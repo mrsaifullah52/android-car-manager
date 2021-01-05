@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Android Car Manager</string>
+    <string name="Android_Car_Manager">Android Car Manager</string>
+    <string name="jump">Jump</string>
+    <string name="enter_your_email">Enter Your Email</string>
+    <string name="email">Email</string>
+    <string name="enter_your_password">Enter Your Password</string>
+    <string name="resetPassword">You can reset your password by giving the correct Answer of Secret Question.</string>
+    <string name="secretQ1">What is Your Favrout Pet Name?</string>
+</resources>
