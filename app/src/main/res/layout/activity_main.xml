@@ -20,42 +20,42 @@
             >
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card1"
-                android:layout_weight="1"
-                android:layout_marginRight="2dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
                 android:clickable="true"
                 android:focusable="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:padding="10dp"
-                    android:orientation="vertical">
+                    android:id="@+id/card1"
+                    android:onClick="moveToNextActivity">
+
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="center"
-                        app:srcCompat="@drawable/addexpenses"
-                        android:scaleType="centerCrop"
                         android:contentDescription="content_description_media"
-                        />
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/addexpenses" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:textSize="18sp"
-                        android:text="Add Expense"
                         android:gravity="center"
-                        />
+                        android:paddingTop="10dp"
+                        android:text="Add Expense"
+                        android:textSize="18sp" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_marginLeft="2dp"
-                android:id="@+id/card2"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -66,7 +66,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:id="@+id/card2"
+                    android:onClick="moveToNextActivity">
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
@@ -97,7 +99,6 @@
             >
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card3"
                 android:layout_weight="1"
                 android:layout_marginRight="2dp"
                 android:layout_width="0dp"
@@ -109,7 +110,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:id="@+id/card3"
+                    android:onClick="moveToNextActivity">
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
@@ -132,7 +135,6 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_marginLeft="2dp"
-                android:id="@+id/card4"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -143,7 +145,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:id="@+id/card4"
+                    android:onClick="moveToNextActivity">
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
@@ -172,7 +176,6 @@
             >
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card5"
                 android:layout_weight="1"
                 android:layout_marginRight="2dp"
                 android:layout_width="0dp"
@@ -184,7 +187,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:id="@+id/card5"
+                    android:onClick="moveToNextActivity">
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"

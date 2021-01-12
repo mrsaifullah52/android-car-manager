@@ -9,7 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".usermanagement.Forgotpassword"></activity>
+        <activity android:name=".add.AddFiles"></activity>
+        <activity android:name=".compute.Compute" />
+        <activity android:name=".Search" />
+        <activity android:name=".statistics.Statistics" />
+        <activity android:name=".capture.Capture" />
+        <activity android:name=".expenses.AddExpenses" />
+        <activity android:name=".usermanagement.Forgotpassword" />
         <activity android:name=".usermanagement.Signup" />
         <activity android:name=".usermanagement.Signin" />
         <activity android:name=".Splash">
