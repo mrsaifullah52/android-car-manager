@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".add.AddFiles"></activity>
+        <activity android:name=".add.AddReminder"></activity>
+        <activity android:name=".add.AddNotes" />
         <activity android:name=".compute.Compute" />
         <activity android:name=".Search" />
         <activity android:name=".statistics.Statistics" />

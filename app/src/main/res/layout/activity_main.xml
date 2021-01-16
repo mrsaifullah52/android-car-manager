@@ -203,19 +203,48 @@
                         android:layout_height="wrap_content"
                         android:paddingTop="10dp"
                         android:textSize="18sp"
-                        android:text="Add. . ."
+                        android:text="Add Notes"
                         android:gravity="center"
                         />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
+            <com.google.android.material.card.MaterialCardView
+                android:layout_weight="1"
+                android:layout_marginRight="2dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true">
 
-<TextView
-    android:layout_weight="1"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:orientation="vertical"
+                    android:id="@+id/card6"
+                    android:onClick="moveToNextActivity">
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/addreminder"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="content_description_media"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:textSize="18sp"
+                        android:text="Add Reminder"
+                        android:gravity="center"
+                        />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
 
         </LinearLayout>
     </LinearLayout>

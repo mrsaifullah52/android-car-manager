@@ -7,7 +7,12 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.softtechglobal.androidcarmanager.add.AddNotes;
+import com.softtechglobal.androidcarmanager.add.AddReminder;
+import com.softtechglobal.androidcarmanager.capture.Capture;
+import com.softtechglobal.androidcarmanager.compute.Compute;
 import com.softtechglobal.androidcarmanager.expenses.AddExpenses;
+import com.softtechglobal.androidcarmanager.statistics.Statistics;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -26,19 +31,23 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }break;
             case R.id.card2:{
-                intent = new Intent(MainActivity.this, AddExpenses.class);
+                intent = new Intent(MainActivity.this, Capture.class);
                 startActivity(intent);
             }break;
             case R.id.card3:{
-                intent = new Intent(MainActivity.this, AddExpenses.class);
+                intent = new Intent(MainActivity.this, Statistics.class);
                 startActivity(intent);
             }break;
             case R.id.card4:{
-                intent = new Intent(MainActivity.this, AddExpenses.class);
+                intent = new Intent(MainActivity.this, Compute.class);
                 startActivity(intent);
             }break;
             case R.id.card5:{
-                intent = new Intent(MainActivity.this, AddExpenses.class);
+                intent = new Intent(MainActivity.this, AddNotes.class);
+                startActivity(intent);
+            }break;
+            case R.id.card6:{
+                intent = new Intent(MainActivity.this, AddReminder.class);
                 startActivity(intent);
             }break;
             default:{
