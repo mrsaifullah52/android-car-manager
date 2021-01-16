@@ -108,24 +108,12 @@
                 android:layout_weight="1"
                 app:srcCompat="@drawable/expensesicon" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_weight="1"
+
+            <Spinner
+                android:id="@+id/expenseSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:hint="Expense Type"
-                app:boxStrokeColor="@color/colorPrimaryDark"
-                app:hintTextColor="#00000000"
-                app:startIconContentDescription="Expense Type"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:inputType="date"
-                    android:textColorHint="@color/colorOnBackground" />
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_weight="1" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_weight="1"
