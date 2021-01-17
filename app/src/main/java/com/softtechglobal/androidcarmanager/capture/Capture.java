@@ -26,6 +26,8 @@ public class Capture extends AppCompatActivity implements AdapterView.OnItemSele
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture);
+        setTitle("Upload Image");
+
 
         imageView=(ImageView)findViewById(R.id.imgView);
         spinner=(Spinner)findViewById(R.id.spinner);

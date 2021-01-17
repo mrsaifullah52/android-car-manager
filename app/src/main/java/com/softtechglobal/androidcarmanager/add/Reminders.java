@@ -1,4 +1,4 @@
-package com.softtechglobal.androidcarmanager.compute;
+package com.softtechglobal.androidcarmanager.add;
 
 import android.os.Bundle;
 
@@ -6,13 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.softtechglobal.androidcarmanager.R;
 
-public class Compute extends AppCompatActivity {
+public class Reminders extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compute);
-        setTitle("Consumption");
-
+        setContentView(R.layout.activity_reminders);
+        setTitle("Add Reminder");
     }
 }

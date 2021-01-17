@@ -19,6 +19,8 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addexpenses);
+        setTitle("Add Expenses");
+
 
         expenseSpinner=(Spinner)findViewById(R.id.expenseSpinner);
 

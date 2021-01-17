@@ -7,6 +7,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.softtechglobal.androidcarmanager.MainActivity;
 import com.softtechglobal.androidcarmanager.R;
 
 public class Signin extends AppCompatActivity {
@@ -26,6 +27,8 @@ public class Signin extends AppCompatActivity {
         startActivity(i);
     }
     public void signIn(View v){
+        Intent i = new Intent(Signin.this, MainActivity.class);
+        startActivity(i);
         Log.i("Sign In","Signed In Successfully.");
     }
     public void signUp(View v){

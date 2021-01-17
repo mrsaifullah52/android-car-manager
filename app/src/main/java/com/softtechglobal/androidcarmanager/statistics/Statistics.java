@@ -31,6 +31,8 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
+        setTitle("View Statistics");
+
 
         statisticsSpinner=(Spinner)findViewById(R.id.statisticsSpinner);
         statisticsSpinner.setOnItemSelectedListener(this);

@@ -161,7 +161,7 @@
                         android:layout_height="wrap_content"
                         android:paddingTop="10dp"
                         android:textSize="18sp"
-                        android:text="Compute"
+                        android:text="Consumption"
                         android:gravity="center"
                         />
                 </LinearLayout>

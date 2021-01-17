@@ -6,6 +6,8 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.softtechglobal.androidcarmanager.usermanagement.Signin;
+
 public class Splash extends AppCompatActivity {
 
 //    LinearLayout llayout;
@@ -23,7 +25,7 @@ public class Splash extends AppCompatActivity {
             public void run() {
 //                llayout.setVisibility(View.INVISIBLE);
 
-                Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                Intent i = new Intent(getApplicationContext(), Signin.class);
                 startActivity(i);
 
                 finish();

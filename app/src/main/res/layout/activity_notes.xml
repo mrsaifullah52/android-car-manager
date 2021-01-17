@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".add.Notes"
+    android:orientation="vertical"
+    android:paddingVertical="20dp"
+    android:paddingHorizontal="10dp"
+    >
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:hint="Enter Your Title"
+        app:helperTextTextColor="@color/colorOnBackground"
+        app:startIconContentDescription="Enter Your Title">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:inputType="text"
+            android:textColorHint="@color/colorOnBackground" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:hint="Enter Your Description"
+        app:helperTextTextColor="@color/colorOnBackground"
+        app:startIconContentDescription="Enter Your Description">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:ems="10"
+            android:gravity="start|top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:inputType="textMultiLine"
+            android:textColorHint="@color/colorOnBackground" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:text="Save Notes"
+        android:layout_marginTop="15dp"/>
+
+</LinearLayout>
