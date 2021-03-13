@@ -15,47 +15,48 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:hint="Enter Your Title"
-        app:helperTextTextColor="@color/colorOnBackground"
+        app:hintTextColor="@color/colorPrimaryDark"
         app:startIconContentDescription="Enter Your Title">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/addTitleEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:inputType="text"
+            android:inputType="textShortMessage"
             android:textColorHint="@color/colorOnBackground" />
-
     </com.google.android.material.textfield.TextInputLayout>
-
-
-
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:hint="Enter Your Description"
-        app:helperTextTextColor="@color/colorOnBackground"
-        app:startIconContentDescription="Enter Your Description">
+        android:hint="Enter Your Message"
+        app:hintTextColor="@color/colorPrimaryDark"
+        app:startIconContentDescription="Enter Your Message">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:ems="10"
-            android:gravity="start|top"
+            android:id="@+id/addMessageEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:inputType="textMultiLine"
+            android:inputType="textLongMessage"
             android:textColorHint="@color/colorOnBackground" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/btnSignUp"
+        android:layout_marginTop="15dp"
+        android:id="@+id/addNoteBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:layout_marginRight="1dp"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/cardview_light_background"
+        android:gravity="center"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:text="Save Notes"
-        android:layout_marginTop="15dp"/>
+        android:textSize="20sp"
+        android:text="Save a Note"
+        android:textAllCaps="false" />
 
 </LinearLayout>

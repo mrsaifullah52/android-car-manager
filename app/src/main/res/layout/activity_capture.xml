@@ -6,6 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".capture.Capture">
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Faild to Load Image"
+        android:gravity="center_horizontal"
+        android:textSize="16sp"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/textInfoTv"
+        android:layout_centerInParent="true"
+        />
+    <Button
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/textInfoTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Capture Again"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp"
+        android:textColor="@color/cardview_light_background"
+        android:background="@color/colorPrimaryDark"
+        android:id="@+id/captureImageBtn"
+        />
+
     <ImageView
         android:visibility="gone"
         android:layout_width="match_parent"
@@ -20,20 +46,22 @@
         >
         <Spinner
             android:background="#fff"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:id="@+id/spinner"
             android:layout_width="wrap_content"
             android:layout_height="48dp"/>
 
         <Button
-            android:layout_weight="1"
+            android:layout_weight="0"
             android:id="@+id/btnSignIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
+            android:textColor="@color/cardview_light_background"
+            android:background="@color/colorPrimaryDark"
             android:gravity="center"
             android:padding="10dp"
             android:text="Upload Image"
+            android:textAllCaps="false"
             />
     </LinearLayout>
 

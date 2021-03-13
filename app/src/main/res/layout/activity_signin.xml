@@ -26,6 +26,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
+                app:hintTextColor="@color/colorPrimaryDark"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/enter_your_email"
@@ -47,8 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:hint="@string/enter_your_password"
-                app:boxStrokeColor="@color/colorPrimaryDark"
-                app:hintTextColor="#00000000"
+                app:hintTextColor="@color/colorPrimaryDark"
                 app:startIconContentDescription="@string/enter_your_password"
                 app:startIconDrawable="@drawable/key"
                 app:endIconMode="password_toggle">
@@ -69,6 +69,7 @@
             android:layout_marginTop="10dp">
 
             <CheckBox
+                android:buttonTint="@color/colorPrimaryDark"
                 android:id="@+id/rememberme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -80,7 +81,7 @@
                 android:checked="true"
                 android:paddingTop="5dp"
                 android:text="Remember Me"
-                android:textAllCaps="true" />
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/btnForgotPassword"
@@ -92,6 +93,7 @@
                 android:onClick="forgotPassword"
                 android:padding="5dp"
                 android:text="Forgot Password?"
+                android:textAllCaps="false"
                 app:rippleColor="@android:color/transparent" />
         </RelativeLayout>
 
@@ -107,25 +109,30 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="1dp"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary"
-
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/cardview_light_background"
                 android:gravity="center"
                 android:onClick="signIn"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="Sign In" />
+                android:textSize="20sp"
+                android:text="Sign In"
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/btnSignUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/cardview_light_background"
                 android:gravity="center"
                 android:onClick="signUp"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="Sign Up" />
+                android:text="Sign Up"
+                android:textSize="20sp"
+                android:textAllCaps="false" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

@@ -1,11 +1,15 @@
 package com.softtechglobal.androidcarmanager;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.softtechglobal.androidcarmanager.add.AddNotes;
 import com.softtechglobal.androidcarmanager.add.AddReminder;
@@ -32,8 +36,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }break;
             case R.id.card2:{
-                intent = new Intent(MainActivity.this, Capture.class);
-                startActivity(intent);
+//                ask for camera permission if haven't
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_DENIED){
+                    ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 100);
+                }else{
+                    intent = new Intent(MainActivity.this, Capture.class);
+                    startActivity(intent);
+                }
             }break;
             case R.id.card3:{
                 intent = new Intent(MainActivity.this, Statistics.class);

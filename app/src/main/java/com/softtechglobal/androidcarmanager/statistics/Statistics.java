@@ -25,7 +25,7 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
     ArrayList barEntries;
 
     Spinner statisticsSpinner;
-    private final String[] service={"Maintenance","Fuel","Purchase","Service","Engine Tunning","Fine","Tax"};
+    private final String[] service={"Expenses","Maintenance","Mileage"};
     private final String[] mMonths = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {

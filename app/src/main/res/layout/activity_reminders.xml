@@ -20,10 +20,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:hint="Enter Your Title"
-        app:helperTextTextColor="@color/colorOnBackground"
+        app:hintTextColor="@color/colorPrimaryDark"
         app:startIconContentDescription="Enter Your Title">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/reminderTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -32,44 +33,83 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <DatePicker
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"/>
-
-    <TimePicker
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:timePickerMode="spinner"/>
-
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:hint="Enter Your Description"
-        app:helperTextTextColor="@color/colorOnBackground"
-        app:startIconContentDescription="Enter Your Description">
+        android:hint="Select Date"
+        app:hintTextColor="@color/colorPrimaryDark"
+        app:startIconContentDescription="Select Date">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:ems="10"
-            android:gravity="start|top"
+            android:id="@+id/reminderDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:inputType="textMultiLine"
-            android:textColorHint="@color/colorOnBackground" />
+
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            />
+
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/btnSignUp"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:layout_marginTop="15dp"
+        android:hint="Select Time"
+        app:hintTextColor="@color/colorPrimaryDark"
+        app:startIconContentDescription="Select Time">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/reminderTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+
+
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+
+            android:inputType="text"
+            android:textColorHint="@color/colorOnBackground" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+<!--    <DatePicker-->
+<!--        android:datePickerMode="calendar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginVertical="10dp"-->
+<!--        android:background="#f00"-->
+<!--        />-->
+
+<!--    <TimePicker-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:timePickerMode="spinner"/>-->
+
+
+    <Button
+        android:layout_marginTop="15dp"
+        android:id="@+id/addReminderBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="1dp"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/cardview_light_background"
+        android:gravity="center"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:text="Save Reminder"
-        android:layout_marginTop="15dp"/>
+        android:textSize="20sp"
+        android:text="Save a Reminder"
+        android:textAllCaps="false" />
 
 </LinearLayout>
 
