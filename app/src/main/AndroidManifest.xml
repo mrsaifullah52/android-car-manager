@@ -3,6 +3,7 @@
     package="com.softtechglobal.androidcarmanager">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".usermanagement.Profile"></activity>
         <activity android:name=".add.Reminders" />
         <activity android:name=".add.Notes" />
         <activity android:name=".add.AddReminder" />
