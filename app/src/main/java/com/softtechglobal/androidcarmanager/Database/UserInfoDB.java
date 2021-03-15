@@ -1,12 +1,12 @@
-package com.softtechglobal.androidcarmanager.usermanagement;
+package com.softtechglobal.androidcarmanager.Database;
 
-public class UserInfo {
+public class UserInfoDB {
     String fullname, gender, phone;
 
-    public UserInfo() {
+    public UserInfoDB() {
     }
 
-    public UserInfo(String fullname, String gender, String phone) {
+    public UserInfoDB(String fullname, String gender, String phone) {
         this.fullname = fullname;
         this.gender = gender;
         this.phone = phone;

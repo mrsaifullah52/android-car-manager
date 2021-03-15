@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".usermanagement.Profile"></activity>
+        <activity android:name=".Vehicles.AddVehicle"></activity>
+        <activity android:name=".Vehicles.Vehicles" />
+        <activity android:name=".usermanagement.Profile" />
         <activity android:name=".add.Reminders" />
         <activity android:name=".add.Notes" />
         <activity android:name=".add.AddReminder" />

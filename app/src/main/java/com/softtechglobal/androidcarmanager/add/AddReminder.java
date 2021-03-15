@@ -13,7 +13,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.softtechglobal.androidcarmanager.CustomBaseAdapter;
 import com.softtechglobal.androidcarmanager.R;
 
 import java.util.ArrayList;
@@ -35,18 +34,7 @@ public class AddReminder extends AppCompatActivity {
         getSupportActionBar().hide();
 
         imageButton=(ImageButton)findViewById(R.id.addReminders);
-
-//        imageButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent i=new Intent(AddReminder.this,Reminders.class);
-//                startActivity(i);
-//            }
-//        });
-
-
         listView=(ListView)findViewById(R.id.remainderslist);
-
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

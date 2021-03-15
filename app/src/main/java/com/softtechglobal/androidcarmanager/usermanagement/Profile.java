@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.softtechglobal.androidcarmanager.Database.UserInfoDB;
 import com.softtechglobal.androidcarmanager.R;
 
 public class Profile extends AppCompatActivity {
@@ -72,9 +73,9 @@ public class Profile extends AppCompatActivity {
                 }else if(TextUtils.isEmpty(gender)){
                     Toast.makeText(Profile.this,"Please Enter Gender!",Toast.LENGTH_SHORT).show();
                 }else{
-                    UserInfo userInfo=new UserInfo(name,gender,phone);
+                    UserInfoDB userInfoDB =new UserInfoDB(name,gender,phone);
                     FirebaseUser user = firebaseAuth.getCurrentUser();
-                    databaseReference.child(user.getUid()).setValue(userInfo);
+                    databaseReference.child(user.getUid()).child("profile").setValue(userInfoDB);
                     Toast.makeText(getApplicationContext(),"User information updated", Toast.LENGTH_LONG).show();
                 }
             }
@@ -85,7 +86,8 @@ public class Profile extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                if(snapshot.hasChild(user.getUid())){UserInfo userProfile = snapshot.child(user.getUid()).getValue(UserInfo.class);
+                if(snapshot.hasChild(user.getUid())){
+                    UserInfoDB userProfile = snapshot.child(user.getUid()).child("profile").getValue(UserInfoDB.class);
                     nameEt.setText(userProfile.getFullname());
                     phoneEt.setText(userProfile.getPhone());
                     genderEt.setText(userProfile.getGender());

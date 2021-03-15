@@ -9,10 +9,19 @@
     android:paddingVertical="15dp"
     >
 
+    <ImageView
+        android:id="@+id/userDp"
+        android:layout_marginTop="50dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/userdp"/>
+
     <ScrollView
+        android:layout_below="@+id/userDp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         >
         <LinearLayout

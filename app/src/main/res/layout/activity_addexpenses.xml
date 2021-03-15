@@ -13,21 +13,37 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
             <ImageView
-                android:id="@+id/datetimeicon"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="20dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/datetimeicon" />
+                app:srcCompat="@drawable/expensesicon" />
+
+            <Spinner
+                android:id="@+id/expenseSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="80dp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="30dp"
+                app:srcCompat="@drawable/dateicon" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 android:layout_marginTop="10dp"
                 android:hint="Expense Date"
                 app:hintTextColor="@color/colorPrimaryDark"
@@ -37,20 +53,28 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/expenseDate"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_height="80dp"
                     android:clickable="false"
                     android:cursorVisible="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:textColorHint="@color/colorOnBackground" />
             </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="30dp"
+                app:srcCompat="@drawable/timeicon" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="80dp"
                 android:hint="Expense Time"
                 app:hintTextColor="@color/colorPrimaryDark"
                 >
@@ -58,8 +82,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/expenseTime"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_height="80dp"
                     android:clickable="false"
                     android:cursorVisible="false"
                     android:focusable="false"
@@ -68,24 +91,18 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
-                android:layout_marginLeft="3dp"
-                android:id="@+id/odometer"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="20dp"
-                android:layout_weight="5.5"
+                android:layout_marginTop="30dp"
                 app:srcCompat="@drawable/odometericon" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="80dp"
                 android:hint="Odometer Reading"
                 app:hintTextColor="@color/colorPrimaryDark"
                 app:startIconContentDescription="Odometer Reading"
@@ -93,45 +110,32 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_height="80dp"
                     android:inputType="number"
                     android:textColorHint="@color/colorOnBackground" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
-                android:id="@+id/expensesicon"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="20dp"
-                android:layout_weight="1"
+                android:layout_marginTop="30dp"
                 app:srcCompat="@drawable/expensesicon" />
 
-
-            <Spinner
-                android:id="@+id/expenseSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_height="80dp"
                 android:hint="Cost"
                 app:hintTextColor="@color/colorPrimaryDark"
                 >
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/priceEt"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="80dp"
                     android:layout_marginTop="10dp"
                     android:inputType="numberDecimal"
                     android:textColorHint="@color/colorOnBackground" />

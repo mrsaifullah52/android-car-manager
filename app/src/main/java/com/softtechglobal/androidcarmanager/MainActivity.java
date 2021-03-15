@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.softtechglobal.androidcarmanager.Vehicles.Vehicles;
 import com.softtechglobal.androidcarmanager.add.AddNotes;
 import com.softtechglobal.androidcarmanager.add.AddReminder;
 import com.softtechglobal.androidcarmanager.capture.Capture;
@@ -28,12 +29,34 @@ import com.softtechglobal.androidcarmanager.usermanagement.Signin;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+//    int vehicleId;
+    Boolean isFirstRun;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("Dashboard");
+
+
+//        initializatin of firebaseauth
         mAuth = FirebaseAuth.getInstance();
+
+//      show vehicles list only first time
+        isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                .getBoolean("isFirstRun", true);
+
+        if (isFirstRun) {
+            setTitle("Dashboard");
+            startActivity(new Intent(MainActivity.this, Vehicles.class));
+        }else{
+//          vehicle name will be dynamic
+            setTitle("Dashboard"+"("+
+                    getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                            .getString("vehicle","Nothing Selected")
+                    +")");
+//          selected vehicle id
+//            vehicleId = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+//                    .getInt("vehicleId", 0);
+        }
 
     }
 
@@ -50,6 +73,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(MainActivity.this, Profile.class);
                 i.putExtra("type","create");
                 i.putExtra("type","update");
+                startActivity(i);
+            }break;
+            case R.id.vehicle:{
+                Intent i = new Intent(MainActivity.this, Vehicles.class);
                 startActivity(i);
             }break;
             case R.id.logout:{
