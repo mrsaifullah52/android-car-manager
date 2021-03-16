@@ -4,14 +4,10 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,16 +26,16 @@ import com.softtechglobal.androidcarmanager.usermanagement.Signin;
 
 import java.util.Calendar;
 
-public class AddVehicle extends AppCompatActivity implements AdapterView.OnItemSelectedListener  {
+public class AddVehicle extends AppCompatActivity{
 
     String vehicleName, manufacturer, vehicleModel, plateNum, odometerUnit;
     Long purchaseDate;
     Double milageRange, fuelLimit;
 //  spinners
-    String[] odometerUnitTypeSpin={"Kilometer","Mile","Hour"};
+//    String[] odometerUnitTypeSpin={"Kilometer","Mile","Hour"};
 
-    Spinner odometerUnitSpin;
-    EditText vehicleNameEt, manufacturerEt, vehicleModelEt, plateNumEt, purchaseDateEt, milageRangeEt, fuelLimitEt;
+//    Spinner odometerUnitSpin;
+    EditText vehicleNameEt, odometerReadingEt, manufacturerEt, vehicleModelEt, plateNumEt, purchaseDateEt, milageRangeEt, fuelLimitEt;
     Button saveVehicleBtn;
     DatePickerDialog datePickerDialog;
 
@@ -48,6 +44,7 @@ public class AddVehicle extends AppCompatActivity implements AdapterView.OnItemS
 
     int vehicleId;
     boolean status=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +58,8 @@ public class AddVehicle extends AppCompatActivity implements AdapterView.OnItemS
         final FirebaseUser user=firebaseAuth.getCurrentUser();
         databaseReference= FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/vehicles");
 
-        odometerUnitSpin=(Spinner)findViewById(R.id.odometerUnit);
-        odometerUnitSpin.setOnItemSelectedListener(this);
+//        odometerUnitSpin=(Spinner)findViewById(R.id.odometerUnit);
+//        odometerUnitSpin.setOnItemSelectedListener(this);
 
         vehicleNameEt=(EditText)findViewById(R.id.vehicleName);
         manufacturerEt=(EditText)findViewById(R.id.manufacturer);
@@ -71,13 +68,43 @@ public class AddVehicle extends AppCompatActivity implements AdapterView.OnItemS
         purchaseDateEt=(EditText)findViewById(R.id.purchaseDate);
         milageRangeEt=(EditText)findViewById(R.id.mileageRange);
         fuelLimitEt=(EditText)findViewById(R.id.fuelLimit);
+        odometerReadingEt=(EditText)findViewById(R.id.odometerReading);
 
         saveVehicleBtn=(Button)findViewById(R.id.addVehicleBtn);
 
 
-        ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_spinner_item, odometerUnitTypeSpin);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        odometerUnitSpin.setAdapter(adapter);
+//      check if user want to edit
+        Bundle bundle=getIntent().getExtras();
+        final String type=bundle.getString("type");
+        if(type.equals("edit")){
+            setTitle("Update Details");
+
+            String key=bundle.getString("key");
+            String title=bundle.getString("title");
+            String meterReading=bundle.getString("meterReading");
+            String model=bundle.getString("model");
+            String manufacturer=bundle.getString("manufacturer");
+            String purchaseDate=bundle.getString("purchaseDate");
+            String milage=bundle.getString("milage");
+            String fuelLimit=bundle.getString("fuelLimit");
+            String plateNum=bundle.getString("plateNum");
+
+            vehicleNameEt.setText(title);
+            manufacturerEt.setText(manufacturer);
+            vehicleModelEt.setText(model);
+            plateNumEt.setText(plateNum);
+            purchaseDateEt.setText(purchaseDate);
+            milageRangeEt.setText(milage);
+            fuelLimitEt.setText(fuelLimit);
+            odometerReadingEt.setText(meterReading);
+
+        }else if(type.equals("add")){
+            setTitle("Add Vehicle");
+        }
+
+//        ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_spinner_item, odometerUnitTypeSpin);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        odometerUnitSpin.setAdapter(adapter);
 
         purchaseDateEt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +129,7 @@ public class AddVehicle extends AppCompatActivity implements AdapterView.OnItemS
         saveVehicleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setValues();
+                getEtValues(type);
 
                 if(TextUtils.isEmpty(vehicleName)){
                     Toast.makeText(AddVehicle.this,"Enter Vehicle Name!",Toast.LENGTH_SHORT).show();
@@ -116,96 +143,83 @@ public class AddVehicle extends AppCompatActivity implements AdapterView.OnItemS
                     Toast.makeText(AddVehicle.this,"Enter Mileage Range!",Toast.LENGTH_SHORT).show();
                 }else if(fuelLimit==null){
                     Toast.makeText(AddVehicle.this,"Enter Fuel Limit Name!",Toast.LENGTH_SHORT).show();
-                }else if(TextUtils.isEmpty(odometerUnit)){
-                    Toast.makeText(AddVehicle.this,"Enter Odometer Unit Type!",Toast.LENGTH_SHORT).show();
+                }else if(odometerUnit==null){
+                    Toast.makeText(AddVehicle.this,"Enter Odometer Reading!",Toast.LENGTH_SHORT).show();
                 }else if(purchaseDate==null){
                     Toast.makeText(AddVehicle.this,"Enter Odometer Unit Type!",Toast.LENGTH_SHORT).show();
                 }else{
-                    VehicleDB vehicleDB =new VehicleDB(vehicleName, odometerUnit, manufacturer, vehicleModel,
-
-                    milageRange, fuelLimit, plateNum, purchaseDate);
-
-//                    first method
-
-                    databaseReference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(snapshot.child("0").exists()){
-                                vehicleId = Integer.parseInt(String.valueOf(snapshot.getChildrenCount()));
-                                status=true;
-                            }else{
-                                vehicleId=0;
-                                status=true;
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            Toast.makeText(AddVehicle.this, error.toString(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-//                    second method
-
-//                    databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-//                            if(task.isComplete()){
-////                                vehicleId = Integer.parseInt(task.getResult().getKey())+1;
-////                                Log.d("gekey", String.valueOf(task.getResult().getChildren()));
-//
-////                                DataSnapshot snapshot= (DataSnapshot) task.getResult().getChildren();
-//
-//                                Log.d("gekey", String.valueOf( task.getResult().or));
-//                                if(task.getResult().child("1").exists()){
-//
-//                                    vehicleId = Integer.parseInt(task.getResult().getKey())+1;
-//
-//                                    status=true;
-//                                }else{
-//                                    vehicleId=0;
-//                                    status=true;
-//                                }
-//                            }
-//                        }
-//                    });
-
-
-//                    third method
-//                    Query query=databaseReference.chi
-
-                    if(status){
-                        databaseReference.child(String.valueOf(vehicleId)).setValue(vehicleDB);
-                        Toast.makeText(getApplicationContext(),"Vehicle information updated", Toast.LENGTH_LONG).show();
-                    }else{
-                        Toast.makeText(getApplicationContext(),"Please try Again", Toast.LENGTH_LONG).show();
-                    }
+                    addData(type);
                 }
-
-
             }
         });
 
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        odometerUnit=odometerUnitTypeSpin[position];
-        Log.d("odometerUnitTypeSpin",odometerUnitTypeSpin[position]);
+//    @Override
+//    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//        odometerUnit=odometerUnitTypeSpin[position];
+//        Log.d("odometerUnitTypeSpin",odometerUnitTypeSpin[position]);
+//    }
+//
+//    @Override
+//    public void onNothingSelected(AdapterView<?> parent) {
+//        odometerUnit="";
+//    }
+
+    public void addData(String type){
+        final VehicleDB vehicleDB =new VehicleDB(vehicleName, odometerUnit, manufacturer, vehicleModel,
+            milageRange, fuelLimit, plateNum, purchaseDate);
+
+        if(type.equals("add")){
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {vehicleId = Integer.parseInt(ds.getKey());}
+                        vehicleId++;
+                    }else{
+                        vehicleId=0;
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(AddVehicle.this, error.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            databaseReference.child(String.valueOf(vehicleId)).setValue(vehicleDB);
+            Toast.makeText(getApplicationContext(),"Vehicle information Added", Toast.LENGTH_LONG).show();
+        }else if(type.equals("edit")){
+            Bundle bundle=getIntent().getExtras();
+            String key=bundle.getString("key");
+            databaseReference.child(key).setValue(vehicleDB);
+            Toast.makeText(getApplicationContext(),"Vehicle information Updated", Toast.LENGTH_LONG).show();
+        }
+
+        emptyValues();
     }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        odometerUnit="";
+    public void emptyValues(){
+        vehicleNameEt.setText("");
+        manufacturerEt.setText("");
+        vehicleModelEt.setText("");
+        plateNumEt.setText("");
+        purchaseDateEt.setText("");
+        milageRangeEt.setText("");
+        fuelLimitEt.setText("");
+        odometerReadingEt.setText("");
     }
 
-    public void setValues(){
+    public void getEtValues(String type){
         vehicleName=vehicleNameEt.getText().toString().trim();
         manufacturer=manufacturerEt.getText().toString().trim();
         vehicleModel=vehicleModelEt.getText().toString().trim();
         plateNum=plateNumEt.getText().toString().trim();
-//        purchaseDate=Long.parseLong(purchaseDateEt.getText().toString());
+//        if(type.equals("edit")){
+//            purchaseDate=Long.valueOf(purchaseDateEt.getText().toString());
+//        }
         milageRange=Double.parseDouble(milageRangeEt.getText().toString());
         fuelLimit=Double.parseDouble(fuelLimitEt.getText().toString());
+        odometerUnit=odometerReadingEt.getText().toString().trim();
     }
 }

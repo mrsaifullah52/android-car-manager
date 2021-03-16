@@ -38,8 +38,9 @@ public class Vehicles extends AppCompatActivity {
     ListView listView;
     CustomBaseAdapter adapter;
 
+    ArrayList<String> key=new ArrayList<String>();
     ArrayList<String> title=new ArrayList<String>();
-    ArrayList<String> unitType=new ArrayList<String>();
+    ArrayList<String> odometerUnit=new ArrayList<String>();
     ArrayList<String> manufacturer=new ArrayList<String>();
     ArrayList<String> purchaseDate=new ArrayList<String>();
     ArrayList<String> model=new ArrayList<String>();
@@ -63,12 +64,14 @@ public class Vehicles extends AppCompatActivity {
         imageButton = (ImageButton)findViewById(R.id.addVehicle);
         listView = (ListView)findViewById(R.id.vehicleslist);
 //      check user is loggedin or not
+//        databaseReference;
         firebaseAuth=FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser()==null){
             finish();
             startActivity(new Intent(Vehicles.this, Signin.class));
         }
-//        FirebaseDatabase.getInstance().setPersistenceEnabled(false);
+
+
         FirebaseUser user = firebaseAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/vehicles");
 
@@ -82,7 +85,7 @@ public class Vehicles extends AppCompatActivity {
                 Intent i=new Intent(Vehicles.this, AddVehicle.class);
                 i.putExtra("type", "add");
                 startActivity(i);
-                finish();
+//                finish();
             }
         });
 
@@ -139,27 +142,30 @@ public class Vehicles extends AppCompatActivity {
         databaseReference.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
-                int index = (int) dataSnapshot.getChildrenCount();
+//                int index = (int) dataSnapshot.getChildrenCount();
+//                if(!(index<=0)){
+//                    index++;
+//                }
                 if(dataSnapshot.exists()) {
-                    for( int i=0; i<=index; i++) {
-                        VehicleDB vehicleDB = dataSnapshot
-                                .child(String.valueOf(i))
-                                .getValue(VehicleDB.class);
+                    for( DataSnapshot ds:dataSnapshot.getChildren()) {
+//                    for( int i=0; i<=index; i++) {
+                        VehicleDB vehicleDB = ds.getValue(VehicleDB.class);
 //                      insert data into Arraylist<String>
-                        if (dataSnapshot.child(String.valueOf(i)).exists()) {
+//                        if (dataSnapshot.child(dataSnapshot.child(String.valueOf(i)).getKey()).exists()) {
+                            key.add(ds.getKey());
                             title.add(vehicleDB.getVehicleName());
                             //getting date from long
                             Calendar calendar = Calendar.getInstance();
                             calendar.setTimeInMillis(vehicleDB.getPurchaseDate());
                             String dateObj = calendar.DAY_OF_MONTH + "/" + calendar.MONTH + "/" + calendar.YEAR;
                             purchaseDate.add(dateObj);
-                            unitType.add(vehicleDB.getOdometerType());
+                            odometerUnit.add(vehicleDB.getModometerReading());
                             manufacturer.add(vehicleDB.getManufacturer());
                             model.add(vehicleDB.getVehicleModel());
                             milage.add(String.valueOf(vehicleDB.getMileageRange()));
                             fuelLimit.add(String.valueOf(vehicleDB.getFuelLimit()));
                             plateNum.add(vehicleDB.getPlateNumber());
-                        }
+//                        }
                     }
                     if(!title.isEmpty() && !purchaseDate.isEmpty()){
                         setListAdapter();
@@ -275,11 +281,17 @@ public class Vehicles extends AppCompatActivity {
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 int index=Integer.parseInt(snapshot.getKey());
 
-                Log.d("snapshotindex", String.valueOf(index));
+                if(snapshot.exists()){
+                    for(DataSnapshot ds:snapshot.getChildren()){
+                        index = Integer.parseInt(ds.getKey());
+                    }
+                }
+              Log.d("snapshotindex", String.valueOf(index));
 
+                key.remove(index);
                 title.remove(index);
                 purchaseDate.remove(index);
-                unitType.remove(index);
+                odometerUnit.remove(index);
                 manufacturer.remove(index);
                 model.remove(index);
                 milage.remove(index);
@@ -312,16 +324,14 @@ public class Vehicles extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case 0:{
-                                Toast.makeText(Vehicles.this,"Viewed",Toast.LENGTH_SHORT).show();
                                 try {
                                     new AlertDialog.Builder(Vehicles.this)
                                             .setTitle(title.get(position))
 //                                            display message
                                             .setMessage("Date: "+purchaseDate.get(position)+"\n"
                                                     +"----------------------------------\n\n"
-                                                    +"UnitType: "+unitType.get(position)+"\n\n"
                                                     +"Model: "+model.get(position)+"\n\n"
-                                                    +"Mileage: "+milage.get(position)+"\n\n"
+                                                    +"Mileage: "+milage.get(position)+"km \n\n"
                                                     +"FuelLimit: "+ fuelLimit.get(position)+" Ltr\n\n"
                                                     +"PlateNumber: "+ plateNum.get(position))
                                             .setCancelable(false)
@@ -336,7 +346,15 @@ public class Vehicles extends AppCompatActivity {
                             case 1:{
                                 Intent i = new Intent(Vehicles.this, AddVehicle.class);
                                 i.putExtra("type", "edit");
-                                i.putExtra("vehicleid", "124");
+                                i.putExtra("key",key.get(position));
+                                i.putExtra("title",title.get(position));
+                                i.putExtra("meterReading",odometerUnit.get(position));
+                                i.putExtra("manufacturer",manufacturer.get(position));
+                                i.putExtra("purchaseDate",purchaseDate.get(position));
+                                i.putExtra("model",model.get(position));
+                                i.putExtra("milage",milage.get(position));
+                                i.putExtra("fuelLimit",fuelLimit.get(position));
+                                i.putExtra("plateNum",plateNum.get(position));
                                 startActivity(i);
                             }break;
                             case 2:{
@@ -344,7 +362,7 @@ public class Vehicles extends AppCompatActivity {
                                 getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                                         .edit()
                                         .putString("vehicle", title.get(position))
-                                        .putInt("vehicleId",124)
+                                        .putString("key", key.get(position))
                                         .commit();
 //                              start dashboard activity
                                 Intent i=new Intent(Vehicles.this, MainActivity.class);
@@ -355,13 +373,19 @@ public class Vehicles extends AppCompatActivity {
                                 finish();
                             }break;
                             case 3:{
-//                                boolean status =
-                                        removeItem(position);
-//                                if(status){
-//                                    adapter.notifyDataSetChanged();
-//                                }else{
-//                                    Toast.makeText(Vehicles.this, "Failed to Delete, try again", Toast.LENGTH_SHORT).show();
-//                                }
+                                databaseReference.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                    ArrayList<String> index=new ArrayList<String>();
+                                    @Override
+                                    public void onSuccess(DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot ds:dataSnapshot.getChildren()){
+                                            String key=ds.getKey();
+                                            if(!key.isEmpty()){
+                                                index.add(key);
+                                            }
+                                        }
+                                        removeItem(Integer.parseInt(index.get(position)));
+                                    }
+                                });
                             }
                         }
                     }
@@ -378,14 +402,13 @@ public class Vehicles extends AppCompatActivity {
     }
 
     public boolean removeItem(int position){
+        Log.d("position", String.valueOf(position));
         boolean status;
         if(position<0){
             status=false;
         }else{
             status=true;
             databaseReference.child(String.valueOf(position)).removeValue();
-//            title.remove(position);
-//            purchaseDate.remove(position);
         }
         return status;
     }

@@ -81,21 +81,13 @@ public class MainActivity extends AppCompatActivity {
             }break;
             case R.id.logout:{
                 mAuth.signOut();
-//              this listener will be called when there is change in firebase user session
-//                FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
-//                    @Override
-//                    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-//                        FirebaseUser user = firebaseAuth.getCurrentUser();
-//                        if (firebaseAuth.getCurrentUser() == null) {
-                            // user auth state is changed - user is null
-                            // launch login activity
-                            startActivity(new Intent(MainActivity.this, Signin.class));
-                            finish();
-//                        }
-//                    }
-//                };
-
-
+                getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                        .edit()
+                        .putString("vehicle", "Nothing Selected")
+                        .putString("key", "null")
+                        .commit();
+                startActivity(new Intent(MainActivity.this, Signin.class));
+                finish();
             }break;
         }
         return(super.onOptionsItemSelected(item));

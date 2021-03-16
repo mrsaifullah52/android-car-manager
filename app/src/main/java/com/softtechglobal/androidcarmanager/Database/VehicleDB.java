@@ -1,7 +1,7 @@
 package com.softtechglobal.androidcarmanager.Database;
 
 public class VehicleDB {
-    String mvehicleName, modometerType, mmanufacturer, mvehicleModel;
+    String mvehicleName, modometerReading, mmanufacturer, mvehicleModel;
     Double mmileageRange, mfuelLimit;
     String mplateNumber;
     Long mpurchaseDate;
@@ -9,16 +9,24 @@ public class VehicleDB {
     public VehicleDB() {
     }
 
-    public VehicleDB(String vehicleName, String odometerType, String manufacturer, String vehicleModel, Double mileageRange,
-                     Double fuelLimit, String plateNumber, Long purchaseDate) {
-        this.mvehicleName = vehicleName;
-        this.modometerType = odometerType;
-        this.mmanufacturer = manufacturer;
-        this.mvehicleModel = vehicleModel;
-        this.mmileageRange = mileageRange;
-        this.mfuelLimit = fuelLimit;
-        this.mplateNumber = plateNumber;
-        this.mpurchaseDate = purchaseDate;
+    public VehicleDB(String mvehicleName, String modometerReading, String mmanufacturer, String mvehicleModel,
+                     Double mmileageRange, Double mfuelLimit, String mplateNumber, Long mpurchaseDate) {
+        this.mvehicleName = mvehicleName;
+        this.modometerReading = modometerReading;
+        this.mmanufacturer = mmanufacturer;
+        this.mvehicleModel = mvehicleModel;
+        this.mmileageRange = mmileageRange;
+        this.mfuelLimit = mfuelLimit;
+        this.mplateNumber = mplateNumber;
+        this.mpurchaseDate = mpurchaseDate;
+    }
+
+    public String getModometerReading() {
+        return modometerReading;
+    }
+
+    public void setModometerReading(String modometerReading) {
+        this.modometerReading = modometerReading;
     }
 
     public Long getPurchaseDate() {
@@ -35,14 +43,6 @@ public class VehicleDB {
 
     public void setVehicleName(String vehicleName) {
         this.mvehicleName = vehicleName;
-    }
-
-    public String getOdometerType() {
-        return modometerType;
-    }
-
-    public void setOdometerType(String odometerType) {
-        this.modometerType = odometerType;
     }
 
     public String getManufacturer() {

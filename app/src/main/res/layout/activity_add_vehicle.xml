@@ -28,21 +28,19 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="50dp"
+            android:hint="Current Odometer Reading"
+            app:hintTextColor="@color/colorPrimaryDark">
 
-            <TextView
-                android:textSize="10sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Odometer Unit Type"/>
-            <Spinner
-                android:id="@+id/odometerUnit"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/odometerReading"
                 android:layout_width="match_parent"
-                android:layout_height="40dp" />
-        </LinearLayout>
+                android:layout_height="40dp"
+                android:inputType="textShortMessage"
+                android:textColorHint="@color/colorOnBackground" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
