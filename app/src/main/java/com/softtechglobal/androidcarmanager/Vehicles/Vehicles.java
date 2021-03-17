@@ -25,12 +25,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.annotations.Nullable;
 import com.softtechglobal.androidcarmanager.Database.VehicleDB;
 import com.softtechglobal.androidcarmanager.MainActivity;
+import com.softtechglobal.androidcarmanager.ModelForAdapter;
 import com.softtechglobal.androidcarmanager.R;
-import com.softtechglobal.androidcarmanager.add.CustomBaseAdapter;
+import com.softtechglobal.androidcarmanager.CustomBaseAdapter;
 import com.softtechglobal.androidcarmanager.usermanagement.Signin;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Vehicles extends AppCompatActivity {
 
@@ -47,6 +50,8 @@ public class Vehicles extends AppCompatActivity {
     ArrayList<String> milage=new ArrayList<String>();
     ArrayList<String> fuelLimit=new ArrayList<String>();
     ArrayList<String> plateNum=new ArrayList<String>();
+
+    ArrayList<ModelForAdapter> listModel= new ArrayList<ModelForAdapter>();
 
     AlertDialog.Builder builder;
     AlertDialog dialog;
@@ -139,166 +144,121 @@ public class Vehicles extends AppCompatActivity {
 //        });
 
 //          second method
-        databaseReference.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-            @Override
-            public void onSuccess(DataSnapshot dataSnapshot) {
-//                int index = (int) dataSnapshot.getChildrenCount();
-//                if(!(index<=0)){
-//                    index++;
-//                }
-                if(dataSnapshot.exists()) {
-                    for( DataSnapshot ds:dataSnapshot.getChildren()) {
-//                    for( int i=0; i<=index; i++) {
-                        VehicleDB vehicleDB = ds.getValue(VehicleDB.class);
-//                      insert data into Arraylist<String>
-//                        if (dataSnapshot.child(dataSnapshot.child(String.valueOf(i)).getKey()).exists()) {
-                            key.add(ds.getKey());
-                            title.add(vehicleDB.getVehicleName());
-                            //getting date from long
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.setTimeInMillis(vehicleDB.getPurchaseDate());
-                            String dateObj = calendar.DAY_OF_MONTH + "/" + calendar.MONTH + "/" + calendar.YEAR;
-                            purchaseDate.add(dateObj);
-                            odometerUnit.add(vehicleDB.getModometerReading());
-                            manufacturer.add(vehicleDB.getManufacturer());
-                            model.add(vehicleDB.getVehicleModel());
-                            milage.add(String.valueOf(vehicleDB.getMileageRange()));
-                            fuelLimit.add(String.valueOf(vehicleDB.getFuelLimit()));
-                            plateNum.add(vehicleDB.getPlateNumber());
-//                        }
-                    }
-                    if(!title.isEmpty() && !purchaseDate.isEmpty()){
-                        setListAdapter();
-                    }else{
-                        Toast.makeText(Vehicles.this, "Failed in Retrieving Data",Toast.LENGTH_SHORT).show();
-                    }
-                }else{
-                    Toast.makeText(Vehicles.this,"Please add a Vehicle",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-//        databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//        databaseReference.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
 //            @Override
-//            public void onComplete(@NonNull Task<DataSnapshot> task) {
-//                if(task.isComplete()){
-////                    int index = (int) task.getResult().getChildrenCount();
-////                    for( int i=0; i<=index; i++) {
-//                        GenericTypeIndicator<List<VehicleDB>> generic=new GenericTypeIndicator<List<VehicleDB>>() {};
-//
-//                        List<VehicleDB> taskData=task.getResult().getValue(generic);
-//
-//                        for(int j=0;j<taskData.size();j++){
-////                            Log.d("taskData",taskData.get(j).getVehicleName());
-//                            title.add(taskData.get(j).getVehicleName());
+//            public void onSuccess(DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.exists()) {
+//                    for( DataSnapshot ds:dataSnapshot.getChildren()) {
+//                        VehicleDB vehicleDB = ds.getValue(VehicleDB.class);
+//                            key.add(ds.getKey());
+//                            title.add(vehicleDB.getVehicleName());
 //                            //getting date from long
 //                            Calendar calendar = Calendar.getInstance();
-//                            calendar.setTimeInMillis(taskData.get(j).getPurchaseDate());
+//                            calendar.setTimeInMillis(vehicleDB.getPurchaseDate());
 //                            String dateObj = calendar.DAY_OF_MONTH + "/" + calendar.MONTH + "/" + calendar.YEAR;
 //                            purchaseDate.add(dateObj);
-//                            unitType.add(taskData.get(j).getOdometerType());
-//                            manufacturer.add(taskData.get(j).getManufacturer());
-//                            model.add(taskData.get(j).getVehicleModel());
-//                            milage.add(String.valueOf(taskData.get(j).getMileageRange()));
-//                            fuelLimit.add(String.valueOf(taskData.get(j).getFuelLimit()));
-//                            plateNum.add(taskData.get(j).getPlateNumber());
-//                        }
+//                            odometerUnit.add(vehicleDB.getModometerReading());
+//                            manufacturer.add(vehicleDB.getManufacturer());
+//                            model.add(vehicleDB.getVehicleModel());
+//                            milage.add(String.valueOf(vehicleDB.getMileageRange()));
+//                            fuelLimit.add(String.valueOf(vehicleDB.getFuelLimit()));
+//                            plateNum.add(vehicleDB.getPlateNumber());
+//                    }
 //                    if(!title.isEmpty() && !purchaseDate.isEmpty()){
 //                        setListAdapter();
 //                    }else{
-//                        Toast.makeText(Vehicles.this, "Failed in Retreiving Data",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(Vehicles.this, "Failed in Retrieving Data",Toast.LENGTH_SHORT).show();
 //                    }
 //                }else{
 //                    Toast.makeText(Vehicles.this,"Please add a Vehicle",Toast.LENGTH_SHORT).show();
 //                }
 //            }
-//
 //        });
-
 
 //      delete or update item from database
         childEventListener=new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//                int index = (int) snapshot.getChildrenCount();
-////                int index= Integer.parseInt(snapshot.getKey());
-//                Log.d("previousChildName",previousChildName);
-//                if(snapshot.exists()) {
-//                    for( int i=0; i<=index; i++) {
-//                        Log.d("snapshot--> ",snapshot.getKey());
-//                        Log.d("snapshot1--> ", String.valueOf(snapshot.child(String.valueOf(i)).getValue()));
-//                        VehicleDB vehicleDB = snapshot
-//                                .child(String.valueOf(index))
-//                                .getValue(VehicleDB.class);
-//                      insert data into Arraylist<String>
-//                        if (snapshot.child(String.valueOf(index)).exists()) {
-//                            title.add(vehicleDB.getVehicleName());
-//                            //getting date from long
-//                            Calendar calendar = Calendar.getInstance();
-//                            calendar.setTimeInMillis(vehicleDB.getPurchaseDate());
-//                            String dateObj = calendar.DAY_OF_MONTH + "/" + calendar.MONTH + "/" + calendar.YEAR;
-//                            purchaseDate.add(dateObj);
-//                            unitType.add(vehicleDB.getOdometerType());
-//                            manufacturer.add(vehicleDB.getManufacturer());
-//                            model.add(vehicleDB.getVehicleModel());
-//                            milage.add(String.valueOf(vehicleDB.getMileageRange()));
-//                            fuelLimit.add(String.valueOf(vehicleDB.getFuelLimit()));
-//                            plateNum.add(vehicleDB.getPlateNumber());
-//                        }else{
-//                            Toast.makeText(Vehicles.this, "Not Existed: "+snapshot.getKey(),Toast.LENGTH_SHORT).show();
-//                        }
-//                        }else{
-//                            title.add(vehicleDB.getVehicleName());
-//                            //getting date from long
-//                            Calendar calendar = Calendar.getInstance();
-//                            calendar.setTimeInMillis(vehicleDB.getPurchaseDate());
-//                            String dateObj = calendar.DAY_OF_MONTH + "/" + calendar.MONTH + "/" + calendar.YEAR;
-//                            purchaseDate.add(dateObj);
-//                            unitType.add(vehicleDB.getOdometerType());
-//                            manufacturer.add(vehicleDB.getManufacturer());
-//                            model.add(vehicleDB.getVehicleModel());
-//                            milage.add(String.valueOf(vehicleDB.getMileageRange()));
-//                            fuelLimit.add(String.valueOf(vehicleDB.getFuelLimit()));
-//                            plateNum.add(vehicleDB.getPlateNumber());
-//                        }
-//                    }
-//                    if(!title.isEmpty() && !purchaseDate.isEmpty()){
-//                        setListAdapter();
-//                    }else{
-//                        Toast.makeText(Vehicles.this, "Failed in Retreiving Data",Toast.LENGTH_SHORT).show();
-//                    }
-//                }else{
-//                    Toast.makeText(Vehicles.this,"Please add a Vehicle",Toast.LENGTH_SHORT).show();
-//                }
+                if(snapshot.exists()){
+                    int index= Integer.parseInt(snapshot.getKey());
+                    Map<String,Object> myVal=(HashMap<String,Object>) snapshot.getValue();
+                            key.add(String.valueOf(index));
+                            title.add(String.valueOf(myVal.get("vehicleName")));
+                            //getting date from long
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTimeInMillis((Long) myVal.get("purchaseDate"));
+                            String dateObj = calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR);
+
+                            purchaseDate.add(dateObj);
+                            odometerUnit.add(String.valueOf(myVal.get("modometerReading")));
+                            manufacturer.add(String.valueOf(myVal.get("manufacturer")));
+                            model.add(String.valueOf(myVal.get("vehicleModel")));
+                            milage.add(String.valueOf(myVal.get("mileageRange")));
+                            fuelLimit.add(String.valueOf(myVal.get("fuelLimit")));
+                            plateNum.add(String.valueOf(myVal.get("plateNumber")));
+
+                    if(!title.isEmpty() && !purchaseDate.isEmpty()){
+                        for(int i=0;i<title.size();i++){
+                            ModelForAdapter modelAdapter=new ModelForAdapter(title.get(i), purchaseDate.get(i));
+                            //bind all strings in an array
+                            listModel.add(modelAdapter);
+                        }
+                        setListAdapter();
+                    }else{
+                        Toast.makeText(Vehicles.this, "Failed in Retrieving Data",Toast.LENGTH_SHORT).show();
+                    }
+                        Log.d("dateobj", purchaseDate.get(0));
+                }else{
+                    Log.d("snapshot:", "snapshot does not exist");
+                }
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                if(snapshot.exists()){
+                    int arrayIndex=key.indexOf(snapshot.getKey());
+                    if(arrayIndex != -1 ){
+                            VehicleDB vehicleDB=snapshot.getValue(VehicleDB.class);
+                            title.set(arrayIndex, vehicleDB.getVehicleName());
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTimeInMillis(vehicleDB.getPurchaseDate());
+                            String dateObj = calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR);
+                            purchaseDate.set(arrayIndex,dateObj);
+                            odometerUnit.set(arrayIndex,vehicleDB.getModometerReading());
+                            manufacturer.set(arrayIndex,vehicleDB.getManufacturer());
+                            model.set(arrayIndex,vehicleDB.getVehicleModel());
+                            milage.set(arrayIndex,String.valueOf(vehicleDB.getMileageRange()));
+                            fuelLimit.set(arrayIndex,String.valueOf(vehicleDB.getFuelLimit()));
+                            plateNum.set(arrayIndex,vehicleDB.getPlateNumber());
+//                          notify the adapter
+                            adapter.notifyDataSetChanged();
+                    }
+                }
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                int index=Integer.parseInt(snapshot.getKey());
-
                 if(snapshot.exists()){
-                    for(DataSnapshot ds:snapshot.getChildren()){
-                        index = Integer.parseInt(ds.getKey());
-                    }
-                }
-              Log.d("snapshotindex", String.valueOf(index));
+                    int arrayIndex=key.indexOf(snapshot.getKey());
+                    if(arrayIndex != -1 ) {
+                        int index = Integer.parseInt(snapshot.getKey());
+                        Log.d("snapshotindex", String.valueOf(index));
+                        key.remove(arrayIndex);
+                        title.remove(arrayIndex);
+                        purchaseDate.remove(arrayIndex);
+                        odometerUnit.remove(arrayIndex);
+                        manufacturer.remove(arrayIndex);
+                        model.remove(arrayIndex);
+                        milage.remove(arrayIndex);
 
-                key.remove(index);
-                title.remove(index);
-                purchaseDate.remove(index);
-                odometerUnit.remove(index);
-                manufacturer.remove(index);
-                model.remove(index);
-                milage.remove(index);
-                fuelLimit.remove(index);
-                plateNum.remove(index);
-//              notify the adapter
-                adapter.notifyDataSetChanged();
+                        fuelLimit.remove(arrayIndex);
+                        plateNum.remove(arrayIndex);
+//                      notify the adapter
+                        adapter.notifyDataSetChanged();
+                    }
+                }else{
+                    Toast.makeText(Vehicles.this,"Failed to Delete!! Please Try again.",Toast.LENGTH_LONG);
+                }
             }
 
             @Override
@@ -311,6 +271,7 @@ public class Vehicles extends AppCompatActivity {
 
             }
         };
+//      set childEventListener
         databaseReference.addChildEventListener(childEventListener);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -397,7 +358,7 @@ public class Vehicles extends AppCompatActivity {
     }
 
     public void setListAdapter(){
-        adapter = new CustomBaseAdapter(Vehicles.this, title, purchaseDate);
+        adapter = new CustomBaseAdapter(Vehicles.this, listModel);
         listView.setAdapter(adapter);
     }
 
@@ -409,6 +370,11 @@ public class Vehicles extends AppCompatActivity {
         }else{
             status=true;
             databaseReference.child(String.valueOf(position)).removeValue();
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                    .edit()
+                    .putString("vehicle", "Nothing Selected")
+                    .putString("key", "")
+                    .commit();
         }
         return status;
     }

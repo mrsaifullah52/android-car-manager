@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.softtechglobal.androidcarmanager.CustomBaseAdapter;
 import com.softtechglobal.androidcarmanager.R;
 
 import java.util.ArrayList;
@@ -58,8 +59,8 @@ public class AddNotes extends AppCompatActivity {
         message.add("This is the First Message");
         message.add("This is the second message");
 
-        adapter = new CustomBaseAdapter(AddNotes.this, title, date);
-        listView.setAdapter(adapter);
+//        adapter = new CustomBaseAdapter(AddNotes.this, title, date);
+//        listView.setAdapter(adapter);
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

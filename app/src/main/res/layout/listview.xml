@@ -41,20 +41,20 @@
         >
         <TextView
             android:textColor="@color/cardview_light_background"
-            android:id="@+id/titleTv"
+            android:id="@+id/listTitleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="I'll be going on Trip."
+            android:text=""
             android:textSize="18sp"
                 />
 
         <TextView
             android:textColor="@color/cardview_light_background"
             android:textSize="10sp"
-            android:id="@+id/dateTv"
+            android:id="@+id/listDateTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="18 Jan 2021"
+            android:text=""
 
             />
 </LinearLayout>

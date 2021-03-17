@@ -90,13 +90,13 @@ public class AddVehicle extends AppCompatActivity{
             String plateNum=bundle.getString("plateNum");
 
             vehicleNameEt.setText(title);
+            odometerReadingEt.setText(meterReading);
             manufacturerEt.setText(manufacturer);
             vehicleModelEt.setText(model);
             plateNumEt.setText(plateNum);
             purchaseDateEt.setText(purchaseDate);
             milageRangeEt.setText(milage);
             fuelLimitEt.setText(fuelLimit);
-            odometerReadingEt.setText(meterReading);
 
         }else if(type.equals("add")){
             setTitle("Add Vehicle");
@@ -143,10 +143,10 @@ public class AddVehicle extends AppCompatActivity{
                     Toast.makeText(AddVehicle.this,"Enter Mileage Range!",Toast.LENGTH_SHORT).show();
                 }else if(fuelLimit==null){
                     Toast.makeText(AddVehicle.this,"Enter Fuel Limit Name!",Toast.LENGTH_SHORT).show();
-                }else if(odometerUnit==null){
+                }else if(TextUtils.isEmpty(odometerUnit)){
                     Toast.makeText(AddVehicle.this,"Enter Odometer Reading!",Toast.LENGTH_SHORT).show();
                 }else if(purchaseDate==null){
-                    Toast.makeText(AddVehicle.this,"Enter Odometer Unit Type!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddVehicle.this,"Enter Purchase Date!",Toast.LENGTH_SHORT).show();
                 }else{
                     addData(type);
                 }

@@ -31,7 +31,7 @@ public class Signin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        initialize and check firebase
+//      initialize and check firebase
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
             startActivity(new Intent(Signin.this, MainActivity.class));
