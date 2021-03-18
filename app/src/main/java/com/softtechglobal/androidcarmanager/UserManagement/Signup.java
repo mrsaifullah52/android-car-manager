@@ -1,4 +1,4 @@
-package com.softtechglobal.androidcarmanager.usermanagement;
+package com.softtechglobal.androidcarmanager.UserManagement;
 
 import android.os.Bundle;
 import android.text.TextUtils;

@@ -22,7 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.softtechglobal.androidcarmanager.Database.VehicleDB;
 import com.softtechglobal.androidcarmanager.R;
-import com.softtechglobal.androidcarmanager.usermanagement.Signin;
+import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 
 import java.util.Calendar;
 
@@ -215,9 +215,6 @@ public class AddVehicle extends AppCompatActivity{
         manufacturer=manufacturerEt.getText().toString().trim();
         vehicleModel=vehicleModelEt.getText().toString().trim();
         plateNum=plateNumEt.getText().toString().trim();
-//        if(type.equals("edit")){
-//            purchaseDate=Long.valueOf(purchaseDateEt.getText().toString());
-//        }
         milageRange=Double.parseDouble(milageRangeEt.getText().toString());
         fuelLimit=Double.parseDouble(fuelLimitEt.getText().toString());
         odometerUnit=odometerReadingEt.getText().toString().trim();

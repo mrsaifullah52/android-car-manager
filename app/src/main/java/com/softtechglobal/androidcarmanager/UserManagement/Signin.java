@@ -1,4 +1,4 @@
-package com.softtechglobal.androidcarmanager.usermanagement;
+package com.softtechglobal.androidcarmanager.UserManagement;
 
 import android.content.Intent;
 import android.os.Bundle;

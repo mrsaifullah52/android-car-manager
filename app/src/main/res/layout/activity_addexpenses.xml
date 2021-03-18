@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".expenses.AddExpenses"
+    tools:context=".Expenses.AddExpenses"
     android:paddingVertical="20dp"
     android:paddingHorizontal="10dp"
     >
@@ -25,7 +25,7 @@
                 app:srcCompat="@drawable/expensesicon" />
 
             <Spinner
-                android:id="@+id/expenseSpinner"
+                android:id="@+id/expenseTitleSp"
                 android:layout_width="match_parent"
                 android:layout_height="80dp" />
         </LinearLayout>
@@ -51,7 +51,7 @@
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/expenseDate"
+                    android:id="@+id/expenseDateEt"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:clickable="false"
@@ -80,7 +80,7 @@
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/expenseTime"
+                    android:id="@+id/expenseTimeEt"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:clickable="false"
@@ -109,6 +109,7 @@
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/meterEt"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:inputType="number"
@@ -133,7 +134,7 @@
                 app:hintTextColor="@color/colorPrimaryDark"
                 >
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/priceEt"
+                    android:id="@+id/costEt"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_marginTop="10dp"

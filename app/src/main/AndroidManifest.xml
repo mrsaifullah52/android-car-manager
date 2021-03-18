@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Vehicles.AddVehicle"></activity>
         <activity android:name=".Vehicles.Vehicles" />
-        <activity android:name=".usermanagement.Profile" />
+        <activity android:name=".UserManagement.Profile" />
         <activity android:name=".add.Reminders" />
         <activity android:name=".add.Notes" />
         <activity android:name=".add.AddReminder" />
@@ -23,10 +23,10 @@
         <activity android:name=".Search" />
         <activity android:name=".statistics.Statistics" />
         <activity android:name=".capture.Capture" />
-        <activity android:name=".expenses.AddExpenses" />
-        <activity android:name=".usermanagement.Forgotpassword" />
-        <activity android:name=".usermanagement.Signup" />
-        <activity android:name=".usermanagement.Signin" />
+        <activity android:name=".Expenses.AddExpenses" />
+        <activity android:name=".UserManagement.Forgotpassword" />
+        <activity android:name=".UserManagement.Signup" />
+        <activity android:name=".UserManagement.Signin" />
         <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

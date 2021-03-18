@@ -28,7 +28,7 @@ import com.softtechglobal.androidcarmanager.MainActivity;
 import com.softtechglobal.androidcarmanager.ModelForAdapter;
 import com.softtechglobal.androidcarmanager.R;
 import com.softtechglobal.androidcarmanager.CustomBaseAdapter;
-import com.softtechglobal.androidcarmanager.usermanagement.Signin;
+import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,7 +69,7 @@ public class Vehicles extends AppCompatActivity {
         imageButton = (ImageButton)findViewById(R.id.addVehicle);
         listView = (ListView)findViewById(R.id.vehicleslist);
 //      check user is loggedin or not
-//        databaseReference;
+
         firebaseAuth=FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser()==null){
             finish();
@@ -90,7 +90,6 @@ public class Vehicles extends AppCompatActivity {
                 Intent i=new Intent(Vehicles.this, AddVehicle.class);
                 i.putExtra("type", "add");
                 startActivity(i);
-//                finish();
             }
         });
 
@@ -182,20 +181,19 @@ public class Vehicles extends AppCompatActivity {
                 if(snapshot.exists()){
                     int index= Integer.parseInt(snapshot.getKey());
                     Map<String,Object> myVal=(HashMap<String,Object>) snapshot.getValue();
-                            key.add(String.valueOf(index));
-                            title.add(String.valueOf(myVal.get("vehicleName")));
-                            //getting date from long
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.setTimeInMillis((Long) myVal.get("purchaseDate"));
-                            String dateObj = calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR);
-
-                            purchaseDate.add(dateObj);
-                            odometerUnit.add(String.valueOf(myVal.get("modometerReading")));
-                            manufacturer.add(String.valueOf(myVal.get("manufacturer")));
-                            model.add(String.valueOf(myVal.get("vehicleModel")));
-                            milage.add(String.valueOf(myVal.get("mileageRange")));
-                            fuelLimit.add(String.valueOf(myVal.get("fuelLimit")));
-                            plateNum.add(String.valueOf(myVal.get("plateNumber")));
+                    key.add(String.valueOf(index));
+                    title.add(String.valueOf(myVal.get("vehicleName")));
+                    //getting date from long
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis((Long) myVal.get("purchaseDate"));
+                    String dateObj = calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR);
+                    purchaseDate.add(dateObj);
+                    odometerUnit.add(String.valueOf(myVal.get("modometerReading")));
+                    manufacturer.add(String.valueOf(myVal.get("manufacturer")));
+                    model.add(String.valueOf(myVal.get("vehicleModel")));
+                    milage.add(String.valueOf(myVal.get("mileageRange")));
+                    fuelLimit.add(String.valueOf(myVal.get("fuelLimit")));
+                    plateNum.add(String.valueOf(myVal.get("plateNumber")));
 
                     if(!title.isEmpty() && !purchaseDate.isEmpty()){
                         for(int i=0;i<title.size();i++){

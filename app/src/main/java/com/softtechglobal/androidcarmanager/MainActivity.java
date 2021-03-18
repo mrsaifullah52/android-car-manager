@@ -20,10 +20,10 @@ import com.softtechglobal.androidcarmanager.add.AddNotes;
 import com.softtechglobal.androidcarmanager.add.AddReminder;
 import com.softtechglobal.androidcarmanager.capture.Capture;
 import com.softtechglobal.androidcarmanager.compute.Compute;
-import com.softtechglobal.androidcarmanager.expenses.AddExpenses;
+import com.softtechglobal.androidcarmanager.Expenses.AddExpenses;
 import com.softtechglobal.androidcarmanager.statistics.Statistics;
-import com.softtechglobal.androidcarmanager.usermanagement.Profile;
-import com.softtechglobal.androidcarmanager.usermanagement.Signin;
+import com.softtechglobal.androidcarmanager.UserManagement.Profile;
+import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                         .edit()
                         .putString("vehicle", "Nothing Selected")
                         .putString("key", "null")
+                        .putBoolean("isFirstRun", true)
                         .commit();
                 startActivity(new Intent(MainActivity.this, Signin.class));
                 finish();

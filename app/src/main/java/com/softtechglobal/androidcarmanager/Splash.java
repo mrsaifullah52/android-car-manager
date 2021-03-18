@@ -6,7 +6,7 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.softtechglobal.androidcarmanager.usermanagement.Signin;
+import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 
 public class Splash extends AppCompatActivity {
 
