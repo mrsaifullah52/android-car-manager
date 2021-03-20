@@ -50,14 +50,19 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
 
     String key;
     int expensesIndex;
-    ArrayList<String> keys=new ArrayList<String>();
+    ArrayList<String> keys = new ArrayList<String>();
+
+    int mYear;
+    int mMonth;
+    int mDay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addexpenses);
 
-        firebaseAuth=FirebaseAuth.getInstance();
-        if(firebaseAuth.getCurrentUser()==null){
+        firebaseAuth = FirebaseAuth.getInstance();
+        if (firebaseAuth.getCurrentUser() == null) {
             finish();
             startActivity(new Intent(AddExpenses.this, Signin.class));
         }
@@ -81,19 +86,20 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
         dateEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Calendar calendar=Calendar.getInstance();
-                int mYear=calendar.get(Calendar.YEAR);
-                int mMonth=calendar.get(Calendar.MONTH);
-                int mDay=calendar.get(Calendar.DAY_OF_MONTH);
+                final Calendar calendar = Calendar.getInstance();
+                mYear = calendar.get(Calendar.YEAR);
+                mMonth = calendar.get(Calendar.MONTH);
+                mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
 //                setting date picker
                 datePickerDialog = new DatePickerDialog(AddExpenses.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        dateEt.setText(dayOfMonth+"/"+(month+1)+"/"+year);
-                        date=calendar.getTimeInMillis();
+                        dateEt.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                        calendar.set(year, month, dayOfMonth);
+                        date = calendar.getTimeInMillis();
                     }
-                }, mYear,mMonth,mDay);
+                }, mYear, mMonth, mDay);
                 datePickerDialog.show();
             }
         });

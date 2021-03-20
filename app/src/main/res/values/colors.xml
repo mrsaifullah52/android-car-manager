@@ -14,5 +14,13 @@
     <color name="colorOnSurface">#000000</color>
     <color name="colorError">#B00020</color>
     <color name="colorOnError">#FFFFFF</color>
-<!--    <color name=" "> </color>-->
+    <!--    <color name=" "> </color>-->
+
+    <color name="bar1">#BAA4C7</color>
+    <color name="bar2">#CDB4DB</color>
+    <color name="bar3">#FFC8DD</color>
+    <color name="bar4">#FFAFCC</color>
+    <color name="bar5">#BDE0FE</color>
+    <color name="bar6">#B0D9FF</color>
+    <color name="bar7">#A2D2FF</color>
 </resources>

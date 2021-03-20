@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".statistics.Statistics"
+    tools:context=".Statistics.Statistics"
 
     android:padding="20dp">
 
@@ -31,9 +31,13 @@
     </LinearLayout>
 
     <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/chart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/chart" />
+        android:layout_height="match_parent" />
 
+    <!--    <me.ithebk.barchart.BarChart-->
+    <!--        android:id="@+id/bar_chart_vertical"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"/>-->
 
 </LinearLayout>

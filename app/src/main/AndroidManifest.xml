@@ -21,7 +21,7 @@
         <activity android:name=".add.AddNotes" />
         <activity android:name=".compute.Compute" />
         <activity android:name=".Search" />
-        <activity android:name=".statistics.Statistics" />
+        <activity android:name=".Statistics.Statistics" />
         <activity android:name=".capture.Capture" />
         <activity android:name=".Expenses.AddExpenses" />
         <activity android:name=".UserManagement.Forgotpassword" />

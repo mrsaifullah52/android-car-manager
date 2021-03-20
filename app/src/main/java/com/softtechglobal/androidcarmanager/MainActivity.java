@@ -21,7 +21,7 @@ import com.softtechglobal.androidcarmanager.add.AddReminder;
 import com.softtechglobal.androidcarmanager.capture.Capture;
 import com.softtechglobal.androidcarmanager.compute.Compute;
 import com.softtechglobal.androidcarmanager.Expenses.AddExpenses;
-import com.softtechglobal.androidcarmanager.statistics.Statistics;
+import com.softtechglobal.androidcarmanager.Statistics.Statistics;
 import com.softtechglobal.androidcarmanager.UserManagement.Profile;
 import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 
