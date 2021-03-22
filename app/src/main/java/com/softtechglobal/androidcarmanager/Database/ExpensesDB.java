@@ -1,19 +1,28 @@
 package com.softtechglobal.androidcarmanager.Database;
 
 public class ExpensesDB {
-    String expenseType;
+    String expenseTitle, expenseType;
     Long date, time;
     Double odometer, cost;
 
     public ExpensesDB() {
     }
 
-    public ExpensesDB(String expenseType, Long date, Long time, Double odometer, Double cost) {
+    public ExpensesDB(String expenseTitle, String expenseType, Long date, Long time, Double odometer, Double cost) {
+        this.expenseTitle = expenseTitle;
         this.expenseType = expenseType;
         this.date = date;
         this.time = time;
         this.odometer = odometer;
         this.cost = cost;
+    }
+
+    public String getExpenseTitle() {
+        return expenseTitle;
+    }
+
+    public void setExpenseTitle(String expenseTitle) {
+        this.expenseTitle = expenseTitle;
     }
 
     public String getExpenseType() {

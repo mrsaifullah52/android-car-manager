@@ -8,7 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class CustomBaseAdapter extends BaseAdapter {
     Context context;
@@ -60,11 +62,33 @@ public class CustomBaseAdapter extends BaseAdapter {
             }else{
                 holder = (MyHolder) row.getTag();
             }
+            Calendar c=Calendar.getInstance();
+            c.setTimeInMillis(modellist.get(position).getDate());
+            holder.dateTv.setText(c.get(Calendar.DAY_OF_MONTH)+"/"+c.get(Calendar.MONTH)+"/"+c.get(Calendar.YEAR));
             holder.titleTv.setText(modellist.get(position).getTitle());
-            holder.dateTv.setText(modellist.get(position).getDate());
             return row;
         }
 
+    //filter
+    public void titleDateFilter(Long startDate, Long endDate, String query){
+        query = query.toLowerCase(Locale.getDefault());
+
+        modellist.clear();
+        if (startDate == null && endDate == null && query.length()==0){
+            modellist.addAll(arrayList);
+        }
+        else {
+            for (ModelForAdapter model : arrayList){
+                if ((model.getTitle().toLowerCase(Locale.getDefault()).contains(query))
+                        && ( model.getDate() >= startDate)
+                        && ( model.getDate() <= endDate))
+                {
+                    modellist.add(model);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
 }
 
 

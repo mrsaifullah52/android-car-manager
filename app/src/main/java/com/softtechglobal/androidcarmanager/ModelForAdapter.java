@@ -1,9 +1,10 @@
 package com.softtechglobal.androidcarmanager;
 
 public class ModelForAdapter {
-    String title, date;
+    String title;
+    Long date;
 
-    public ModelForAdapter(String title, String date) {
+    public ModelForAdapter(String title, Long date) {
         this.title = title;
         this.date = date;
     }
@@ -16,11 +17,11 @@ public class ModelForAdapter {
         this.title = title;
     }
 
-    public String getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 }

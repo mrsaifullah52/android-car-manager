@@ -1,5 +1,6 @@
 package com.softtechglobal.androidcarmanager.Vehicles;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,11 +24,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.annotations.Nullable;
+import com.softtechglobal.androidcarmanager.CustomBaseAdapter;
 import com.softtechglobal.androidcarmanager.Database.VehicleDB;
 import com.softtechglobal.androidcarmanager.MainActivity;
 import com.softtechglobal.androidcarmanager.ModelForAdapter;
 import com.softtechglobal.androidcarmanager.R;
-import com.softtechglobal.androidcarmanager.CustomBaseAdapter;
 import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class Vehicles extends AppCompatActivity {
     ArrayList<String> title=new ArrayList<String>();
     ArrayList<String> odometerUnit=new ArrayList<String>();
     ArrayList<String> manufacturer=new ArrayList<String>();
-    ArrayList<String> purchaseDate=new ArrayList<String>();
+    ArrayList<Long> purchaseDate=new ArrayList<Long>();
     ArrayList<String> model=new ArrayList<String>();
     ArrayList<String> milage=new ArrayList<String>();
     ArrayList<String> fuelLimit=new ArrayList<String>();
@@ -60,6 +61,7 @@ public class Vehicles extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
 
     boolean status;
+    ProgressDialog progressDialog;
     ChildEventListener childEventListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +70,10 @@ public class Vehicles extends AppCompatActivity {
         getSupportActionBar().hide();
         imageButton = (ImageButton)findViewById(R.id.addVehicle);
         listView = (ListView)findViewById(R.id.vehicleslist);
-//      check user is loggedin or not
 
+        progressDialog= ProgressDialog.show(Vehicles.this, "","Please Wait, Loading...",true);
+
+//      check user is loggedin or not
         firebaseAuth=FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser()==null){
             finish();
@@ -184,11 +188,11 @@ public class Vehicles extends AppCompatActivity {
                     key.add(String.valueOf(index));
                     title.add(String.valueOf(myVal.get("vehicleName")));
                     //getting date from long
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTimeInMillis((Long) myVal.get("purchaseDate"));
-                    String dateObj = calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR);
-                    purchaseDate.add(dateObj);
-                    odometerUnit.add(String.valueOf(myVal.get("modometerReading")));
+//                    Calendar calendar = Calendar.getInstance();
+//                    calendar.setTimeInMillis((Long) myVal.get("purchaseDate"));
+//                    String dateObj = calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR);
+                    purchaseDate.add((Long) myVal.get("purchaseDate"));
+                    odometerUnit.add(String.valueOf(myVal.get("odometerReading")));
                     manufacturer.add(String.valueOf(myVal.get("manufacturer")));
                     model.add(String.valueOf(myVal.get("vehicleModel")));
                     milage.add(String.valueOf(myVal.get("mileageRange")));
@@ -205,8 +209,11 @@ public class Vehicles extends AppCompatActivity {
                     }else{
                         Toast.makeText(Vehicles.this, "Failed in Retrieving Data",Toast.LENGTH_SHORT).show();
                     }
-                        Log.d("dateobj", purchaseDate.get(0));
+//                        Log.d("dateobj", purchaseDate.get(0));
+                    progressDialog.dismiss();
                 }else{
+                    progressDialog.dismiss();
+                    Toast.makeText(Vehicles.this,"Failed to Fetch Data try again",Toast.LENGTH_SHORT);
                     Log.d("snapshot:", "snapshot does not exist");
                 }
             }
@@ -221,7 +228,7 @@ public class Vehicles extends AppCompatActivity {
                             Calendar calendar = Calendar.getInstance();
                             calendar.setTimeInMillis(vehicleDB.getPurchaseDate());
                             String dateObj = calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR);
-                            purchaseDate.set(arrayIndex,dateObj);
+                            purchaseDate.set(arrayIndex, vehicleDB.getPurchaseDate());
                             odometerUnit.set(arrayIndex,vehicleDB.getModometerReading());
                             manufacturer.set(arrayIndex,vehicleDB.getManufacturer());
                             model.set(arrayIndex,vehicleDB.getVehicleModel());
@@ -381,5 +388,11 @@ public class Vehicles extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         databaseReference.removeEventListener(childEventListener);
+    }
+
+    @Override
+    public void onBackPressed() {
+        progressDialog.dismiss();
+        super.onBackPressed();
     }
 }

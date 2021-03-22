@@ -1,5 +1,6 @@
 package com.softtechglobal.androidcarmanager.UserManagement;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -7,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,10 +24,10 @@ import com.softtechglobal.androidcarmanager.R;
 public class Signin extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    ProgressBar progressBar;
     EditText emailEt, passwordEt;
     Button SigninBtn;
 
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +40,6 @@ public class Signin extends AppCompatActivity {
 
         setContentView(R.layout.activity_signin);
         setTitle("Sign In");
-        progressBar=(ProgressBar)findViewById(R.id.progressBar);
         emailEt=(EditText)findViewById(R.id.email);
         passwordEt=(EditText)findViewById(R.id.pass);
         SigninBtn=(Button)findViewById(R.id.btnSignIn);
@@ -49,28 +48,33 @@ public class Signin extends AppCompatActivity {
         SigninBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                progressDialog= ProgressDialog.show(Signin.this, "","Please Wait, Authenticating...",true);
+
                 String email = emailEt.getText().toString();
                 final String password = passwordEt.getText().toString();
                 if (TextUtils.isEmpty(email)) {
+                    progressDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
                     return;
                 }else if (TextUtils.isEmpty(password)) {
+                    progressDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
                     return;
                 }else {
-                    progressBar.setVisibility(View.VISIBLE);
                     mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            progressBar.setVisibility(View.GONE);
                             if (!task.isSuccessful()) {
                                 // there was an error
                                 if (password.length() < 6) {
                                     passwordEt.setError("Please Enter Corrent Passowrd.");
                                 } else {
+                                    progressDialog.dismiss();
                                     Toast.makeText(Signin.this, "Authentication Failed", Toast.LENGTH_LONG).show();
                                 }
                             } else {
+                                progressDialog.dismiss();
                                 Intent intent = new Intent(Signin.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -107,5 +111,11 @@ public class Signin extends AppCompatActivity {
     public void signUp(View v){
         Intent i = new Intent(Signin.this,Signup.class);
         startActivity(i);
+    }
+
+    @Override
+    public void onBackPressed() {
+        progressDialog.dismiss();
+        super.onBackPressed();
     }
 }

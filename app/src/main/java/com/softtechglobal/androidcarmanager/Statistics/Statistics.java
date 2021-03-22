@@ -1,5 +1,6 @@
 package com.softtechglobal.androidcarmanager.Statistics;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,7 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.softtechglobal.androidcarmanager.Database.ExpensesDB;
 import com.softtechglobal.androidcarmanager.R;
+import com.softtechglobal.androidcarmanager.Search;
 import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 
 import java.util.ArrayList;
@@ -34,47 +38,39 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Statistics extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+//  barchart
     BarChart barChart;
     BarDataSet barDataSet1, barDataSet2, barDataSet3, barDataSet4, barDataSet5, barDataSet6;
     BarData barData;
     ArrayList<BarEntry> barEntries1, barEntries2, barEntries3, barEntries4, barEntries5, barEntries6;
-    ArrayList<String> barEntriesLabel = new ArrayList<String>();
-
+//  spinner
     Spinner statisticsSpinner;
-    private final String[] service = {"Last 7 Days", "Last 1 Month", "Last 12 Months"};
+    private final String[] service = {"Select Duration","Last 7 Days", "Last 1 Month", "Last 12 Months"};
     int duration;
-
     //  graph values from firebase
     ArrayList<Double> maintenance = new ArrayList<Double>();
     ArrayList<Long> maintenanceDate = new ArrayList<Long>();
-
     ArrayList<Double> fuel = new ArrayList<Double>();
     ArrayList<Long> fuelDate = new ArrayList<Long>();
-
     ArrayList<Double> purchase = new ArrayList<Double>();
     ArrayList<Long> purchaseDate = new ArrayList<Long>();
-
     ArrayList<Double> services = new ArrayList<Double>();
     ArrayList<Long> servicesDate = new ArrayList<Long>();
-
     ArrayList<Double> fine = new ArrayList<Double>();
     ArrayList<Long> fineDate = new ArrayList<Long>();
-
     ArrayList<Double> tax = new ArrayList<Double>();
     ArrayList<Long> taxDate = new ArrayList<Long>();
+    Long queryDate, todayDate;
+    String vehicleId;
+    Double cost1 =  0.01,  cost2 =  0.01, cost3 =  0.01, cost4 =  0.01, cost5 =  0.01, cost6 =  0.01;
 
     private DatabaseReference databaseReference1;
     private Query databaseReference2;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
 
-    Long queryDate, todayDate;
-
-    String vehicleId;
-
-    Boolean isFirtTime1 = false;
-    Boolean isFirtTime2 = false;
-
+    ProgressDialog progressDialog;
+    ImageButton searchBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,17 +79,13 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
 
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
-
         if (firebaseAuth.getCurrentUser() == null) {
             finish();
             startActivity(new Intent(Statistics.this, Signin.class));
         }
         vehicleId = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                 .getString("key", "-1");
-
-//        +"/Maintenance"
-
-
+        searchBtn= (ImageButton) findViewById(R.id.searchBtn);
         statisticsSpinner = (Spinner) findViewById(R.id.statisticsSpinner);
         statisticsSpinner.setOnItemSelectedListener(this);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, service);
@@ -101,8 +93,17 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
         statisticsSpinner.setAdapter(adapter);
 
         barChart = findViewById(R.id.chart);
-//        barChart.setDescription("Percent(%)");
-//        barChart.getXAxis().setEnabled(true);
+        barChart.getDescription().setText("Statistics Variables");
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(Statistics.this, Search.class);
+                startActivity(i);
+            }
+        });
+
+//      barChart.getXAxis().setEnabled(true);
         YAxis rightYAxis = barChart.getAxisRight();
         rightYAxis.setEnabled(false);
         XAxis topYAxis = barChart.getXAxis();
@@ -116,121 +117,78 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
         barEntries5 = new ArrayList<BarEntry>();
         barEntries6 = new ArrayList<BarEntry>();
 
+        barEntries1.add(new BarEntry(1, cost1.floatValue()));
+        barEntries2.add(new BarEntry(2, cost2.floatValue()));
+        barEntries3.add(new BarEntry(3, cost3.floatValue()));
+        barEntries4.add(new BarEntry(4, cost4.floatValue()));
+        barEntries5.add(new BarEntry(5, cost5.floatValue()));
+        barEntries6.add(new BarEntry(6, cost6.floatValue()));
+        initializeBarGraph(false);
 
-        barEntries1.add(new BarEntry(1, 0));
-        barEntries2.add(new BarEntry(2, 0));
-        barEntries3.add(new BarEntry(3, 0));
-        barEntries4.add(new BarEntry(4, 0));
-        barEntries5.add(new BarEntry(5, 0));
-        barEntries6.add(new BarEntry(6, 0));
-        initializeBarGraph();
-
+        progressDialog= ProgressDialog.show(Statistics.this, "","Please Wait, Loading...",true);
+        getDataFromFirebase();
     }
 
-//    private void getLabels(){
-//        barEntriesLabel.add("Maintenance");
-//        barEntriesLabel.add("Fuel");
-//        barEntriesLabel.add("Purchase");
-//        barEntriesLabel.add("Services");
-////        barEntriesLabel.add("Engine Tuning");
-//        barEntriesLabel.add("Fine");
-//        barEntriesLabel.add("Tax");
-//    }
+//    get data before spinner get changed
+    public void initializeBarGraph(Boolean value) {
+        if (value) {
+            barDataSet1.removeFirst();
+            barDataSet2.removeFirst();
+            barDataSet3.removeFirst();
+            barDataSet4.removeFirst();
+            barDataSet5.removeFirst();
+            barDataSet6.removeFirst();
 
-
-    public void initializeBarGraph() {
-
-        //      Removing previous data
-//        if(isFirtTime2){
-//            Log.d("isFirtTime","removing");
-//
-//            barDataSet1.removeEntry(0);
-//            barDataSet2.removeEntry(0);
-//            barDataSet3.removeEntry(0);
-//            barDataSet4.removeEntry(0);
-//            barDataSet5.removeEntry(0);
-//            barDataSet6.removeEntry(0);
-//
-//
-//            barData.removeDataSet(0);
-//            barData.removeDataSet(1);
-//            barData.removeDataSet(2);
-//            barData.removeDataSet(3);
-//            barData.removeDataSet(4);
-//            barData.removeDataSet(5);
-//            barChart.removeAllViews();
-//        }
-
-
-        //      setting labels
-        barDataSet1 = new BarDataSet(barEntries1, "Maintenance");
-        barDataSet2 = new BarDataSet(barEntries2, "Fuel");
-        barDataSet3 = new BarDataSet(barEntries3, "Purchase");
-        barDataSet4 = new BarDataSet(barEntries4, "Services");
-        barDataSet5 = new BarDataSet(barEntries5, "Fine");
-        barDataSet6 = new BarDataSet(barEntries6, "Tax");
+            barChart.notifyDataSetChanged();
+            barChart.invalidate();
+        }else{
+//      setting labels
+            barDataSet1 = new BarDataSet(barEntries1, "Maintenance");
+            barDataSet2 = new BarDataSet(barEntries2, "Fuel");
+            barDataSet3 = new BarDataSet(barEntries3, "Purchase");
+            barDataSet4 = new BarDataSet(barEntries4, "Services");
+            barDataSet5 = new BarDataSet(barEntries5, "Fine");
+            barDataSet6 = new BarDataSet(barEntries6, "Tax");
 
 //      setting colours
-        barDataSet1.setColors(ColorTemplate.COLORFUL_COLORS);
-        barDataSet2.setColors(R.color.bar2);
-        barDataSet3.setColors(ColorTemplate.JOYFUL_COLORS);
-        barDataSet4.setColors(ColorTemplate.LIBERTY_COLORS);
-        barDataSet5.setColors(ColorTemplate.VORDIPLOM_COLORS);
-        barDataSet5.setColors(ColorTemplate.PASTEL_COLORS);
-
+            barDataSet1.setColors(ColorTemplate.COLORFUL_COLORS);
+            barDataSet2.setColors(R.color.bar2);
+            barDataSet3.setColors(ColorTemplate.JOYFUL_COLORS);
+            barDataSet4.setColors(ColorTemplate.LIBERTY_COLORS);
+            barDataSet5.setColors(ColorTemplate.VORDIPLOM_COLORS);
+            barDataSet5.setColors(ColorTemplate.PASTEL_COLORS);
 
 //      setting text colour
-        barDataSet1.setValueTextColor(Color.BLUE);
-        barDataSet2.setValueTextColor(Color.BLUE);
-        barDataSet3.setValueTextColor(Color.BLUE);
-        barDataSet4.setValueTextColor(Color.BLUE);
-        barDataSet5.setValueTextColor(Color.BLUE);
-        barDataSet6.setValueTextColor(Color.BLUE);
+            barDataSet1.setValueTextColor(Color.BLUE);
+            barDataSet2.setValueTextColor(Color.BLUE);
+            barDataSet3.setValueTextColor(Color.BLUE);
+            barDataSet4.setValueTextColor(Color.BLUE);
+            barDataSet5.setValueTextColor(Color.BLUE);
+            barDataSet6.setValueTextColor(Color.BLUE);
 
 //      setting value textsize
-        barDataSet1.setValueTextSize(12);
-        barDataSet2.setValueTextSize(12);
-        barDataSet3.setValueTextSize(12);
-        barDataSet4.setValueTextSize(12);
-        barDataSet5.setValueTextSize(12);
-        barDataSet6.setValueTextSize(12);
+            barDataSet1.setValueTextSize(12);
+            barDataSet2.setValueTextSize(12);
+            barDataSet3.setValueTextSize(12);
+            barDataSet4.setValueTextSize(12);
+            barDataSet5.setValueTextSize(12);
+            barDataSet6.setValueTextSize(12);
 
-        barData = new BarData(barDataSet1, barDataSet2, barDataSet3, barDataSet4, barDataSet5, barDataSet6);
+            barData = new BarData(barDataSet1, barDataSet2, barDataSet3, barDataSet4, barDataSet5, barDataSet6);
+            float groupSpace = 0.06f;
+            float barSpace = 0.3f; // x2 dataset
+            float barWidth = 0.7f; // x2 dataset
+            barData.setBarWidth(barWidth);
+            barChart.setData(barData);
+            barChart.groupBars(0.5f, groupSpace, barSpace);
 
-        float groupSpace = 0.06f;
-        float barSpace = 0.3f; // x2 dataset
-        float barWidth = 0.7f; // x2 dataset
-
-        barData.setBarWidth(barWidth);
-
-        barChart.setData(barData);
-        barChart.groupBars(0.5f, groupSpace, barSpace);
-
-        barChart.notifyDataSetChanged();
-        barChart.invalidate();
+//          barChart.setFitBars(true);
+            barChart.notifyDataSetChanged();
+//            barChart.invalidate();
+        }
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        duration = position;
-
-        final Date currentDate = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
-        todayDate = calendar.getTimeInMillis();
-
-        if (duration == 0) {
-            calendar.add(Calendar.DATE, -7);
-            queryDate = calendar.getTimeInMillis();
-//            Log.d("duration", calendar.get(Calendar.DAY_OF_MONTH)+"/"+calendar.get(Calendar.MONTH)+"/"+calendar.get(Calendar.YEAR));
-        } else if (duration == 1) {
-            calendar.add(Calendar.MONTH, -1);
-            queryDate = calendar.getTimeInMillis();
-        } else {
-            calendar.add(Calendar.YEAR, -1);
-            queryDate = calendar.getTimeInMillis();
-        }
+    public void getDataFromFirebase() {
 
         databaseReference1 = FirebaseDatabase.getInstance().getReference("users/" + user.getUid() + "/expenses/" + vehicleId);
 
@@ -246,27 +204,14 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
                             public void onSuccess(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                     ExpensesDB expensesDB = ds.getValue(ExpensesDB.class);
-                                    if (expensesDB.getDate() >= queryDate && expensesDB.getDate() <= todayDate) {
-                                        Log.d("expensesDB(maintena)", String.valueOf(expensesDB.getCost()));
-                                        maintenance.add(expensesDB.getCost());
-                                        maintenanceDate.add(expensesDB.getDate());
-                                    }
+                                    Log.d("expensesDB(maintena)", String.valueOf(expensesDB.getCost()));
+                                    maintenance.add(expensesDB.getCost());
+                                    maintenanceDate.add(expensesDB.getDate());
                                 }
                             }
                         });
-                        Double cost1 = 0.1;
-                        for (Double val : maintenance) {
-                            cost1 = val + cost1;
-                        }
-                        if (barEntries1.isEmpty()) {
-                            Log.d("barEntries1", "Empty");
-                        } else {
-                            barEntries1.remove(0);
-                        }
-                        barEntries1.add(new BarEntry(1, cost1.floatValue()));
                     } else {
-                        Log.d("maintenance", "Empty");
-                        barEntries1.add(new BarEntry(1, 0));
+                        Log.d("expensesDB(maintenance)", "Empty");
                     }
 
 //                  fuel
@@ -277,27 +222,14 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
                             public void onSuccess(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                     ExpensesDB expensesDB = ds.getValue(ExpensesDB.class);
-                                    if (expensesDB.getDate() >= queryDate) {
-                                        Log.d("expensesDB(fuel)", String.valueOf(expensesDB.getCost()));
-                                        fuel.add(expensesDB.getCost());
-                                        fuelDate.add(expensesDB.getDate());
-                                    }
+                                    Log.d("expensesDB(fuel)", String.valueOf(expensesDB.getCost()));
+                                    fuel.add(expensesDB.getCost());
+                                    fuelDate.add(expensesDB.getDate());
                                 }
                             }
                         });
-                        Double cost2 = 0.1;
-                        for (Double val : fuel) {
-                            cost2 = val + cost2;
-                        }
-                        if (barEntries2.isEmpty()) {
-                            Log.d("barEntries2", "Empty");
-                        } else {
-                            barEntries2.remove(0);
-                        }
-                        barEntries2.add(new BarEntry(2, cost2.floatValue()));
                     } else {
                         Log.d("fuel", "Empty");
-                        barEntries2.add(new BarEntry(2, 0));
                     }
 
 //                  purchase
@@ -308,27 +240,14 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
                             public void onSuccess(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                     ExpensesDB expensesDB = ds.getValue(ExpensesDB.class);
-                                    if (expensesDB.getDate() >= queryDate) {
-                                        Log.d("expensesDB(purchase)", String.valueOf(expensesDB.getCost()));
-                                        purchase.add(expensesDB.getCost());
-                                        purchaseDate.add(expensesDB.getDate());
-                                    }
+                                    Log.d("expensesDB(purchase)", String.valueOf(expensesDB.getCost()));
+                                    purchase.add(expensesDB.getCost());
+                                    purchaseDate.add(expensesDB.getDate());
                                 }
                             }
                         });
-                        Double cost3 = 0.1;
-                        for (Double val : purchase) {
-                            cost3 = val + cost3;
-                        }
-                        if (barEntries3.isEmpty()) {
-                            Log.d("barEntries3", "Empty");
-                        } else {
-                            barEntries3.remove(0);
-                        }
-                        barEntries3.add(new BarEntry(3, cost3.floatValue()));
                     } else {
                         Log.d("purchase", "Empty");
-                        barEntries3.add(new BarEntry(3, 0));
                     }
 
 //                  services
@@ -339,27 +258,14 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
                             public void onSuccess(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                     ExpensesDB expensesDB = ds.getValue(ExpensesDB.class);
-                                    if (expensesDB.getDate() >= queryDate) {
-                                        Log.d("expensesDB(services)", String.valueOf(expensesDB.getCost()));
-                                        services.add(expensesDB.getCost());
-                                        servicesDate.add(expensesDB.getDate());
-                                    }
+                                    Log.d("expensesDB(services)", String.valueOf(expensesDB.getCost()));
+                                    services.add(expensesDB.getCost());
+                                    servicesDate.add(expensesDB.getDate());
                                 }
                             }
                         });
-                        Double cost4 = 0.1;
-                        for (Double val : services) {
-                            cost4 = val + cost4;
-                        }
-                        if (barEntries4.isEmpty()) {
-                            Log.d("barEntries4", "Empty");
-                        } else {
-                            barEntries4.remove(0);
-                        }
-                        barEntries4.add(new BarEntry(4, cost4.floatValue()));
                     } else {
                         Log.d("services", "Empty");
-                        barEntries4.add(new BarEntry(4, 0));
                     }
 
 //                  fine
@@ -370,27 +276,14 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
                             public void onSuccess(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                     ExpensesDB expensesDB = ds.getValue(ExpensesDB.class);
-                                    if (expensesDB.getDate() >= queryDate) {
                                         Log.d("expensesDB(fine)", String.valueOf(expensesDB.getCost()));
                                         fine.add(expensesDB.getCost());
                                         fineDate.add(expensesDB.getDate());
-                                    }
                                 }
                             }
                         });
-                        Double cost5 = 0.1;
-                        for (Double val : fine) {
-                            cost5 = val + cost5;
-                        }
-                        if (barEntries5.isEmpty()) {
-                            Log.d("barEntries5", "Empty");
-                        } else {
-                            barEntries5.remove(0);
-                        }
-                        barEntries5.add(new BarEntry(5, cost5.floatValue()));
                     } else {
                         Log.d("fine", "Empty");
-                        barEntries5.add(new BarEntry(5, 0));
                     }
 
 //                  tax
@@ -401,162 +294,352 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
                             public void onSuccess(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                     ExpensesDB expensesDB = ds.getValue(ExpensesDB.class);
-                                    if (expensesDB.getDate() >= queryDate) {
                                         Log.d("expensesDB(tax)", String.valueOf(expensesDB.getCost()));
                                         tax.add(expensesDB.getCost());
                                         taxDate.add(expensesDB.getDate());
-                                    }
                                 }
                             }
                         });
-                        Double cost6 = 0.1;
-                        for (Double val : tax) {
-                            cost6 = val + cost6;
-                        }
-                        if (barEntries6.isEmpty()) {
-                            Log.d("barEntries6", "Empty");
-                        } else {
-                            barEntries6.remove(0);
-                        }
-                        barEntries6.add(new BarEntry(6, cost6.floatValue()));
                     } else {
-                        Log.d("fuel", "Empty");
-                        barEntries6.add(new BarEntry(6, 0));
+                        Log.d("Tax", "Empty");
                     }
-
-
-//                    settingValues();
+                    progressDialog.dismiss();
+                }else{
+                    progressDialog.dismiss();
+                    Toast.makeText(Statistics.this,"Failed to Fetch Data try again",Toast.LENGTH_SHORT).show();
+                    Log.d("dataSnapshot.exists()", "Empty");
                 }
-
-
-//                initializeBarGraph();
-
-//                barDataSet1 = new BarDataSet(barEntries1, "Maintenance");
-//                barDataSet2 = new BarDataSet(barEntries2, "Fuel");
-//                barDataSet3 = new BarDataSet(barEntries3, "Purchase");
-//                barDataSet4 = new BarDataSet(barEntries4, "Services");
-//                barDataSet5 = new BarDataSet(barEntries5, "Fine");
-//                barDataSet6 = new BarDataSet(barEntries6, "Tax");
-
-                initializeBarGraph();
             }
         });
-
-//        initializeBarGraph();
-
-
-//        if(!isFirtTime1) {
-//            isFirtTime1 = true;
-//            isFirtTime2 = false;
-//        }else{
-//            isFirtTime1 = false;
-//            isFirtTime2 = true;
-//        }
-//
-//            barChart.notifyDataSetChanged();
-//            barChart.invalidate();
-//            initializeBarGraph();
-//            initializeBarGraph();
-//        }
-//        else{
-//            initializeBarGraph();
-//            barChart.notifyDataSetChanged();
-//            barChart.invalidate();
-//            initializeBarGraph();
-//        }
-//        else{
-//            if(!isFirtTime2){
-//                isFirtTime2=true;
-//                initializeBarGraph();
-//            }
-//        }
-
-//        if(isFirtTime1){
-//            initializeBarGraph();
-//            isFirtTime1=false;
-//        }
-
-//        initializeBarGraph();
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        duration = position;
+        final Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        todayDate = calendar.getTimeInMillis();
 
-//    public void settingValues(){
-//        //                  setting bar entries
-//        if(!maintenance.isEmpty()) {
-//            Double cost1=0.0;
-//            for(Double val:maintenance){
-//                cost1=val+cost1;
-//            }
-//            float val=cost1.floatValue();
-//            barEntries1.add(new BarEntry(1f, cost1.floatValue()));
-////                        getEntries("Maintenance", cost.floatValue());
-//        }else{
-//            Log.d("maintenance", "Empty");
-//            barEntries1.add(new BarEntry(1f, 0));
-//        }
-//
-//        if(!fuel.isEmpty()) {
-//            Double cost2=0.0;
-//            for(Double val:fuel){
-//                cost2=val+cost2;
-//            }
-//            barEntries2.add(new BarEntry(2f, cost2.floatValue()));
-////                        getEntries("Fuel", cost.floatValue());
-//        }else{
-//            Log.d("fuel", "Empty");
-//            barEntries2.add(new BarEntry(2f, 0));
-//        }
-//
-//        if(!purchase.isEmpty()) {
-//            Double cost3=0.0;
-//            for(Double val:purchase){
-//                cost3=val+cost3;
-//            }
-//            barEntries3.add(new BarEntry(3f, cost3.floatValue()));
-////                        getEntries("Purchase", cost.floatValue());
-//        }else{
-//            Log.d("purchase", "Empty");
-//            barEntries3.add(new BarEntry(3f, 0));
-//        }
-//
-//        if(!services.isEmpty()) {
-//            Double cost4=0.0;
-//            for(Double val:services){
-//                cost4=val+cost4;
-//            }
-//            barEntries4.add(new BarEntry(4f, cost4.floatValue()));
-////                        getEntries("Services", cost.floatValue());
-//        }else{
-//            Log.d("services", "Empty");
-//            barEntries4.add(new BarEntry(4f, 0));
-//        }
-//
-//        if(!fine.isEmpty()) {
-//            Double cost5=0.0;
-//            for(Double val:fine){
-//                cost5=val+cost5;
-//            }
-//            barEntries5.add(new BarEntry(6f, cost5.floatValue()));
-////                        getEntries("Fine", cost.floatValue());
-//        }else{
-//            Log.d("fine", "Empty");
-//            barEntries6.add(new BarEntry(6f, 0));
-//        }
-//
-//        if(!tax.isEmpty()) {
-//            Double cost6=0.0;
-//            for(Double val:tax){
-//                cost6=val+cost6;
-//            }
-//            barEntries6.add(new BarEntry(7f, cost6.floatValue()));
-////                        getEntries("Tax", cost.floatValue());
-//        }else{
-//            Log.d("tax", "Empty");
-//            barEntries6.add(new BarEntry(7f, 0));
-//        }
-//    }
+        if (duration == 1) {
+            calendar.add(Calendar.DATE, -7);
+            queryDate = calendar.getTimeInMillis();
+
+//          maintenance
+            if(!maintenance.isEmpty() && !maintenanceDate.isEmpty()){
+                for(int i=0;i<=maintenance.size()-1;i++){
+                    if (maintenanceDate.get(i) >= queryDate){
+                        cost1 = cost1 + maintenance.get(i);
+                        Log.d("maintenance"+i, String.valueOf(cost1));
+                    }else{
+                        Log.d("maintenance", "out of filter");
+                    }
+                }
+                barEntries1.add(new BarEntry(1,cost1.floatValue()));
+                cost1=0.1;
+            }else{
+                Log.d("cost1", "empty");
+                barEntries1.add(new BarEntry(1, 0));
+            }
+//          fuel
+            if(!fuel.isEmpty() && !fuelDate.isEmpty()){
+                for(int i=0;i<=fuel.size()-1;i++){
+                    if (fuelDate.get(i) >= queryDate){
+                        cost2 = cost2 + fuel.get(i);
+                        Log.d("fuel"+i, String.valueOf(cost2));
+                    }else{
+                        Log.d("fuel", "out of filter");
+                    }
+                }
+                barEntries2.add(new BarEntry(2,cost2.floatValue()));
+                cost2=0.1;
+            }else{
+                Log.d("fuel", "empty");
+                barEntries2.add(new BarEntry(2, 0));
+            }
+//          purchase
+            if(!purchase.isEmpty() && !purchaseDate.isEmpty()){
+                for(int i=0;i<=purchase.size()-1;i++){
+                    if (purchaseDate.get(i) >= queryDate){
+                        cost3 = cost3 + purchase.get(i);
+                        Log.d("purchase"+i, String.valueOf(cost3));
+                    }else{
+                        Log.d("purchase", "out of filter");
+                    }
+                }
+                barEntries3.add(new BarEntry(3,cost3.floatValue()));
+                cost3=0.1;
+            }else{
+                Log.d("purchase", "empty");
+                barEntries3.add(new BarEntry(3, 0));
+            }
+//          service
+            if(!services.isEmpty() && !servicesDate.isEmpty()){
+                for(int i=0;i<=services.size()-1;i++){
+                    if (servicesDate.get(i) >= queryDate){
+                        cost4 = cost4 + services.get(i);
+                        Log.d("service"+i, String.valueOf(cost4));
+                    }else{
+                        Log.d("service", "out of filter");
+                    }
+                }
+                barEntries4.add(new BarEntry(4,cost4.floatValue()));
+                cost4=0.1;
+            }else{
+                Log.d("services", "empty");
+                barEntries4.add(new BarEntry(4, 0));
+            }
+//          fine
+            if(!fine.isEmpty() && !fineDate.isEmpty()){
+                for(int i=0;i<=fine.size()-1;i++){
+                    if (fineDate.get(i) >= queryDate){
+                        cost5 = cost5 + fine.get(i);
+                        Log.d("fine"+i, String.valueOf(cost5));
+                    }else{
+                        Log.d("fine", "out of filter");
+                    }
+                }
+                barEntries5.add(new BarEntry(5,cost5.floatValue()));
+                cost5=0.1;
+            }else{
+                Log.d("fine", "empty");
+                barEntries5.add(new BarEntry(5, 0));
+            }
+//          tax
+            if(!tax.isEmpty() && !taxDate.isEmpty()){
+                for(int i=0;i<=taxDate.size()-1;i++){
+                    if (taxDate.get(i) >= queryDate){
+                        cost6 = cost6 + tax.get(i);
+                        Log.d("tax"+i, String.valueOf(cost6));
+                    }else{
+                        Log.d("tax", "out of filter");
+                    }
+                }
+                barEntries6.add(new BarEntry(6,cost6.floatValue()));
+                cost6=0.1;
+            }else{
+                Log.d("tax", "empty");
+                barEntries6.add(new BarEntry(6, 0));
+            }
+            initializeBarGraph(true);
+            initializeBarGraph(false);
+
+        } else if (duration == 2) {
+            calendar.add(Calendar.MONTH, -1);
+            queryDate = calendar.getTimeInMillis();
+
+//          maintenance
+            if(!maintenance.isEmpty() && !maintenanceDate.isEmpty()){
+                for(int i=0;i<=maintenance.size()-1;i++){
+                    if (maintenanceDate.get(i) >= queryDate){
+                        cost1 = cost1 + maintenance.get(i);
+                        Log.d("maintenance"+i, String.valueOf(cost1));
+                    }else{
+                        Log.d("maintenance", "out of filter");
+                    }
+                }
+                barEntries1.add(new BarEntry(1,cost1.floatValue()));
+                cost1=0.1;
+            }else{
+                Log.d("cost1", "empty");
+                barEntries1.add(new BarEntry(1, 0));
+            }
+//          fuel
+            if(!fuel.isEmpty() && !fuelDate.isEmpty()){
+                for(int i=0;i<=fuel.size()-1;i++){
+                    if (fuelDate.get(i) >= queryDate){
+                        cost2 = cost2 + fuel.get(i);
+                        Log.d("fuel"+i, String.valueOf(cost2));
+                    }else{
+                        Log.d("fuel", "out of filter");
+                    }
+                }
+                barEntries2.add(new BarEntry(2,cost2.floatValue()));
+                cost2=0.1;
+            }else{
+                Log.d("fuel", "empty");
+                barEntries2.add(new BarEntry(2, 0));
+            }
+//          purchase
+            if(!purchase.isEmpty() && !purchaseDate.isEmpty()){
+                for(int i=0;i<=purchase.size()-1;i++){
+                    if (purchaseDate.get(i) >= queryDate){
+                        cost3 = cost3 + purchase.get(i);
+                        Log.d("purchase"+i, String.valueOf(cost3));
+                    }else{
+                        Log.d("purchase", "out of filter");
+                    }
+                }
+                barEntries3.add(new BarEntry(3,cost3.floatValue()));
+                cost3=0.1;
+            }else{
+                Log.d("purchase", "empty");
+                barEntries3.add(new BarEntry(3, 0));
+            }
+//          service
+            if(!services.isEmpty() && !servicesDate.isEmpty()){
+                for(int i=0;i<=services.size()-1;i++){
+                    if (servicesDate.get(i) >= queryDate){
+                        cost4 = cost4 + services.get(i);
+                        Log.d("service"+i, String.valueOf(cost4));
+                    }else{
+                        Log.d("service", "out of filter");
+                    }
+                }
+                barEntries4.add(new BarEntry(4,cost4.floatValue()));
+                cost4=0.1;
+            }else{
+                Log.d("services", "empty");
+                barEntries4.add(new BarEntry(4, 0));
+            }
+//          fine
+            if(!fine.isEmpty() && !fineDate.isEmpty()){
+                for(int i=0;i<=fine.size()-1;i++){
+                    if (fineDate.get(i) >= queryDate){
+                        cost5 = cost5 + fine.get(i);
+                        Log.d("fine"+i, String.valueOf(cost5));
+                    }else{
+                        Log.d("fine", "out of filter");
+                    }
+                }
+                barEntries5.add(new BarEntry(5,cost5.floatValue()));
+                cost5=0.1;
+            }else{
+                Log.d("fine", "empty");
+                barEntries5.add(new BarEntry(5, 0));
+            }
+//          tax
+            if(!tax.isEmpty() && !taxDate.isEmpty()){
+                for(int i=0;i<=taxDate.size()-1;i++){
+                    if (taxDate.get(i) >= queryDate){
+                        cost6 = cost6 + tax.get(i);
+                        Log.d("tax"+i, String.valueOf(cost6));
+                    }else{
+                        Log.d("tax", "out of filter");
+                    }
+                }
+                barEntries6.add(new BarEntry(6,cost6.floatValue()));
+                cost6=0.1;
+            }else{
+                Log.d("tax", "empty");
+                barEntries6.add(new BarEntry(6, 0));
+            }
+            initializeBarGraph(true);
+            initializeBarGraph(false);
+
+        } else if(duration==3) {
+            calendar.add(Calendar.YEAR, -1);
+            queryDate = calendar.getTimeInMillis();
+
+//          maintenance
+            if(!maintenance.isEmpty() && !maintenanceDate.isEmpty()){
+                for(int i=0;i<=maintenance.size()-1;i++){
+                    if (maintenanceDate.get(i) >= queryDate){
+                        cost1 = cost1 + maintenance.get(i);
+                        Log.d("maintenance"+i, String.valueOf(cost1));
+                    }else{
+                        Log.d("maintenance", "out of filter");
+                    }
+                }
+                barEntries1.add(new BarEntry(1,cost1.floatValue()));
+                cost1=0.1;
+            }else{
+                Log.d("cost1", "empty");
+                barEntries1.add(new BarEntry(1, 0));
+            }
+//          fuel
+            if(!fuel.isEmpty() && !fuelDate.isEmpty()){
+                for(int i=0;i<=fuel.size()-1;i++){
+                    if (fuelDate.get(i) >= queryDate){
+                        cost2 = cost2 + fuel.get(i);
+                        Log.d("fuel"+i, String.valueOf(cost2));
+                    }else{
+                        Log.d("fuel", "out of filter");
+                    }
+                }
+                barEntries2.add(new BarEntry(2,cost2.floatValue()));
+                cost2=0.1;
+            }else{
+                Log.d("fuel", "empty");
+                barEntries2.add(new BarEntry(2, 0));
+            }
+//          purchase
+            if(!purchase.isEmpty() && !purchaseDate.isEmpty()){
+                for(int i=0;i<=purchase.size()-1;i++){
+                    if (purchaseDate.get(i) >= queryDate){
+                        cost3 = cost3 + purchase.get(i);
+                        Log.d("purchase"+i, String.valueOf(cost3));
+                    }else{
+                        Log.d("purchase", "out of filter");
+                    }
+                }
+                barEntries3.add(new BarEntry(3,cost3.floatValue()));
+                cost3=0.1;
+            }else{
+                Log.d("purchase", "empty");
+                barEntries3.add(new BarEntry(3, 0));
+            }
+//          service
+            if(!services.isEmpty() && !servicesDate.isEmpty()){
+                for(int i=0;i<=services.size()-1;i++){
+                    if (servicesDate.get(i) >= queryDate){
+                        cost4 = cost4 + services.get(i);
+                        Log.d("service"+i, String.valueOf(cost4));
+                    }else{
+                        Log.d("service", "out of filter");
+                    }
+                }
+                barEntries4.add(new BarEntry(4,cost4.floatValue()));
+                cost4=0.1;
+            }else{
+                Log.d("services", "empty");
+                barEntries4.add(new BarEntry(4, 0));
+            }
+//          fine
+            if(!fine.isEmpty() && !fineDate.isEmpty()){
+                for(int i=0;i<=fine.size()-1;i++){
+                    if (fineDate.get(i) >= queryDate){
+                        cost5 = cost5 + fine.get(i);
+                        Log.d("fine"+i, String.valueOf(cost5));
+                    }else{
+                        Log.d("fine", "out of filter");
+                    }
+                }
+                barEntries5.add(new BarEntry(5,cost5.floatValue()));
+                cost5=0.1;
+            }else{
+                Log.d("fine", "empty");
+                barEntries5.add(new BarEntry(5, 0));
+            }
+//          tax
+            if(!tax.isEmpty() && !taxDate.isEmpty()){
+                for(int i=0;i<=tax.size()-1;i++){
+                    if (taxDate.get(i) >= queryDate){
+                        cost6 = cost6 + tax.get(i);
+                        Log.d("tax"+i, String.valueOf(cost6));
+                    }else{
+                        Log.d("tax", "out of filter");
+                    }
+                }
+                barEntries6.add(new BarEntry(6,cost6.floatValue()));
+                cost6=0.1;
+            }else{
+                Log.d("tax", "empty");
+                barEntries6.add(new BarEntry(6, 0));
+            }
+            initializeBarGraph(true);
+            initializeBarGraph(false);
+        }
+
+    }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    @Override
+    public void onBackPressed() {
+        progressDialog.dismiss();
+        super.onBackPressed();
     }
 }

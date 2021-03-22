@@ -33,13 +33,14 @@ import java.util.Calendar;
 public class AddExpenses extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     Spinner expenseSpinner;
-    String[] expenses={"Maintenance","Fuel","Purchase","Service","Engine Tunning","Fine","Tax"};
+    String[] expenses={"Maintenance","Fuel","Purchase","Service","Fine","Tax"};
     String selectedExpenses;
 //  data to put
+    String title;
     Long date, time;
     Double meter, cost;
 
-    EditText dateEt,timeEt, meterReadingEt,costEt;
+    EditText titleEt, dateEt,timeEt, meterReadingEt,costEt;
     Button saveBtn;
 
     DatePickerDialog datePickerDialog;
@@ -74,6 +75,7 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
 
         setTitle("Add Expenses");
         expenseSpinner=(Spinner)findViewById(R.id.expenseTitleSp);
+        titleEt=(EditText) findViewById(R.id.expenseTitleEt);
         dateEt=(EditText) findViewById(R.id.expenseDateEt);
         timeEt=(EditText) findViewById(R.id.expenseTimeEt);
         meterReadingEt=(EditText) findViewById(R.id.meterEt);
@@ -144,6 +146,8 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
                     Toast.makeText(AddExpenses.this, "Please Select a Car Before Adding Expense!", Toast.LENGTH_LONG).show();
                 }else if (selectedExpenses.isEmpty()){
                     Toast.makeText(AddExpenses.this,"Select Expense Category!",Toast.LENGTH_SHORT).show();
+                }else if(title==null){
+                    Toast.makeText(AddExpenses.this,"Enter Title!",Toast.LENGTH_SHORT).show();
                 }else if(date==null){
                     Toast.makeText(AddExpenses.this,"Enter Date!",Toast.LENGTH_SHORT).show();
                 }else if(time==null){
@@ -196,7 +200,7 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
     }
 
     public void addIntoDb(int index){
-        ExpensesDB expensesDB = new ExpensesDB(selectedExpenses, date, time, meter, cost);
+        ExpensesDB expensesDB = new ExpensesDB(title, selectedExpenses, date, time, meter, cost);
         databaseReference2.child(selectedExpenses).child(String.valueOf(index)).setValue(expensesDB);
         clearEtValue();
         Toast.makeText(AddExpenses.this, "Expense Added!", Toast.LENGTH_SHORT).show();
@@ -204,6 +208,7 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
     }
 
     public void clearEtValue(){
+        titleEt.setText("");
         dateEt.setText("");
         timeEt.setText("");
         meterReadingEt.setText("");
@@ -211,6 +216,7 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
     }
 
     public void getValuesFromEt(){
+        title= titleEt.getText().toString().trim();
         meter= Double.valueOf(meterReadingEt.getText().toString());
         cost= Double.valueOf(costEt.getText().toString().trim());
     }
