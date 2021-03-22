@@ -129,8 +129,7 @@ public class AddVehicle extends AppCompatActivity{
         saveVehicleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getEtValues(type);
-
+                getEtValues();
                 if(TextUtils.isEmpty(vehicleName)){
                     Toast.makeText(AddVehicle.this,"Enter Vehicle Name!",Toast.LENGTH_SHORT).show();
                 }else if(TextUtils.isEmpty(manufacturer)){
@@ -152,19 +151,7 @@ public class AddVehicle extends AppCompatActivity{
                 }
             }
         });
-
     }
-
-//    @Override
-//    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//        odometerUnit=odometerUnitTypeSpin[position];
-//        Log.d("odometerUnitTypeSpin",odometerUnitTypeSpin[position]);
-//    }
-//
-//    @Override
-//    public void onNothingSelected(AdapterView<?> parent) {
-//        odometerUnit="";
-//    }
 
     public void addData(String type){
         final VehicleDB vehicleDB =new VehicleDB(vehicleName, odometerUnit, manufacturer, vehicleModel,
@@ -175,7 +162,9 @@ public class AddVehicle extends AppCompatActivity{
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(snapshot.exists()) {
-                        for (DataSnapshot ds : snapshot.getChildren()) {vehicleId = Integer.parseInt(ds.getKey());}
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            vehicleId = Integer.parseInt(ds.getKey());
+                        }
                         vehicleId++;
                     }else{
                         vehicleId=0;
@@ -210,7 +199,7 @@ public class AddVehicle extends AppCompatActivity{
         odometerReadingEt.setText("");
     }
 
-    public void getEtValues(String type){
+    public void getEtValues(){
         vehicleName=vehicleNameEt.getText().toString().trim();
         manufacturer=manufacturerEt.getText().toString().trim();
         vehicleModel=vehicleModelEt.getText().toString().trim();

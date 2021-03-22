@@ -1,4 +1,4 @@
-package com.softtechglobal.androidcarmanager;
+package com.softtechglobal.androidcarmanager.Statistics;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -21,7 +21,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.softtechglobal.androidcarmanager.CustomBaseAdapter;
 import com.softtechglobal.androidcarmanager.Database.ExpensesDB;
+import com.softtechglobal.androidcarmanager.ModelForAdapter;
+import com.softtechglobal.androidcarmanager.R;
 import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 
 import java.util.ArrayList;
@@ -123,7 +126,6 @@ public class Search extends AppCompatActivity {
                         endDateEt.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
                         calendar.set(year, month, dayOfMonth);
                         endDate=calendar.getTimeInMillis();
-//                        endDate = dayOfMonth + "/" + (month + 1) + "/" + year;
                     }
                 }, mYear, mMonth, mDay).show();
             }
@@ -281,10 +283,6 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(Search.this,"Failed to Fetch Data try again",Toast.LENGTH_SHORT).show();
                     Log.d("dataSnapshot.exists()", "Empty");
                 }
-
-
-
-
             }
         });
     }
@@ -381,7 +379,6 @@ public class Search extends AppCompatActivity {
 
 //        Log.d("setAdapter", String.valueOf(titles.size()));
             for(int i=0;i<titles.size()-1;i++){
-//                Log.d("setAdapter", titles.get(i)+ "/" + dates.get(i));
                 ModelForAdapter modelAdapter=new ModelForAdapter(titles.get(i), dates.get(i));
                 //bind all strings in an array
                 listModel.add(modelAdapter);

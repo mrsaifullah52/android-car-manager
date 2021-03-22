@@ -159,7 +159,7 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
                 }else{
                     int position=keys.indexOf(key);
                     if(position==-1){
-                        Toast.makeText(AddExpenses.this, "Please Select a Existing Car!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AddExpenses.this, "Please Select an Existing Car!", Toast.LENGTH_LONG).show();
                     }else {
                         databaseReference2.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                             @Override

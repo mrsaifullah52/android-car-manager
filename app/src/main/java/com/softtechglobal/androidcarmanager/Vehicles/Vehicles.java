@@ -291,10 +291,14 @@ public class Vehicles extends AppCompatActivity {
                         switch (which){
                             case 0:{
                                 try {
+                                    Calendar c = Calendar.getInstance();
+                                    c.setTimeInMillis(purchaseDate.get(position));
+                                    c.add(Calendar.MONTH,1);
+                                    String dateString= c.get(Calendar.DAY_OF_MONTH)+"/"+c.get(Calendar.MONTH)+"/"+c.get(Calendar.YEAR);
                                     new AlertDialog.Builder(Vehicles.this)
                                             .setTitle(title.get(position))
 //                                            display message
-                                            .setMessage("Date: "+purchaseDate.get(position)+"\n"
+                                            .setMessage("Date: "+dateString+"\n"
                                                     +"----------------------------------\n\n"
                                                     +"Model: "+model.get(position)+"\n\n"
                                                     +"Mileage: "+milage.get(position)+"km \n\n"

@@ -1,134 +1,159 @@
 package com.softtechglobal.androidcarmanager.add;
 
-import android.content.DialogInterface;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageButton;
-import android.widget.ListView;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.softtechglobal.androidcarmanager.CustomBaseAdapter;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.softtechglobal.androidcarmanager.Database.NotesDB;
 import com.softtechglobal.androidcarmanager.R;
+import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 
-import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AddNotes extends AppCompatActivity {
 
-    ImageButton imageButton;
-    ListView listView;
-    CustomBaseAdapter adapter;
+    EditText titleEt, messageEt, dateEt;
+    Button saveBtn;
 
-    ArrayList<String> title= new ArrayList<String>();
-    ArrayList<String> date= new ArrayList<String>();
-    ArrayList<String> message= new ArrayList<String>();
+    String title="",message="";
+    Long date;
 
+    private DatabaseReference databaseReference, databaseReference2;
+    private FirebaseAuth firebaseAuth;
+    String key="";
+    int position=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_addnotes);
+        setContentView(R.layout.activity_add_notes);
 
-        getSupportActionBar().hide();
+        firebaseAuth = FirebaseAuth.getInstance();
+        if (firebaseAuth.getCurrentUser() == null) {
+            finish();
+            startActivity(new Intent(AddNotes.this, Signin.class));
+        }
+        final FirebaseUser user=firebaseAuth.getCurrentUser();
+        key= getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                .getString("key","-1");
+        databaseReference= FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/notes/"+key);
+//        databaseReference2=FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/notes/"+key);
 
-        imageButton=(ImageButton)findViewById(R.id.addNotes);
-        listView=(ListView)findViewById(R.id.noteslist);
+        titleEt=(EditText) findViewById(R.id.notesTitleEt);
+        messageEt=(EditText) findViewById(R.id.notesMessageEt);
+        dateEt=(EditText) findViewById(R.id.notesDateEt);
+        saveBtn=(Button) findViewById(R.id.addNoteBtn);
+        setTitle("Add Note");
 
-        imageButton.setOnClickListener(new View.OnClickListener() {
+
+        dateEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(AddNotes.this,Notes.class);
-                i.putExtra("type","add");
-                startActivity(i);
+                final Calendar calendar = Calendar.getInstance();
+                int mYear = calendar.get(Calendar.YEAR);
+                int mMonth = calendar.get(Calendar.MONTH);
+                int mDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+                new DatePickerDialog(AddNotes.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        dateEt.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                        calendar.set(year, month, dayOfMonth);
+                        date=calendar.getTimeInMillis();
+                    }
+                }, mYear, mMonth, mDay).show();
             }
         });
 
-//        adding titles
-        title.add("I'll be going on Trip.");
-        title.add("I'll be going to Murrew.");
-
-//        adding dates
-        date.add("6 Jul 21");
-        date.add("9 Aug 21");
-
-//        adding messages
-        message.add("This is the First Message");
-        message.add("This is the second message");
-
-//        adapter = new CustomBaseAdapter(AddNotes.this, title, date);
-//        listView.setAdapter(adapter);
 
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(AddNotes.this);
-                    builder.setTitle("Choose an option");
-                    String[] options={"View","Edit","Delete"};
-                    builder.setItems(options, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which){
-                                case 0:{
-                                    Toast.makeText(AddNotes.this,"Viewed",Toast.LENGTH_SHORT).show();
-                                    try {
-                                        new AlertDialog.Builder(AddNotes.this)
-                                                .setTitle("Detail of Note")
-                                                .setMessage(message.get(position))
-                                                .setCancelable(false)
-                                                .setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                    }
-                                                }).show();
-                                    } catch (Exception e) {
-                                        Log.d("Notifications: ", e.getMessage());
-                                    }
-                                }break;
-                                case 1:{
-                                    Intent i = new Intent(AddNotes.this, Notes.class);
-                                    i.putExtra("type", "edit");
-                                    i.putExtra("title", title.get(position));
-                                    i.putExtra("message", message.get(position));
-                                    startActivity(i);
-                                }break;
-                                case 2:{
-                                    boolean status = removeItem(position);
-                                    if(status){
-                                        adapter.notifyDataSetChanged();
-                                    }else{
-                                        Toast.makeText(AddNotes.this, "Failed to Delete, try again", Toast.LENGTH_SHORT).show();
-                                    }
-                                }break;
-                            }
-                        }
-                    });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-            }
-        });
-
-    }
-
-    public boolean removeItem(int position){
-        boolean status;
-        if(position<0){
-            status=false;
-        }else{
-            status=true;
-            title.remove(position);
-            date.remove(position);
-            message.remove(position);
+        Bundle i = getIntent().getExtras();
+        final String type=i.getString("type");
+        if(type.equals("edit")){
+            titleEt.setText(i.getString("title"));
+            messageEt.setText(i.getString("message"));
         }
-        return status;
+
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                title=titleEt.getText().toString().trim();
+                message=messageEt.getText().toString().trim();
+                if(key.equals("-1")){
+                    Toast.makeText(AddNotes.this,"Please Select a Car Before Adding Note!",Toast.LENGTH_SHORT).show();
+                }else if(title.isEmpty()){
+                    Toast.makeText(AddNotes.this,"Enter Title!",Toast.LENGTH_SHORT).show();
+                }else if(message.isEmpty()){
+                    Toast.makeText(AddNotes.this,"Enter Message!",Toast.LENGTH_SHORT).show();
+                }else if(date == null){
+                    Toast.makeText(AddNotes.this,"Select Date!",Toast.LENGTH_SHORT).show();
+                }else{
+                    addNoteIntoFirebase(type);
+                }
+            }
+        });
+
     }
 
-//    public void EditNotes(View v){
-//        Log.i("Button Status: ", "Edit Working");
-//        Toast.makeText(this,"Edit row: working",Toast.LENGTH_SHORT).show();
-//    }
+    public void getPosition() {
+        databaseReference.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        position= Integer.parseInt(ds.getKey());
+                    }
+                }else{
+                    position=0;
+                }
+            }
+        });
+    }
+
+    public void addNoteIntoFirebase(String type){
+        NotesDB notesDB = new NotesDB(title, message, date);
+        databaseReference.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        position= Integer.parseInt(ds.getKey());
+                    }
+                    position++;
+                }else{
+                    position=0;
+                }
+            }
+        });
+        if(type.equals("add")){
+            databaseReference.child(String.valueOf(position)).setValue(notesDB);
+            clearEtValue();
+            Toast.makeText(AddNotes.this, "Note Added!", Toast.LENGTH_SHORT).show();
+        }else if(type.equals("edit")) {
+            Bundle bundle=getIntent().getExtras();
+            String noteKey=bundle.getString("key");
+            databaseReference.child(noteKey).setValue(notesDB);
+            clearEtValue();
+            Toast.makeText(AddNotes.this, "Note Updated!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void clearEtValue(){
+        titleEt.setText("");
+        messageEt.setText("");
+        dateEt.setText("");
+    }
 }

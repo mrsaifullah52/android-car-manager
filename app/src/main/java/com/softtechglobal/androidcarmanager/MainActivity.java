@@ -16,8 +16,8 @@ import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.softtechglobal.androidcarmanager.Vehicles.Vehicles;
-import com.softtechglobal.androidcarmanager.add.AddNotes;
-import com.softtechglobal.androidcarmanager.add.AddReminder;
+import com.softtechglobal.androidcarmanager.add.Notes;
+import com.softtechglobal.androidcarmanager.add.Reminder;
 import com.softtechglobal.androidcarmanager.capture.Capture;
 import com.softtechglobal.androidcarmanager.compute.Compute;
 import com.softtechglobal.androidcarmanager.Expenses.AddExpenses;
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-//        initializatin of firebaseauth
+//      initializatin of firebaseauth
         mAuth = FirebaseAuth.getInstance();
 
 //      show vehicles list only first time
@@ -120,11 +120,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }break;
             case R.id.card5:{
-                intent = new Intent(MainActivity.this, AddNotes.class);
+                intent = new Intent(MainActivity.this, Notes.class);
                 startActivity(intent);
             }break;
             case R.id.card6:{
-                intent = new Intent(MainActivity.this, AddReminder.class);
+                intent = new Intent(MainActivity.this, Reminder.class);
                 startActivity(intent);
             }break;
             default:{

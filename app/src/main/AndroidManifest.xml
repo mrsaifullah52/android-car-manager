@@ -15,12 +15,12 @@
         <activity android:name=".Vehicles.AddVehicle"></activity>
         <activity android:name=".Vehicles.Vehicles" />
         <activity android:name=".UserManagement.Profile" />
-        <activity android:name=".add.Reminders" />
-        <activity android:name=".add.Notes" />
-        <activity android:name=".add.AddReminder" />
+        <activity android:name=".add.AddReminders" />
         <activity android:name=".add.AddNotes" />
+        <activity android:name=".add.Reminder" />
+        <activity android:name=".add.Notes" />
         <activity android:name=".compute.Compute" />
-        <activity android:name=".Search" />
+        <activity android:name=".Statistics.Search" />
         <activity android:name=".Statistics.Statistics" />
         <activity android:name=".capture.Capture" />
         <activity android:name=".Expenses.AddExpenses" />
@@ -35,6 +35,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
+<!--        setting reminder-->
+        <receiver android:name=".add.AlarmReceiver" />
     </application>
 
 </manifest>

@@ -18,7 +18,7 @@ import com.softtechglobal.androidcarmanager.R;
 
 import java.util.ArrayList;
 
-public class AddReminder extends AppCompatActivity {
+public class Reminder extends AppCompatActivity {
 
     ImageButton imageButton;
     ListView listView;
@@ -31,7 +31,7 @@ public class AddReminder extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_reminder);
+        setContentView(R.layout.activity_reminder);
         getSupportActionBar().hide();
 
         imageButton=(ImageButton)findViewById(R.id.addReminders);
@@ -39,7 +39,7 @@ public class AddReminder extends AppCompatActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(AddReminder.this, Reminders.class);
+                Intent i=new Intent(Reminder.this, AddReminders.class);
                 i.putExtra("type", "add");
                 startActivity(i);
             }
@@ -61,7 +61,7 @@ public class AddReminder extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(AddReminder.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(Reminder.this);
                 builder.setTitle("Choose an option");
                 String[] options={"View","Edit","Delete"};
                 builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -69,9 +69,9 @@ public class AddReminder extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case 0:{
-                                Toast.makeText(AddReminder.this,"Viewed",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Reminder.this,"Viewed",Toast.LENGTH_SHORT).show();
                                 try {
-                                    new AlertDialog.Builder(AddReminder.this)
+                                    new AlertDialog.Builder(Reminder.this)
                                             .setTitle("Detail of Reminder")
                                             .setMessage("Date: "+date.get(position)+"\n\n"+title.get(position))
                                             .setCancelable(false)
@@ -84,7 +84,7 @@ public class AddReminder extends AppCompatActivity {
                                 }
                             }break;
                             case 1:{
-                                Intent i = new Intent(AddReminder.this, Reminders.class);
+                                Intent i = new Intent(Reminder.this, AddReminders.class);
                                 i.putExtra("type", "edit");
                                 i.putExtra("title", title.get(position));
                                 i.putExtra("date", date.get(position));
@@ -96,7 +96,7 @@ public class AddReminder extends AppCompatActivity {
                                 if(status){
                                     adapter.notifyDataSetChanged();
                                 }else{
-                                    Toast.makeText(AddReminder.this, "Failed to Delete, try again", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Reminder.this, "Failed to Delete, try again", Toast.LENGTH_SHORT).show();
                                 }
                             }break;
                         }

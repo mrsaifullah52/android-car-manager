@@ -30,7 +30,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.softtechglobal.androidcarmanager.Database.ExpensesDB;
 import com.softtechglobal.androidcarmanager.R;
-import com.softtechglobal.androidcarmanager.Search;
 import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 
 import java.util.ArrayList;

@@ -64,6 +64,7 @@ public class CustomBaseAdapter extends BaseAdapter {
             }
             Calendar c=Calendar.getInstance();
             c.setTimeInMillis(modellist.get(position).getDate());
+            c.add(Calendar.MONTH,1);
             holder.dateTv.setText(c.get(Calendar.DAY_OF_MONTH)+"/"+c.get(Calendar.MONTH)+"/"+c.get(Calendar.YEAR));
             holder.titleTv.setText(modellist.get(position).getTitle());
             return row;

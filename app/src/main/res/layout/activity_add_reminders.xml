@@ -12,7 +12,7 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".add.Reminders"
+    tools:context=".add.AddReminders"
     android:orientation="vertical">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -24,7 +24,7 @@
         app:startIconContentDescription="Enter Your Title">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/reminderTitle"
+            android:id="@+id/reminderTitleEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -42,11 +42,10 @@
         app:startIconContentDescription="Select Date">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/reminderDate"
+            android:id="@+id/reminderDateEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-
             android:clickable="false"
             android:cursorVisible="false"
             android:focusable="false"
@@ -64,17 +63,14 @@
         app:startIconContentDescription="Select Time">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/reminderTime"
+            android:id="@+id/reminderTimeEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-
-
             android:clickable="false"
             android:cursorVisible="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-
             android:inputType="text"
             android:textColorHint="@color/colorOnBackground" />
 
