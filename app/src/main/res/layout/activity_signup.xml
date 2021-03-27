@@ -5,20 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UserManagement.Signup"
-    android:padding="30dp"
+    android:paddingVertical="20dp"
+    android:paddingHorizontal="15dp"
     >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <ProgressBar
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:id="@+id/progressBar2"
-            android:layout_gravity="center"
-            />
 
         <ImageView
             android:layout_gravity="center"
@@ -33,12 +27,29 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Your Name"
+                app:hintTextColor="@color/colorPrimaryDark"
+                android:layout_marginTop="10dp"
+                app:startIconContentDescription="Enter Your Name"
+                app:startIconDrawable="@drawable/user"
+                app:endIconMode="clear_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/userName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="@string/enter_your_email"
                 app:hintTextColor="@color/colorPrimaryDark"
                 android:layout_marginTop="10dp"
                 app:startIconContentDescription="@string/email"
-                app:startIconDrawable="@drawable/user"
+                app:startIconDrawable="@drawable/email"
                 app:endIconMode="clear_text">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -48,6 +59,22 @@
                     android:inputType="textEmailAddress"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Phone Number"
+                app:hintTextColor="@color/colorPrimaryDark"
+                android:layout_marginTop="10dp"
+                app:startIconContentDescription="Enter Phone Number"
+                app:startIconDrawable="@drawable/phone"
+                app:endIconMode="clear_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/userPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -56,11 +83,30 @@
                 android:hint="@string/enter_your_password"
                 app:hintTextColor="@color/colorPrimaryDark"
                 app:startIconContentDescription="@string/enter_your_password"
-                app:startIconDrawable="@drawable/key"
+                app:startIconDrawable="@drawable/padlock"
                 app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/userPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:inputType="textPassword"
+                    android:textColorHint="@color/colorOnBackground" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:hint="Confirm your Password"
+                app:hintTextColor="@color/colorPrimaryDark"
+                app:startIconContentDescription="@string/enter_your_password"
+                app:startIconDrawable="@drawable/padlock"
+                app:endIconMode="password_toggle">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/confirmPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"

@@ -22,7 +22,7 @@
         android:layout_below="@+id/textInfoTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Capture Again"
+        android:text="Retake"
         android:textAllCaps="false"
         android:textSize="20sp"
         android:paddingVertical="10dp"

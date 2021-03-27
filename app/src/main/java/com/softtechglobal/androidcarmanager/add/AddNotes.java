@@ -34,7 +34,7 @@ public class AddNotes extends AppCompatActivity {
     private DatabaseReference databaseReference, databaseReference2;
     private FirebaseAuth firebaseAuth;
     String key="";
-    int position=0;
+    int position;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,23 +108,8 @@ public class AddNotes extends AppCompatActivity {
 
     }
 
-    public void getPosition() {
-        databaseReference.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-            @Override
-            public void onSuccess(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        position= Integer.parseInt(ds.getKey());
-                    }
-                }else{
-                    position=0;
-                }
-            }
-        });
-    }
-
-    public void addNoteIntoFirebase(String type){
-        NotesDB notesDB = new NotesDB(title, message, date);
+    public void addNoteIntoFirebase(final String type){
+        final NotesDB notesDB = new NotesDB(title, message, date);
         databaseReference.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
@@ -136,19 +121,22 @@ public class AddNotes extends AppCompatActivity {
                 }else{
                     position=0;
                 }
+
+                if(type.equals("add")){
+                    databaseReference.child(String.valueOf(position)).setValue(notesDB);
+                    clearEtValue();
+                    Toast.makeText(AddNotes.this, "Note Added!", Toast.LENGTH_SHORT).show();
+                }else if(type.equals("edit")) {
+                    Bundle bundle=getIntent().getExtras();
+                    String noteKey=bundle.getString("key");
+                    databaseReference.child(noteKey).setValue(notesDB);
+                    clearEtValue();
+                    Toast.makeText(AddNotes.this, "Note Updated!", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
-        if(type.equals("add")){
-            databaseReference.child(String.valueOf(position)).setValue(notesDB);
-            clearEtValue();
-            Toast.makeText(AddNotes.this, "Note Added!", Toast.LENGTH_SHORT).show();
-        }else if(type.equals("edit")) {
-            Bundle bundle=getIntent().getExtras();
-            String noteKey=bundle.getString("key");
-            databaseReference.child(noteKey).setValue(notesDB);
-            clearEtValue();
-            Toast.makeText(AddNotes.this, "Note Updated!", Toast.LENGTH_SHORT).show();
-        }
+
     }
 
     public void clearEtValue(){

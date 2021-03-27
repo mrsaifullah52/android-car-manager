@@ -39,7 +39,7 @@ public class Notes extends AppCompatActivity {
     ArrayList<String> message= new ArrayList<String>();
     ArrayList<ModelForAdapter> listModel=new ArrayList<ModelForAdapter>();
 
-    private DatabaseReference databaseReference, databaseReference2;
+    private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
 
     String key="";
@@ -143,12 +143,19 @@ public class Notes extends AppCompatActivity {
                                     startActivity(i);
                                 }break;
                                 case 2:{
-                                    boolean status = removeItem(position);
-                                    if(status){
-                                        adapter.notifyDataSetChanged();
-                                    }else{
-                                        Toast.makeText(Notes.this, "Failed to Delete, try again", Toast.LENGTH_SHORT).show();
-                                    }
+                                    databaseReference.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                        ArrayList<String> index=new ArrayList<String>();
+                                        @Override
+                                        public void onSuccess(DataSnapshot dataSnapshot) {
+                                            for(DataSnapshot ds:dataSnapshot.getChildren()){
+                                                String key=ds.getKey();
+                                                if(!key.isEmpty()){
+                                                    index.add(key);
+                                                }
+                                            }
+                                            removeItem(Integer.parseInt(index.get(position)), position);
+                                        }
+                                    });
                                 }break;
                             }
                         }
@@ -160,21 +167,24 @@ public class Notes extends AppCompatActivity {
 
     }
 
-    public boolean removeItem(int position){
+    public boolean removeItem(final int dbPosition, final int listPosition){
+        Log.d("position", String.valueOf(dbPosition));
         boolean status;
-        if(position<0){
+        if(dbPosition<0){
             status=false;
         }else{
             status=true;
-            title.remove(position);
-            date.remove(position);
-            message.remove(position);
+            databaseReference.child(String.valueOf(dbPosition)).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    listModel.remove(listPosition);
+                    title.remove(listPosition);
+                    message.remove(listPosition);
+                    date.remove(listPosition);
+                    adapter.notifyDataSetChanged();
+                }
+            });
         }
         return status;
     }
-
-//    public void EditNotes(View v){
-//        Log.i("Button Status: ", "Edit Working");
-//        Toast.makeText(this,"Edit row: working",Toast.LENGTH_SHORT).show();
-//    }
 }

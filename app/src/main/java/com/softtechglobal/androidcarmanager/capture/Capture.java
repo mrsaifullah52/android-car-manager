@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
@@ -18,6 +19,7 @@ import com.softtechglobal.androidcarmanager.R;
 public class Capture extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     ImageView imageView;
+    Button captureImageBtn;
     Spinner spinner;
     String[] service={"Maintenance","Fuel","Purchase","Service","Engine Tunning","Fine","Tax"};
     private static final int CAMERA_REQUEST = 0;
@@ -31,12 +33,19 @@ public class Capture extends AppCompatActivity implements AdapterView.OnItemSele
 
         imageView=(ImageView)findViewById(R.id.imgView);
         spinner=(Spinner)findViewById(R.id.spinner);
-
+        captureImageBtn=(Button) findViewById(R.id.captureImageBtn);
         spinner.setOnItemSelectedListener(this);
 
         ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_spinner_item,service);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+        captureImageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                capture();
+            }
+        });
 
         capture();
     }

@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -34,7 +34,7 @@ public class Search extends AppCompatActivity {
 
     EditText startDateEt, endDateEt, searchTitleEt;
     ListView expensesList;
-    Button searchListBtn;
+    ImageButton searchListBtn;
 
     CustomBaseAdapter adapter;
 //  values from firebase
@@ -84,7 +84,7 @@ public class Search extends AppCompatActivity {
         endDateEt=(EditText) findViewById(R.id.endDateEt);
         searchTitleEt=(EditText) findViewById(R.id.searchTitleEt);
         expensesList=(ListView) findViewById(R.id.searchList);
-        searchListBtn=(Button) findViewById(R.id.searchListBtn);
+        searchListBtn=(ImageButton) findViewById(R.id.searchListBtn);
 
         progressDialog= ProgressDialog.show(Search.this, "","Please Wait, Loading...",true);
         getDataFromFirebase();
@@ -147,6 +147,7 @@ public class Search extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     public void getDataFromFirebase(){

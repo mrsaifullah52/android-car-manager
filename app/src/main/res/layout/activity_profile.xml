@@ -9,65 +9,117 @@
     android:paddingVertical="15dp"
     >
 
-    <ImageView
-        android:id="@+id/userDp"
-        android:layout_marginTop="50dp"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_alignParentTop="true"
+    <RelativeLayout
+        android:id="@+id/dpContainer"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/userdp"/>
+        android:layout_width="122dp"
+        android:layout_height="122dp"
+        android:background="@drawable/circle">
+        <ImageView
+            android:layout_centerInParent="true"
+            android:id="@+id/userDp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:src="@drawable/usericon"/>
+    </RelativeLayout>
+    <TextView
+        android:layout_below="@+id/dpContainer"
+        android:textSize="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tap on image to Change it!"
+        />
 
     <ScrollView
-        android:layout_below="@+id/userDp"
+        android:layout_below="@id/dpContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ProgressBar
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/progressBar4"
-                android:visibility="gone"
-                android:layout_gravity="center"
-                />
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/btnPickImg"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:background="@color/colorPrimaryDark"-->
+<!--                    android:gravity="center"-->
+<!--                    android:paddingTop="8dp"-->
+<!--                    android:paddingBottom="8dp"-->
+<!--                    android:text="Upload Image"-->
+<!--                    android:textAllCaps="false"-->
+<!--                    android:textColor="@color/cardview_light_background"-->
+<!--                    android:textSize="20sp" />-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/btnUploadImg"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:background="@color/colorPrimaryDark"-->
+<!--                    android:gravity="center"-->
+<!--                    android:paddingTop="8dp"-->
+<!--                    android:paddingBottom="8dp"-->
+<!--                    android:text="Upload Image"-->
+<!--                    android:textAllCaps="false"-->
+<!--                    android:textColor="@color/cardview_light_background"-->
+<!--                    android:textSize="20sp" />-->
+
+<!--            </LinearLayout>-->
+
+
+<!--            <ProgressBar-->
+<!--                android:layout_width="40dp"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:id="@+id/progressBar4"-->
+<!--                android:visibility="gone"-->
+<!--                android:layout_gravity="center"-->
+<!--                />-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:hint="Enter your Name"
                 app:hintTextColor="@color/colorPrimaryDark"
                 app:startIconDrawable="@android:drawable/ic_menu_edit">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/userName"
+                    android:id="@+id/userNameEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:cursorVisible="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:inputType="text"
+                    android:inputType="textPersonName"
                     android:onClick="editTextBoxs" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 app:hintTextColor="@color/colorPrimaryDark"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="Enter Phone Number"
                 android:layout_marginTop="10dp"
                 app:startIconContentDescription="Enter Phone Number"
                 app:startIconDrawable="@android:drawable/ic_menu_edit">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/userPhone"
+                    android:id="@+id/userPhoneEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone"
@@ -82,17 +134,17 @@
             <com.google.android.material.textfield.TextInputLayout
                 app:hintTextColor="@color/colorPrimaryDark"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Enter your Gender"
+                android:layout_height="wrap_content"
+                android:hint="Enter Email Address"
                 android:layout_marginTop="10dp"
-                app:startIconContentDescription="Enter your Gender"
+                app:startIconContentDescription="Enter Email Address"
                 app:startIconDrawable="@android:drawable/ic_menu_edit">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/userGender"
+                    android:id="@+id/userEmailEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="textEmailAddress"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:clickable="false"
@@ -101,23 +153,23 @@
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Email: "
-                    android:textSize="18sp"/>
-                <TextView
-                    android:textSize="18sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="example@gmail.com"
-                    android:id="@+id/userEmailTv"/>
-            </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                >-->
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Email: "-->
+<!--                    android:textSize="18sp"/>-->
+<!--                <TextView-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="example@gmail.com"-->
+<!--                    android:id="@+id/userEmailTv"/>-->
+<!--            </LinearLayout>-->
 
             <Button
                 android:id="@+id/btnUpdate"

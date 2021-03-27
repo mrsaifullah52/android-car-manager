@@ -11,12 +11,14 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.softtechglobal.androidcarmanager.R;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class AddReminders extends AppCompatActivity {
 
@@ -84,17 +86,14 @@ public class AddReminders extends AppCompatActivity {
         addReminderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar now=Calendar.getInstance();
-
                 AlarmManager manager = (AlarmManager) getSystemService(AddReminders.ALARM_SERVICE);
-//                Date dat = new Date();
+                Date dat = new Date();
                 Calendar cal_alarm = Calendar.getInstance();
                 Calendar cal_now = Calendar.getInstance();
-                cal_alarm.add(Calendar);
-//                cal_now.setTime(dat);
-//                cal_alarm.setTime(dat);
-                cal_alarm.set(Calendar.HOUR_OF_DAY,14);
-                cal_alarm.set(Calendar.MINUTE,18);
+                cal_now.setTime(dat);
+                cal_alarm.setTime(dat);
+//                cal_alarm.set(Calendar.HOUR_OF_DAY,12);
+                cal_alarm.set(Calendar.MINUTE,15);
                 cal_alarm.set(Calendar.SECOND,0);
                 if(cal_alarm.before(cal_now)){
                     cal_alarm.add(Calendar.DATE,1);
@@ -104,8 +103,7 @@ public class AddReminders extends AppCompatActivity {
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(AddReminders.this, 0, myIntent, 0);
 
                 manager.set(AlarmManager.RTC_WAKEUP,cal_alarm.getTimeInMillis(), pendingIntent);
-
-
+                Toast.makeText(AddReminders.this,"Alarm setuped",Toast.LENGTH_SHORT).show();
             }
         });
 

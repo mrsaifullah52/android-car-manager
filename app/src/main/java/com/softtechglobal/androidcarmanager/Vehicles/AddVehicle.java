@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,10 +33,6 @@ public class AddVehicle extends AppCompatActivity{
     String vehicleName, manufacturer, vehicleModel, plateNum, odometerUnit;
     Long purchaseDate;
     Double milageRange, fuelLimit;
-//  spinners
-//    String[] odometerUnitTypeSpin={"Kilometer","Mile","Hour"};
-
-//    Spinner odometerUnitSpin;
     EditText vehicleNameEt, odometerReadingEt, manufacturerEt, vehicleModelEt, plateNumEt, purchaseDateEt, milageRangeEt, fuelLimitEt;
     Button saveVehicleBtn;
     DatePickerDialog datePickerDialog;
@@ -176,16 +174,50 @@ public class AddVehicle extends AppCompatActivity{
                     Toast.makeText(AddVehicle.this, error.toString(), Toast.LENGTH_SHORT).show();
                 }
             });
-            databaseReference.child(String.valueOf(vehicleId)).setValue(vehicleDB);
-            Toast.makeText(getApplicationContext(),"Vehicle information Added", Toast.LENGTH_LONG).show();
+
+            databaseReference.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                @Override
+                public void onSuccess(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            vehicleId = Integer.parseInt(ds.getKey());
+                        }
+                        vehicleId++;
+                        databaseReference.child(String.valueOf(vehicleId)).setValue(vehicleDB).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                emptyValues();
+                                Toast.makeText(getApplicationContext(),"Vehicle information Added", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }else{
+                        vehicleId=0;
+                        databaseReference.child(String.valueOf(vehicleId)).setValue(vehicleDB).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                emptyValues();
+                                Toast.makeText(getApplicationContext(),"Vehicle information Added", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(AddVehicle.this, e.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }else if(type.equals("edit")){
             Bundle bundle=getIntent().getExtras();
             String key=bundle.getString("key");
-            databaseReference.child(key).setValue(vehicleDB);
-            Toast.makeText(getApplicationContext(),"Vehicle information Updated", Toast.LENGTH_LONG).show();
+            databaseReference.child(key).setValue(vehicleDB).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    emptyValues();
+                    Toast.makeText(getApplicationContext(),"Vehicle information Updated", Toast.LENGTH_LONG).show();
+                }
+            });
         }
-
-        emptyValues();
     }
 
     public void emptyValues(){

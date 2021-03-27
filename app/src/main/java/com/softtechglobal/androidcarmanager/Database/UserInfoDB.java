@@ -1,14 +1,21 @@
 package com.softtechglobal.androidcarmanager.Database;
 
 public class UserInfoDB {
-    String fullname, gender, phone;
+    String fullname, email, phone, dpUrl;
 
     public UserInfoDB() {
     }
 
-    public UserInfoDB(String fullname, String gender, String phone) {
+    public UserInfoDB(String fullname, String email, String phone, String dpUrl) {
         this.fullname = fullname;
-        this.gender = gender;
+        this.email = email;
+        this.phone = phone;
+        this.dpUrl = dpUrl;
+    }
+
+    public UserInfoDB(String fullname, String email, String phone) {
+        this.fullname = fullname;
+        this.email = email;
         this.phone = phone;
     }
 
@@ -20,12 +27,12 @@ public class UserInfoDB {
         this.fullname = fullname;
     }
 
-    public String getGender() {
-        return gender;
+    public String getEmail() {
+        return email;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhone() {
@@ -36,4 +43,11 @@ public class UserInfoDB {
         this.phone = phone;
     }
 
+    public String getDpUrl() {
+        return dpUrl;
+    }
+
+    public void setDpUrl(String dpUrl) {
+        this.dpUrl = dpUrl;
+    }
 }

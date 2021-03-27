@@ -13,8 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -62,22 +62,24 @@ public class Signin extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
                     return;
                 }else {
-                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    mAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (!task.isSuccessful()) {
-                                // there was an error
-                                if (password.length() < 6) {
-                                    passwordEt.setError("Please Enter Corrent Passowrd.");
-                                } else {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(Signin.this, "Authentication Failed", Toast.LENGTH_LONG).show();
-                                }
+                        public void onSuccess(AuthResult authResult) {
+                            progressDialog.dismiss();
+                            Intent intent = new Intent(Signin.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // there was an error
+                            if (password.length() < 6) {
+                                passwordEt.setError("Password must have 6 Characters.");
+                                progressDialog.dismiss();
                             } else {
                                 progressDialog.dismiss();
-                                Intent intent = new Intent(Signin.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
+                                Toast.makeText(Signin.this, "Email or Password not Matched.", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
