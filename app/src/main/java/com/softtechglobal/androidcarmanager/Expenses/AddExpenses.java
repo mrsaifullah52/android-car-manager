@@ -1,32 +1,49 @@
 package com.softtechglobal.androidcarmanager.Expenses;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.softtechglobal.androidcarmanager.Database.ExpensesDB;
 import com.softtechglobal.androidcarmanager.R;
 import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -42,12 +59,24 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
 
     EditText titleEt, dateEt,timeEt, meterReadingEt,costEt;
     Button saveBtn;
+    ImageView addImgCamera, addImgGallery;
+    LinearLayout imagesContainer;
+
+    private int PICK_IMAGE=786;
+    private int READ_PERMISSION=787;
+    private int CAMERA_REQUEST=788;
+    private int CAMERA_PERMISSION=789;
+    private Uri filePath;
+    ArrayList<Uri> imagesPathList=new ArrayList<Uri>();
+    ArrayList<String> imagesDbPathList=new ArrayList<String>();
 
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
 
     private DatabaseReference databaseReference1, databaseReference2;
     private FirebaseAuth firebaseAuth;
+    private StorageReference storageReference;
+    private FirebaseStorage storage;
 
     String key;
     int expensesIndex;
@@ -73,6 +102,10 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
         databaseReference1= FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/vehicles/");
         databaseReference2=FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/expenses/"+key);
 
+        storage = FirebaseStorage.getInstance();
+        storageReference=storage.getReference("expenses/"+user.getUid());
+
+
         setTitle("Add Expenses");
         expenseSpinner=(Spinner)findViewById(R.id.expenseTitleSp);
         titleEt=(EditText) findViewById(R.id.expenseTitleEt);
@@ -81,8 +114,41 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
         meterReadingEt=(EditText) findViewById(R.id.meterEt);
         costEt=(EditText) findViewById(R.id.costEt);
         saveBtn=(Button) findViewById(R.id.saveExpenseBtn);
+        addImgCamera=(ImageView) findViewById(R.id.addImgCamera);
+        addImgGallery=(ImageView) findViewById(R.id.addImgGallery);
+        imagesContainer= (LinearLayout) findViewById(R.id.imagesContainer);
 
         expenseSpinner.setOnItemSelectedListener(this);
+
+
+
+//      add / select images
+        addImgCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(AddExpenses.this, Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_DENIED){
+                    ActivityCompat.requestPermissions(AddExpenses.this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION);
+                }else{
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                }
+            }
+        });
+
+        addImgGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ((ActivityCompat.checkSelfPermission(AddExpenses.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
+                    Intent i=new Intent();
+                    i.setType("image/*");
+                    i.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(i, "Select an Picture"), PICK_IMAGE);
+                } else {
+                    ActivityCompat.requestPermissions((Activity) AddExpenses.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_PERMISSION);
+                }
+            }
+        });
 
 //      seting date and time picker
         dateEt.setOnClickListener(new View.OnClickListener() {
@@ -158,7 +224,7 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
                     Toast.makeText(AddExpenses.this,"Enter Cost!",Toast.LENGTH_SHORT).show();
                 }else{
                     int position=keys.indexOf(key);
-                    if(position==-1){
+                    if(position == -1){
                         Toast.makeText(AddExpenses.this, "Please Select an Existing Car!", Toast.LENGTH_LONG).show();
                     }else {
                         databaseReference2.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
@@ -189,6 +255,42 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
 
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK){
+            filePath=data.getData();
+            imagesPathList.add(filePath);
+
+            Bitmap photo=(Bitmap)data.getExtras().get("data");
+            ImageView imageView=new ImageView(AddExpenses.this);
+            imageView.setLayoutParams(new ViewGroup.LayoutParams(150,250));
+            imageView.setMaxHeight(250);
+            imageView.setMaxWidth(150);
+            imageView.setPadding(10,0,10,0);
+            imageView.setImageBitmap(photo);
+            imagesContainer.addView(imageView);
+        }else if(requestCode == PICK_IMAGE && resultCode == RESULT_OK
+                && data != null && data.getData() != null){
+            filePath=data.getData();
+            imagesPathList.add(filePath);
+
+            try {
+                Bitmap bitmap= MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                ImageView imageView=new ImageView(AddExpenses.this);
+                imageView.setLayoutParams(new ViewGroup.LayoutParams(150,250));
+                imageView.setMaxHeight(250);
+                imageView.setMaxWidth(150);
+                imageView.setPadding(10,0,10,0);
+                imageView.setImageBitmap(bitmap);
+                imagesContainer.addView(imageView);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         selectedExpenses=expenses[position];
@@ -199,15 +301,89 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
 
     }
 
-    public void addIntoDb(int index){
-        ExpensesDB expensesDB = new ExpensesDB(title, selectedExpenses, date, time, meter, cost);
-        databaseReference2.child(selectedExpenses).child(String.valueOf(index)).setValue(expensesDB);
-        clearEtValue();
-        Toast.makeText(AddExpenses.this, "Expense Added!", Toast.LENGTH_SHORT).show();
+    public void addIntoDb(int in){
+        final int index=in;
+        if (imagesPathList.isEmpty()){
+            ExpensesDB expensesDB = new ExpensesDB(title, selectedExpenses, date, time, meter, cost);
+            databaseReference2.child(selectedExpenses).child(String.valueOf(index)).setValue(expensesDB)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            clearEtValue();
+                            Toast.makeText(AddExpenses.this, "Expense Added!", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(AddExpenses.this, "Failed to add: "+e.toString(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }else{
+            ExpensesDB expensesDB = new ExpensesDB(title, selectedExpenses, date, time, meter, cost);
+            databaseReference2.child(selectedExpenses).child(String.valueOf(index)).setValue(expensesDB)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    for (int i=0; i < imagesPathList.size(); i++){
+                        final int j=i;
+                        storageReference
+                                .child(selectedExpenses)
+                                .child(key)
+                                .child(String.valueOf(index))
+                                .child(String.valueOf(i))
+                                .putFile(imagesPathList.get(i))
+                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                storageReference
+                                        .child(selectedExpenses)
+                                        .child(key)
+                                        .child(String.valueOf(index))
+                                        .child(String.valueOf(j))
+                                        .getDownloadUrl()
+                                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        imagesDbPathList.add(String.valueOf(uri));
+                                        if ( j == imagesPathList.size()-1 ){
+                                            addImageIntoFirebase(index);
+                                         }
+                                    }
+                                });
+                            }
+                        });
+                    }
 
+                }
+            });
+        }
+    }
+
+    public void addImageIntoFirebase(int index){
+        for(int i=0; i<imagesDbPathList.size(); i++) {
+            databaseReference2.child(selectedExpenses).child(String.valueOf(index))
+                    .child("images")
+                    .child(String.valueOf(i))
+                    .setValue(imagesDbPathList.get(i))
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(AddExpenses.this, "Expense Added!", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(AddExpenses.this, "Failed"+e.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+        imagesContainer.removeAllViews();
+        clearEtValue();
     }
 
     public void clearEtValue(){
+
         titleEt.setText("");
         dateEt.setText("");
         timeEt.setText("");

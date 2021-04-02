@@ -4,6 +4,7 @@ public class ExpensesDB {
     String expenseTitle, expenseType;
     Long date, time;
     Double odometer, cost;
+    String image;
 
     public ExpensesDB() {
     }
@@ -15,6 +16,24 @@ public class ExpensesDB {
         this.time = time;
         this.odometer = odometer;
         this.cost = cost;
+    }
+
+    public ExpensesDB(String expenseTitle, String expenseType, Long date, Long time, Double odometer, Double cost, String image) {
+        this.expenseTitle = expenseTitle;
+        this.expenseType = expenseType;
+        this.date = date;
+        this.time = time;
+        this.odometer = odometer;
+        this.cost = cost;
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getExpenseTitle() {
