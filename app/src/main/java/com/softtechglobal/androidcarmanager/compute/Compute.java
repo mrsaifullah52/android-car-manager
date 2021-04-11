@@ -37,17 +37,17 @@ public class Compute extends AppCompatActivity {
         fuelMile=(TextView)findViewById(R.id.fuelMile);
 
 //      calculate consumption
-        costTotalVal=3530;
-        costKMVal=7.06;
+        costTotalVal=3928.02;
+        costKMVal=785.71;
         costMileVal=12.36;
 
         distanceTotalVal=500;
         distanceKMVal=100;
-        distanceMileVal=62;
+        distanceMileVal=312.5;
 
-        fuelTotalVal=33.35;
-        fuelKMVal=0.67;
-        fuelMileVal=0.093;
+        fuelTotalVal=35.71;
+        fuelKMVal=7.14;
+        fuelMileVal=4.46;
 
 //      set values to display
         costTotal.setText("RS: "+costTotalVal);
