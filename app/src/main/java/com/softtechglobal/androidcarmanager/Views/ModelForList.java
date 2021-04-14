@@ -1,10 +1,10 @@
-package com.softtechglobal.androidcarmanager;
+package com.softtechglobal.androidcarmanager.Views;
 
-public class ModelForAdapter {
+public class ModelForList {
     String title;
     Long date;
 
-    public ModelForAdapter(String title, Long date) {
+    public ModelForList(String title, Long date) {
         this.title = title;
         this.date = date;
     }

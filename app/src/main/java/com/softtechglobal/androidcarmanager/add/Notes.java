@@ -19,9 +19,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.softtechglobal.androidcarmanager.CustomBaseAdapter;
+import com.softtechglobal.androidcarmanager.Views.BaseAdapterForList;
 import com.softtechglobal.androidcarmanager.Database.NotesDB;
-import com.softtechglobal.androidcarmanager.ModelForAdapter;
+import com.softtechglobal.androidcarmanager.Views.ModelForList;
 import com.softtechglobal.androidcarmanager.R;
 import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 
@@ -32,12 +32,12 @@ public class Notes extends AppCompatActivity {
 
     ImageButton imageButton;
     ListView listView;
-    CustomBaseAdapter adapter;
+    BaseAdapterForList adapter;
 
     ArrayList<String> title= new ArrayList<String>();
     ArrayList<Long> date= new ArrayList<Long>();
     ArrayList<String> message= new ArrayList<String>();
-    ArrayList<ModelForAdapter> listModel=new ArrayList<ModelForAdapter>();
+    ArrayList<ModelForList> listModel=new ArrayList<ModelForList>();
 
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
@@ -90,10 +90,10 @@ public class Notes extends AppCompatActivity {
 
                 if (!title.isEmpty() && !date.isEmpty() && !message.isEmpty()){
                     for (int i=0;i<=title.size()-1;i++){
-                        ModelForAdapter model=new ModelForAdapter(title.get(i),date.get(i));
+                        ModelForList model=new ModelForList(title.get(i),date.get(i));
                         listModel.add(model);
                     }
-                    adapter = new CustomBaseAdapter(Notes.this, listModel);
+                    adapter = new BaseAdapterForList(Notes.this, listModel);
                     listView.setAdapter(adapter);
                 }else{
                     Log.d("listmodel","failed to get values");

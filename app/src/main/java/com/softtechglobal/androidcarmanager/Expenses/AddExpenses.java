@@ -262,7 +262,7 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
             filePath=data.getData();
             imagesPathList.add(filePath);
 
-            Bitmap photo=(Bitmap)data.getExtras().get("data");
+            Bitmap photo=(Bitmap) data.getExtras().get("data");
             ImageView imageView=new ImageView(AddExpenses.this);
             imageView.setLayoutParams(new ViewGroup.LayoutParams(150,250));
             imageView.setMaxHeight(250);

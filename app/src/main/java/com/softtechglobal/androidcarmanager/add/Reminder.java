@@ -13,7 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.softtechglobal.androidcarmanager.CustomBaseAdapter;
+import com.softtechglobal.androidcarmanager.Views.BaseAdapterForList;
 import com.softtechglobal.androidcarmanager.R;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class Reminder extends AppCompatActivity {
 
     ImageButton imageButton;
     ListView listView;
-    CustomBaseAdapter adapter;
+    BaseAdapterForList adapter;
 
     ArrayList<String> title= new ArrayList<String>();
     ArrayList<String> date= new ArrayList<String>();

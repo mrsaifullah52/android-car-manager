@@ -21,9 +21,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.softtechglobal.androidcarmanager.CustomBaseAdapter;
+import com.softtechglobal.androidcarmanager.Views.BaseAdapterForList;
 import com.softtechglobal.androidcarmanager.Database.ExpensesDB;
-import com.softtechglobal.androidcarmanager.ModelForAdapter;
+import com.softtechglobal.androidcarmanager.Views.ModelForList;
 import com.softtechglobal.androidcarmanager.R;
 import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 
@@ -36,7 +36,7 @@ public class Search extends AppCompatActivity {
     ListView expensesList;
     ImageButton searchListBtn;
 
-    CustomBaseAdapter adapter;
+    BaseAdapterForList adapter;
 //  values from firebase
     ArrayList<String> maintenance = new ArrayList<String>();
     ArrayList<Long> maintenanceDate = new ArrayList<Long>();
@@ -54,7 +54,7 @@ public class Search extends AppCompatActivity {
 
     ArrayList<String>titles=new ArrayList<String>();
     ArrayList<Long>dates=new ArrayList<Long>();
-    ArrayList<ModelForAdapter> listModel= new ArrayList<ModelForAdapter>();
+    ArrayList<ModelForList> listModel= new ArrayList<ModelForList>();
 
     Long startDate, endDate;
     String query="";
@@ -380,11 +380,11 @@ public class Search extends AppCompatActivity {
 
 //        Log.d("setAdapter", String.valueOf(titles.size()));
             for(int i=0;i<titles.size()-1;i++){
-                ModelForAdapter modelAdapter=new ModelForAdapter(titles.get(i), dates.get(i));
+                ModelForList modelAdapter=new ModelForList(titles.get(i), dates.get(i));
                 //bind all strings in an array
                 listModel.add(modelAdapter);
             }
-            adapter = new CustomBaseAdapter(Search.this, listModel);
+            adapter = new BaseAdapterForList(Search.this, listModel);
             expensesList.setAdapter(adapter);
 
         }else{

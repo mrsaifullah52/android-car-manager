@@ -23,10 +23,10 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.softtechglobal.androidcarmanager.CustomBaseAdapter;
+import com.softtechglobal.androidcarmanager.Views.BaseAdapterForList;
 import com.softtechglobal.androidcarmanager.Database.VehicleDB;
 import com.softtechglobal.androidcarmanager.MainActivity;
-import com.softtechglobal.androidcarmanager.ModelForAdapter;
+import com.softtechglobal.androidcarmanager.Views.ModelForList;
 import com.softtechglobal.androidcarmanager.R;
 import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 
@@ -37,7 +37,7 @@ public class Vehicles extends AppCompatActivity {
 
     ImageButton imageButton;
     ListView listView;
-    CustomBaseAdapter adapter;
+    BaseAdapterForList adapter;
 
     ArrayList<String> key=new ArrayList<String>();
     ArrayList<String> title=new ArrayList<String>();
@@ -49,7 +49,7 @@ public class Vehicles extends AppCompatActivity {
     ArrayList<String> fuelLimit=new ArrayList<String>();
     ArrayList<String> plateNum=new ArrayList<String>();
 
-    ArrayList<ModelForAdapter> listModel= new ArrayList<ModelForAdapter>();
+    ArrayList<ModelForList> listModel= new ArrayList<ModelForList>();
 
     AlertDialog.Builder builder;
     AlertDialog dialog;
@@ -114,7 +114,7 @@ public class Vehicles extends AppCompatActivity {
 
                     if(!title.isEmpty() && !purchaseDate.isEmpty()){
                         for(int i=0;i<title.size();i++){
-                            ModelForAdapter modelAdapter=new ModelForAdapter(title.get(i), purchaseDate.get(i));
+                            ModelForList modelAdapter=new ModelForList(title.get(i), purchaseDate.get(i));
                             //bind all strings in an array
                             listModel.add(modelAdapter);
                         }
@@ -327,7 +327,7 @@ public class Vehicles extends AppCompatActivity {
     }
 
     public void setListAdapter(){
-        adapter = new CustomBaseAdapter(Vehicles.this, listModel);
+        adapter = new BaseAdapterForList(Vehicles.this, listModel);
         listView.setAdapter(adapter);
     }
 

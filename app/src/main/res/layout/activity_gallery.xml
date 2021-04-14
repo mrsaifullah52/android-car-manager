@@ -1,48 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".capture.Gallery"
-    android:paddingVertical="30dp"
-    android:paddingHorizontal="15dp">
-    <LinearLayout
+    tools:context=".capture.Gallery">
+
+    <RelativeLayout
+        android:id="@+id/head"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="@color/colorPrimary">
 
-        <com.google.android.material.card.MaterialCardView
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="15dp"
+            android:text="Gallery Manager"
+            android:textColor="#fff"
+            android:textSize="22sp" />
+
+        <ImageButton
+            android:id="@+id/addImage"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:src="@android:drawable/ic_menu_add" />
+    </RelativeLayout>
+
+<!--    <ListView-->
+<!--        android:layout_alignParentLeft="true"-->
+<!--        android:layout_below="@+id/head"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:longClickable="true"-->
+<!--        android:id="@+id/gallerylistview"-->
+<!--        />-->
+
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/head"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <GridView
+            android:id="@+id/gridview"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:clickable="true"
-            android:focusable="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:onClick="moveToNextActivity">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="9"
-                    android:layout_gravity="center"
-                    android:contentDescription="content_description_media"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/addexpenses" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingTop="10dp"
-                    android:text="This is dummy title here"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
+            android:layout_height="wrap_content"
+            android:numColumns="4"
+            android:verticalSpacing="4dp"
+            />
     </LinearLayout>
-</ScrollView>
+
+</RelativeLayout>

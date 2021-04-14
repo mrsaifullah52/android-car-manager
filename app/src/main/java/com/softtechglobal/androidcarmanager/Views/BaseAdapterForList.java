@@ -1,4 +1,4 @@
-package com.softtechglobal.androidcarmanager;
+package com.softtechglobal.androidcarmanager.Views;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,21 +7,23 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.softtechglobal.androidcarmanager.R;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class CustomBaseAdapter extends BaseAdapter {
+public class BaseAdapterForList extends BaseAdapter {
     Context context;
-    List<ModelForAdapter> modellist;
-    ArrayList<ModelForAdapter> arrayList;
+    List<ModelForList> modellist;
+    ArrayList<ModelForList> arrayList;
 
-    public CustomBaseAdapter(Context context, List<ModelForAdapter> modellist ) {
+    public BaseAdapterForList(Context context, List<ModelForList> modellist ) {
         this.context = context;
         this.modellist = modellist;
-        this.arrayList = arrayList;
-        this.arrayList = new ArrayList<ModelForAdapter>();
+//        this.arrayList = arrayList;
+        this.arrayList = new ArrayList<ModelForList>();
         this.arrayList.addAll(modellist);
     }
 
@@ -79,7 +81,7 @@ public class CustomBaseAdapter extends BaseAdapter {
             modellist.addAll(arrayList);
         }
         else {
-            for (ModelForAdapter model : arrayList){
+            for (ModelForList model : arrayList){
                 if ((model.getTitle().toLowerCase(Locale.getDefault()).contains(query))
                         && ( model.getDate() >= startDate)
                         && ( model.getDate() <= endDate))

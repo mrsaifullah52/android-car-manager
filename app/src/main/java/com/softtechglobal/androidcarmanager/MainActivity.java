@@ -1,8 +1,6 @@
 package com.softtechglobal.androidcarmanager;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,19 +9,17 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.softtechglobal.androidcarmanager.Vehicles.Vehicles;
-import com.softtechglobal.androidcarmanager.add.Notes;
-import com.softtechglobal.androidcarmanager.add.Reminder;
-import com.softtechglobal.androidcarmanager.capture.Capture;
-import com.softtechglobal.androidcarmanager.compute.Compute;
 import com.softtechglobal.androidcarmanager.Expenses.AddExpenses;
 import com.softtechglobal.androidcarmanager.Statistics.Statistics;
 import com.softtechglobal.androidcarmanager.UserManagement.Profile;
 import com.softtechglobal.androidcarmanager.UserManagement.Signin;
+import com.softtechglobal.androidcarmanager.Vehicles.Vehicles;
+import com.softtechglobal.androidcarmanager.add.Notes;
+import com.softtechglobal.androidcarmanager.add.Reminder;
+import com.softtechglobal.androidcarmanager.capture.Gallery;
+import com.softtechglobal.androidcarmanager.compute.Compute;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -102,14 +98,19 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }break;
             case R.id.card2:{
+
+                intent = new Intent(MainActivity.this, Gallery.class);
+                startActivity(intent);
+
+
 //                ask for camera permission if haven't
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                        == PackageManager.PERMISSION_DENIED){
-                    ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 100);
-                }else{
-                    intent = new Intent(MainActivity.this, Capture.class);
-                    startActivity(intent);
-                }
+//                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+//                        == PackageManager.PERMISSION_DENIED){
+//                    ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 100);
+//                }else{
+//                    intent = new Intent(MainActivity.this, Capture.class);
+//                    startActivity(intent);
+//                }
             }break;
             case R.id.card3:{
                 intent = new Intent(MainActivity.this, Statistics.class);

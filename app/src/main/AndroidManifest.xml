@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".capture.Gallery"></activity>
+        <activity android:name=".capture.ViewImage"></activity>
+        <activity android:name=".capture.Gallery" />
         <activity android:name=".Vehicles.AddVehicle" />
         <activity android:name=".Vehicles.Vehicles" />
         <activity android:name=".UserManagement.Profile" />
