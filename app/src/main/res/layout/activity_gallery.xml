@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".capture.Gallery">
+    tools:context=".Capture.Gallery">
 
     <RelativeLayout
         android:id="@+id/head"
@@ -25,7 +25,7 @@
             android:textSize="22sp" />
 
         <ImageButton
-            android:id="@+id/addImage"
+            android:id="@+id/capture"
             android:layout_width="wrap_content"
             android:layout_height="55dp"
             android:layout_alignParentRight="true"

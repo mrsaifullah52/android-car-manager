@@ -1,4 +1,4 @@
-package com.softtechglobal.androidcarmanager.capture;
+package com.softtechglobal.androidcarmanager.Capture;
 
 import android.os.Bundle;
 import android.widget.ImageView;

@@ -14,8 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".capture.ViewImage"></activity>
-        <activity android:name=".capture.Gallery" />
+        <activity android:name=".Capture.ViewImage"></activity>
+        <activity android:name=".Capture.Gallery" />
         <activity android:name=".Vehicles.AddVehicle" />
         <activity android:name=".Vehicles.Vehicles" />
         <activity android:name=".UserManagement.Profile" />
@@ -26,7 +26,7 @@
         <activity android:name=".compute.Compute" />
         <activity android:name=".Statistics.Search" />
         <activity android:name=".Statistics.Statistics" />
-        <activity android:name=".capture.Capture" />
+        <activity android:name=".Capture.Capture" />
         <activity android:name=".Expenses.AddExpenses" />
         <activity android:name=".UserManagement.Forgotpassword" />
         <activity android:name=".UserManagement.Signup" />

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".capture.Capture"
+    tools:context=".Capture.Capture"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -22,20 +22,20 @@
             android:id="@+id/textInfoTv"
             android:layout_centerInParent="true"
             />
-        <Button
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/textInfoTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Retake"
-            android:textAllCaps="false"
-            android:textSize="20sp"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="20dp"
-            android:textColor="@color/cardview_light_background"
-            android:background="@color/colorPrimaryDark"
-            android:id="@+id/captureImageBtn"
-            />
+<!--        <Button-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:layout_below="@+id/textInfoTv"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Retake"-->
+<!--            android:textAllCaps="false"-->
+<!--            android:textSize="20sp"-->
+<!--            android:paddingVertical="10dp"-->
+<!--            android:paddingHorizontal="20dp"-->
+<!--            android:textColor="@color/cardview_light_background"-->
+<!--            android:background="@color/colorPrimaryDark"-->
+<!--            android:id="@+id/captureImageBtn"-->
+<!--            />-->
 
         <ImageView
             android:layout_alignParentLeft="true"
@@ -54,42 +54,55 @@
         android:paddingBottom="15dp"
         >
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginTop="10dp"
-            android:hint="Enter your Title"
-            app:hintTextColor="@color/colorPrimaryDark"
-            >
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="80dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:hint="Enter your Title"-->
+<!--            app:hintTextColor="@color/colorPrimaryDark"-->
+<!--            >-->
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/captureTitleEt"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:inputType="text"
-                android:textColorHint="@color/colorOnBackground" />
-        </com.google.android.material.textfield.TextInputLayout>
+<!--            <com.google.android.material.textfield.TextInputEditText-->
+<!--                android:id="@+id/captureTitleEt"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="80dp"-->
+<!--                android:inputType="text"-->
+<!--                android:textColorHint="@color/colorOnBackground" />-->
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
-            <Spinner
-                android:background="#fff"
-                android:layout_weight="4"
-                android:id="@+id/spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"/>
+<!--            <Spinner-->
+<!--                android:background="#fff"-->
+<!--                android:layout_weight="4"-->
+<!--                android:id="@+id/spinner"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="48dp"/>-->
 
             <Button
-                android:layout_weight="0"
-                android:id="@+id/btnSignIn"
+                android:layout_weight="1"
+                android:id="@+id/captureImageBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/cardview_light_background"
                 android:background="@color/colorPrimaryDark"
                 android:gravity="center"
-                android:padding="10dp"
+                android:text="Retake Image"
+                android:textAllCaps="false"
+                android:layout_marginHorizontal="1dp"
+                />
+
+            <Button
+                android:layout_marginHorizontal="1dp"
+                android:layout_weight="1"
+                android:id="@+id/uploadImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/cardview_light_background"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="center"
                 android:text="Upload Image"
                 android:textAllCaps="false"
                 />

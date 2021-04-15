@@ -18,7 +18,7 @@ import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 import com.softtechglobal.androidcarmanager.Vehicles.Vehicles;
 import com.softtechglobal.androidcarmanager.add.Notes;
 import com.softtechglobal.androidcarmanager.add.Reminder;
-import com.softtechglobal.androidcarmanager.capture.Gallery;
+import com.softtechglobal.androidcarmanager.Capture.Gallery;
 import com.softtechglobal.androidcarmanager.compute.Compute;
 
 
@@ -98,19 +98,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }break;
             case R.id.card2:{
-
                 intent = new Intent(MainActivity.this, Gallery.class);
                 startActivity(intent);
-
-
-//                ask for camera permission if haven't
-//                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-//                        == PackageManager.PERMISSION_DENIED){
-//                    ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 100);
-//                }else{
-//                    intent = new Intent(MainActivity.this, Capture.class);
-//                    startActivity(intent);
-//                }
             }break;
             case R.id.card3:{
                 intent = new Intent(MainActivity.this, Statistics.class);
