@@ -123,10 +123,10 @@
             android:layout_alignParentLeft="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Avg. KM/Ltr"/>
+            android:text="Avg. KM/Route"/>
         <TextView
             android:textColor="@color/colorPrimaryDark"
-            android:id="@+id/ltrCostEt"
+            android:id="@+id/kmRouteEt"
             android:paddingVertical="10dp"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
@@ -135,29 +135,52 @@
     </RelativeLayout>
 
 
-<!--    <RelativeLayout-->
-<!--        android:layout_marginVertical="10dp"-->
-<!--        android:paddingHorizontal="10dp"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal">-->
-<!--        <TextView-->
-<!--            android:textColor="@color/colorPrimaryDark"-->
-<!--            android:paddingVertical="10dp"-->
-<!--            android:layout_alignParentLeft="true"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Fuel Cost/Week"/>-->
-<!--        <TextView-->
-<!--            android:textColor="@color/colorPrimaryDark"-->
-<!--            android:id="@+id/costWeekEt"-->
-<!--            android:paddingVertical="10dp"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="3000"/>-->
-<!--    </RelativeLayout>-->
+    <RelativeLayout
+        android:layout_marginVertical="10dp"
+        android:paddingHorizontal="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:textColor="@color/colorPrimaryDark"
+            android:paddingVertical="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fuel Cost/KM"/>
+        <TextView
+            android:textColor="@color/colorPrimaryDark"
+            android:id="@+id/costKmEt"
+            android:paddingVertical="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3000"/>
+    </RelativeLayout>
 
+
+    <RelativeLayout
+        android:layout_marginVertical="10dp"
+        android:paddingHorizontal="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:textColor="@color/colorPrimaryDark"
+            android:paddingVertical="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Consumed Fuel"/>
+        <TextView
+            android:textColor="@color/colorPrimaryDark"
+            android:id="@+id/consumedFuelEt"
+            android:paddingVertical="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3000"/>
+    </RelativeLayout>
 
 <!--    <LinearLayout-->
 <!--        android:layout_width="match_parent"-->

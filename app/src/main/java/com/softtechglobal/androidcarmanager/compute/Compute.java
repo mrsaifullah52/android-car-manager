@@ -26,9 +26,9 @@ import java.util.Date;
 
 public class Compute extends AppCompatActivity {
 
-    TextView lastOdometerEt, distanceEt, fillupsEt, fuelCostEt, ltrCostEt;
+    TextView lastOdometerEt, distanceEt, fillupsEt, fuelCostEt, costKmEt, kmRouteEt, consumedFuelEt;
 
-    Double odometer=0.0, distance=0.0, fillups=0.0, fuelcost=0.0, avgkm=0.0;
+    Double odometer=0.0, distance=0.0, fillups=0.0, fuelcost=0.0, avgkm=0.0, avgkmcost=0.0, consumedFuel;
 
     private DatabaseReference databaseReference1,databaseReference2;
     private FirebaseAuth firebaseAuth;
@@ -60,7 +60,9 @@ public class Compute extends AppCompatActivity {
         distanceEt=(TextView)findViewById(R.id.distanceEt);
         fillupsEt=(TextView)findViewById(R.id.fillupsEt);
         fuelCostEt=(TextView)findViewById(R.id.fuelCostEt);
-        ltrCostEt=(TextView)findViewById(R.id.ltrCostEt);
+        kmRouteEt=(TextView)findViewById(R.id.kmRouteEt);
+        costKmEt=(TextView)findViewById(R.id.costKmEt);
+        consumedFuelEt=(TextView)findViewById(R.id.consumedFuelEt);
 
         databaseReference1.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
@@ -121,18 +123,23 @@ public class Compute extends AppCompatActivity {
                 odometer=newVal;
                 distance=-1*(lastVal-newVal);
 
+                Double fuelVal=0.0;
                 Collections.sort(fuellist);
                 for (Double val:fuellist){
+                    fuelVal=fuelVal+val;
                     Log.d("fuellist", String.valueOf(val));
                 }
                 fillups= Double.valueOf(fuellist.size());
+                consumedFuel=fuelVal;
 
                 Collections.sort(costList);
                 for (Double val:costList){
                     fuelcost = val+fuelcost;
                     Log.d("costlist", String.valueOf(val));
                 }
-                avgkm=(fuelcost/distance);
+
+                avgkm=(distance/distanceList.size());
+                avgkmcost=(fuelcost/distance);
                 setValues();
             }
         });
@@ -144,6 +151,8 @@ public class Compute extends AppCompatActivity {
         distanceEt.setText(new DecimalFormat("##.##").format(distance)+" km");
         fillupsEt.setText(new DecimalFormat("##.##").format(fillups)+" Time");
         fuelCostEt.setText("Rs: "+new DecimalFormat("##.##").format(fuelcost));
-        ltrCostEt.setText(new DecimalFormat("##.##").format(avgkm)+" km");
+        kmRouteEt.setText(new DecimalFormat("##.##").format(avgkm)+" km");
+        costKmEt.setText("Rs: "+new DecimalFormat("##.##").format(avgkmcost));
+        consumedFuelEt.setText(new DecimalFormat("##.##").format(consumedFuel)+" Ltr");
     }
 }
