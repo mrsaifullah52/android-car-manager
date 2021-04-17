@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!--    <LinearLayout-->
@@ -22,14 +22,28 @@
 
     <!--    android:layout_height="0dp"-->
     <!--    android:layout_weight="9"-->
-    <ImageView
-        android:padding="5dp"
-        android:background="#D2D3D5"
-        android:id="@+id/gallery_list_thumbnail"
-        android:layout_width="95dp"
-        android:layout_height="95dp"
-        android:contentDescription="content_description_media"
-        android:src="@drawable/addcamera" />
+
+
+    <RelativeLayout
+        android:layout_width="100dp"
+        android:layout_height="100dp">
+        <ImageView
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:padding="5dp"
+            android:background="#D2D3D5"
+            android:id="@+id/gallery_list_thumbnail"
+            android:layout_width="95dp"
+            android:layout_height="95dp"
+            android:contentDescription="content_description_media"
+            android:src="@drawable/addcamera" />
+
+        <ProgressBar
+            android:layout_centerInParent="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/gallery_list_progressbar"/>
+    </RelativeLayout>
 
     <!--                <TextView-->
     <!--                    android:id="@+id/gallery_list_title"-->
@@ -45,4 +59,4 @@
 
     <!--        </com.google.android.material.card.MaterialCardView>-->
     <!--    </LinearLayout>-->
-</LinearLayout>
+</RelativeLayout>

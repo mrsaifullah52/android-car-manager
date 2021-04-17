@@ -14,6 +14,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/ex1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
@@ -41,6 +42,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ex2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
@@ -58,6 +60,7 @@
 
 
         <LinearLayout
+            android:id="@+id/ex3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
@@ -71,9 +74,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginTop="10dp"
-                android:hint="Expense Date"
+                android:hint="Select Date"
                 app:hintTextColor="@color/colorPrimaryDark"
-                app:startIconContentDescription="Expense Date"
+                app:startIconContentDescription="Select Date"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -89,6 +92,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ex4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -101,8 +105,9 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:hint="Expense Time"
+                android:hint="Select Time"
                 app:hintTextColor="@color/colorPrimaryDark"
+                app:startIconContentDescription="Select Time"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -118,6 +123,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ex5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
@@ -145,6 +151,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ex6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
@@ -153,23 +160,49 @@
                 android:layout_marginTop="30dp"
                 app:srcCompat="@drawable/expensesicon" />
 
-            <com.google.android.material.textfield.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:hint="Cost"
-                app:hintTextColor="@color/colorPrimaryDark"
-                >
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/costEt"
-                    android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_weight="8"
+                    android:layout_width="0dp"
                     android:layout_height="80dp"
-                    android:layout_marginTop="10dp"
-                    android:inputType="numberDecimal"
-                    android:textColorHint="@color/colorOnBackground" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:hint="Cost"
+                    app:hintTextColor="@color/colorPrimaryDark"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/costEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="10dp"
+                        android:inputType="numberDecimal"
+                        android:textColorHint="@color/colorOnBackground" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fuelContainer"
+                    android:visibility="gone"
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:hint="Ltr"
+                    app:hintTextColor="@color/colorPrimaryDark"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ltrEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="10dp"
+                        android:inputType="numberDecimal"
+                        android:textColorHint="@color/colorOnBackground" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
+
+            android:id="@+id/ex7"
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

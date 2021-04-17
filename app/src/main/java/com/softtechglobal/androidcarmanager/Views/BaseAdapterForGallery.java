@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -52,9 +53,10 @@ public class BaseAdapterForGallery extends BaseAdapter {
 
     public class MyHolder {
 //        TextView titleTv;
+        ProgressBar progressBar;
         ImageView imageView;
         MyHolder(View v) {
-//            titleTv = (TextView) v.findViewById(R.id.gallery_list_title);
+            progressBar = (ProgressBar) v.findViewById(R.id.gallery_list_progressbar);
             imageView = (ImageView) v.findViewById(R.id.gallery_list_thumbnail);
         }
     }
@@ -72,7 +74,7 @@ public class BaseAdapterForGallery extends BaseAdapter {
             holder = (MyHolder) row.getTag();
         }
 
-//        holder.titleTv.setText(list.get(position).getTitle());
+        final MyHolder finalHolder = holder;
         Glide.with(context)
                 .load(list.get(position).getUrl())
                 .addListener(new RequestListener<Drawable>() {
@@ -84,12 +86,11 @@ public class BaseAdapterForGallery extends BaseAdapter {
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        finalHolder.progressBar.setVisibility(View.GONE);
                         return false;
                     }
                 })
-                .into(holder.imageView);
-
-
+                .into(finalHolder.imageView);
         return row;
     }
 

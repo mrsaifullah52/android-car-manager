@@ -31,6 +31,7 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -49,15 +50,17 @@ import java.util.Calendar;
 
 public class AddExpenses extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    LinearLayout linearLayout;
     Spinner expenseSpinner;
-    String[] expenses={"Maintenance","Fuel","Purchase","Service","Fine","Tax"};
+    String[] expenses={"Add Odometer","Maintenance","Fuel","Purchase","Service","Fine","Tax"};
     String selectedExpenses;
 //  data to put
     String title;
     Long date, time;
-    Double meter, cost;
+    Double meter, cost, ltr;
 
-    EditText titleEt, dateEt,timeEt, meterReadingEt,costEt;
+    TextInputLayout fuelContainer;
+    EditText titleEt, dateEt,timeEt, meterReadingEt, costEt, ltrEt;
     Button saveBtn;
     ImageView addImgCamera, addImgGallery;
     LinearLayout imagesContainer;
@@ -99,8 +102,8 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
         final FirebaseUser user=firebaseAuth.getCurrentUser();
         key= getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                 .getString("key","-1");
-        databaseReference1= FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/vehicles/");
-        databaseReference2=FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/expenses/"+key);
+        databaseReference1 = FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/vehicles/");
+        databaseReference2 = FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/expenses/"+key);
 
         storage = FirebaseStorage.getInstance();
         storageReference=storage.getReference("expenses/"+user.getUid());
@@ -113,13 +116,21 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
         timeEt=(EditText) findViewById(R.id.expenseTimeEt);
         meterReadingEt=(EditText) findViewById(R.id.meterEt);
         costEt=(EditText) findViewById(R.id.costEt);
+        ltrEt=(EditText) findViewById(R.id.ltrEt);
         saveBtn=(Button) findViewById(R.id.saveExpenseBtn);
         addImgCamera=(ImageView) findViewById(R.id.addImgCamera);
         addImgGallery=(ImageView) findViewById(R.id.addImgGallery);
         imagesContainer= (LinearLayout) findViewById(R.id.imagesContainer);
-
+        fuelContainer= (TextInputLayout) findViewById(R.id.fuelContainer);
         expenseSpinner.setOnItemSelectedListener(this);
 
+//      setting empty value by default
+        titleEt.setText("");
+        dateEt.setText("");
+        timeEt.setText("");
+        meterReadingEt.setText("0");
+        costEt.setText("0");
+        ltrEt.setText("0");
 
 
 //      add / select images
@@ -207,48 +218,74 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getValuesFromEt();
+
+                Log.d("SaveBtn: ","Button Clicked");
+
+                if(selectedExpenses.equals("Add Odometer")){
+                    getValuesFromEt(true, false);
+                }else{
+                    if(selectedExpenses.equals("Fuel")){
+                        Log.d("SaveBtn: ","Fuel addition function called 1");
+                        getValuesFromEt(false, true);
+                    }else{
+                        Log.d("SaveBtn: ","Fuel addition function called 2");
+                        getValuesFromEt(false, false);
+                    }
+                }
+
                 if(key.equals("-1")) {
                     Toast.makeText(AddExpenses.this, "Please Select a Car Before Adding Expense!", Toast.LENGTH_LONG).show();
                 }else if (selectedExpenses.isEmpty()){
                     Toast.makeText(AddExpenses.this,"Select Expense Category!",Toast.LENGTH_SHORT).show();
-                }else if(title==null){
-                    Toast.makeText(AddExpenses.this,"Enter Title!",Toast.LENGTH_SHORT).show();
                 }else if(date==null){
                     Toast.makeText(AddExpenses.this,"Enter Date!",Toast.LENGTH_SHORT).show();
                 }else if(time==null){
                     Toast.makeText(AddExpenses.this,"Enter Time!",Toast.LENGTH_SHORT).show();
                 }else if(meter==null){
                     Toast.makeText(AddExpenses.this,"Enter Meter Reading!",Toast.LENGTH_SHORT).show();
-                }else if(cost==null){
-                    Toast.makeText(AddExpenses.this,"Enter Cost!",Toast.LENGTH_SHORT).show();
-                }else{
-                    int position=keys.indexOf(key);
-                    if(position == -1){
-                        Toast.makeText(AddExpenses.this, "Please Select an Existing Car!", Toast.LENGTH_LONG).show();
-                    }else {
-                        databaseReference2.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                            @Override
-                            public void onSuccess(DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.child(selectedExpenses).exists()){
-                                    for (DataSnapshot ds : dataSnapshot.child(selectedExpenses).getChildren()) {
-                                        expensesIndex = Integer.parseInt(ds.getKey());
-                                        Log.d("expensesIndex1", String.valueOf(expensesIndex));
-                                    }
-                                    expensesIndex++;
-                                    Log.d("expensesIndex2", String.valueOf(expensesIndex));
-                                    addIntoDb(expensesIndex);
-//                                    expensesIndex = Integer.parseInt(dataSnapshot.child(selectedExpenses).getKey());
-                                }else{
-                                    Log.d("expensesIndex3", String.valueOf(expensesIndex));
-                                    expensesIndex=0;
-                                    addIntoDb(expensesIndex);
+                }else if(selectedExpenses.equals("Add Odometer")) {
+//                  if adding oddometer
+                    databaseReference2.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                        @Override
+                        public void onSuccess(DataSnapshot dataSnapshot) {
+                            Integer i=0;
+                            if (dataSnapshot.child("Oddometer").exists()) {
+                                for (DataSnapshot ds : dataSnapshot.child("Oddometer").getChildren()) {
+                                    i = Integer.valueOf(ds.getKey());
+                                    Log.d("oddomter index: ", ds.getKey());
                                 }
+                                i++;
+                                addOdometer(i);
+                            }else{
+                                addOdometer(0);
                             }
-                        });
+                        }
+                    });
 
-                    }
+                }else if(!selectedExpenses.equals("Add Odometer")){
+//                  checking if it isn't add odometer
+                    if(title==null){
+                        Toast.makeText(AddExpenses.this,"Enter Title!",Toast.LENGTH_SHORT).show();
+                    }else if(cost==null){
+                        Toast.makeText(AddExpenses.this,"Enter Cost!",Toast.LENGTH_SHORT).show();
+                    }else if(selectedExpenses.equals("Fuel")){
+                        if (ltr==null){
+                            Toast.makeText(AddExpenses.this,"Enter Litters!",Toast.LENGTH_SHORT).show();
+                        }else{
+                            getDBIndex(true);
+                            Log.d("SaveBtn: ", "Check for Null");
+                        }
+                    }else{
+                        int position=keys.indexOf(key);
+                        if(position == -1){
+                            Toast.makeText(AddExpenses.this, "Please Select an Existing Car!", Toast.LENGTH_LONG).show();
+                        }else {
+//                            call function
+                            getDBIndex(false);
+                        }
                 }
+
+            }
 
             }
         });
@@ -294,6 +331,28 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         selectedExpenses=expenses[position];
+        if(selectedExpenses.equals("Add Odometer")){
+//          adding odometer
+            linearLayout=(LinearLayout)findViewById(R.id.ex1);
+            linearLayout.setVisibility(View.GONE);
+            linearLayout=(LinearLayout)findViewById(R.id.ex6);
+            linearLayout.setVisibility(View.GONE);
+            linearLayout=(LinearLayout)findViewById(R.id.ex7);
+            linearLayout.setVisibility(View.GONE);
+        }else if(! selectedExpenses.equals("Add Odometer") ){
+            linearLayout=(LinearLayout)findViewById(R.id.ex1);
+            linearLayout.setVisibility(View.VISIBLE);
+            linearLayout=(LinearLayout)findViewById(R.id.ex6);
+            linearLayout.setVisibility(View.VISIBLE);
+            linearLayout=(LinearLayout)findViewById(R.id.ex7);
+            linearLayout.setVisibility(View.VISIBLE);
+//            if adding fuel expense
+            if( selectedExpenses.equals("Fuel")){
+                fuelContainer.setVisibility(View.VISIBLE);
+            }else{
+                fuelContainer.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -301,10 +360,64 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
 
     }
 
-    public void addIntoDb(int in){
+    public void getDBIndex(final Boolean type){
+        databaseReference2.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child(selectedExpenses).exists()){
+                    for (DataSnapshot ds : dataSnapshot.child(selectedExpenses).getChildren()) {
+                        expensesIndex = Integer.parseInt(ds.getKey());
+                        Log.d("expensesIndex1", String.valueOf(expensesIndex));
+                    }
+                    expensesIndex++;
+//                    Log.d("expensesIndex2", String.valueOf(expensesIndex));
+                    if(type){
+                        addIntoDb(expensesIndex, true);
+                    }else{
+                        addIntoDb(expensesIndex, false);
+                    }
+//                  expensesIndex = Integer.parseInt(dataSnapshot.child(selectedExpenses).getKey());
+                }else{
+//                    Log.d("expensesIndex3", String.valueOf(expensesIndex));
+                    expensesIndex=0;
+                    if(type){
+                        addIntoDb(expensesIndex, true);
+                    }else{
+                        addIntoDb(expensesIndex, false);
+                    }
+                }
+            }
+        });
+    }
+
+    public void addOdometer(int in){
+        final int i=in;
+
+        final ExpensesDB expensesDB=new ExpensesDB(date, time, meter);
+        databaseReference2.child("Oddometer").child(String.valueOf(i))
+                .setValue(expensesDB).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                clearEtValue();
+                Toast.makeText(AddExpenses.this, "Oddometer Reading added!!", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(AddExpenses.this, "Failed to add, "+e.toString()+"!!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void addIntoDb(int in, Boolean type){
         final int index=in;
+        ExpensesDB expensesDB;
+        if (type){
+            expensesDB = new ExpensesDB(title, selectedExpenses, date, time, meter, cost, ltr);
+        }else{
+            expensesDB = new ExpensesDB(title, selectedExpenses, date, time, meter, cost);
+        }
         if (imagesPathList.isEmpty()){
-            ExpensesDB expensesDB = new ExpensesDB(title, selectedExpenses, date, time, meter, cost);
             databaseReference2.child(selectedExpenses).child(String.valueOf(index)).setValue(expensesDB)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -319,7 +432,12 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
                 }
             });
         }else{
-            ExpensesDB expensesDB = new ExpensesDB(title, selectedExpenses, date, time, meter, cost);
+//            ExpensesDB expensesDB;
+//            if (selectedExpenses.equals("Fuel")){
+//                expensesDB = new ExpensesDB(title, selectedExpenses, date, time, meter, cost, ltr);
+//            }else{
+//                expensesDB = new ExpensesDB(title, selectedExpenses, date, time, meter, cost);
+//            }
             databaseReference2.child(selectedExpenses).child(String.valueOf(index)).setValue(expensesDB)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
@@ -383,17 +501,29 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
     }
 
     public void clearEtValue(){
-
         titleEt.setText("");
         dateEt.setText("");
         timeEt.setText("");
         meterReadingEt.setText("");
         costEt.setText("");
+        ltrEt.setText("");
     }
 
-    public void getValuesFromEt(){
-        title= titleEt.getText().toString().trim();
-        meter= Double.valueOf(meterReadingEt.getText().toString());
-        cost= Double.valueOf(costEt.getText().toString().trim());
+    public void getValuesFromEt(Boolean type, Boolean category){
+        if(type){
+            meter= Double.valueOf(meterReadingEt.getText().toString());
+        }else{
+            if(category){
+                Log.d("SaveBtn: ","getValuesFromEt() called");
+                meter= Double.valueOf(meterReadingEt.getText().toString());
+                title= titleEt.getText().toString().trim();
+                cost= Double.valueOf(costEt.getText().toString().trim());
+                ltr= Double.valueOf(ltrEt.getText().toString().trim());
+            }else{
+                meter= Double.valueOf(meterReadingEt.getText().toString());
+                title= titleEt.getText().toString().trim();
+                cost= Double.valueOf(costEt.getText().toString().trim());
+            }
+        }
     }
 }

@@ -3,12 +3,19 @@ package com.softtechglobal.androidcarmanager.Database;
 public class ExpensesDB {
     String expenseTitle, expenseType;
     Long date, time;
-    Double odometer, cost;
+    Double odometer, cost, ltr;
     String image;
 
     public ExpensesDB() {
     }
 
+//  while adding odometer reading
+    public ExpensesDB(Long date, Long time, Double odometer) {
+        this.date = date;
+        this.time = time;
+        this.odometer = odometer;
+    }
+//  while adding other expenses except fuel
     public ExpensesDB(String expenseTitle, String expenseType, Long date, Long time, Double odometer, Double cost) {
         this.expenseTitle = expenseTitle;
         this.expenseType = expenseType;
@@ -18,6 +25,28 @@ public class ExpensesDB {
         this.cost = cost;
     }
 
+//  while addding fuel expense
+    public ExpensesDB(String expenseTitle, String expenseType, Long date, Long time, Double odometer, Double cost, Double ltr) {
+        this.expenseTitle = expenseTitle;
+        this.expenseType = expenseType;
+        this.date = date;
+        this.time = time;
+        this.odometer = odometer;
+        this.cost = cost;
+        this.ltr = ltr;
+    }
+//  while adding fuel expense with images
+//    public ExpensesDB(String expenseTitle, String expenseType, Long date, Long time, Double odometer, Double cost, Double ltr, String image) {
+//        this.expenseTitle = expenseTitle;
+//        this.expenseType = expenseType;
+//        this.date = date;
+//        this.time = time;
+//        this.odometer = odometer;
+//        this.cost = cost;
+//        this.ltr = ltr;
+//        this.image = image;
+//    }
+//  whiel adding expenses with images
     public ExpensesDB(String expenseTitle, String expenseType, Long date, Long time, Double odometer, Double cost, String image) {
         this.expenseTitle = expenseTitle;
         this.expenseType = expenseType;
@@ -26,6 +55,14 @@ public class ExpensesDB {
         this.odometer = odometer;
         this.cost = cost;
         this.image = image;
+    }
+
+    public Double getLtr() {
+        return ltr;
+    }
+
+    public void setLtr(Double ltr) {
+        this.ltr = ltr;
     }
 
     public String getImage() {
