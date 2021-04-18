@@ -1,5 +1,6 @@
 package com.softtechglobal.androidcarmanager.add;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,11 +20,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.softtechglobal.androidcarmanager.Views.BaseAdapterForList;
 import com.softtechglobal.androidcarmanager.Database.NotesDB;
-import com.softtechglobal.androidcarmanager.Views.ModelForList;
 import com.softtechglobal.androidcarmanager.R;
 import com.softtechglobal.androidcarmanager.UserManagement.Signin;
+import com.softtechglobal.androidcarmanager.Views.BaseAdapterForList;
+import com.softtechglobal.androidcarmanager.Views.ModelForList;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,6 +45,9 @@ public class Notes extends AppCompatActivity {
 
     String key="";
     ArrayList<String> keys=new ArrayList<String>();
+
+
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +57,8 @@ public class Notes extends AppCompatActivity {
             finish();
             startActivity(new Intent(Notes.this, Signin.class));
         }
+        progressDialog= ProgressDialog.show(Notes.this, "","Please Wait, Loading...",true);
+
         final FirebaseUser user=firebaseAuth.getCurrentUser();
         key= getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                 .getString("key","-1");
@@ -85,6 +91,7 @@ public class Notes extends AppCompatActivity {
                     }
 
                 }else {
+                    progressDialog.dismiss();
                     Toast.makeText(Notes.this, "Please Select a Vehicle before adding Note.",Toast.LENGTH_SHORT).show();
                 }
 
@@ -95,7 +102,9 @@ public class Notes extends AppCompatActivity {
                     }
                     adapter = new BaseAdapterForList(Notes.this, listModel);
                     listView.setAdapter(adapter);
+                    progressDialog.dismiss();
                 }else{
+                    progressDialog.dismiss();
                     Log.d("listmodel","failed to get values");
                 }
             }

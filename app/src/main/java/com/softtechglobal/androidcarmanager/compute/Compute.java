@@ -1,5 +1,6 @@
 package com.softtechglobal.androidcarmanager.compute;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,9 +27,9 @@ import java.util.Date;
 
 public class Compute extends AppCompatActivity {
 
-    TextView lastOdometerEt, distanceEt, fillupsEt, fuelCostEt, costKmEt, kmRouteEt, consumedFuelEt;
+    TextView lastOdometerEt, distanceEt, fillupsEt, fuelCostEt, costKmEt, kmRouteEt, consumedFuelEt, avgKmLtrEt;
 
-    Double odometer=0.0, distance=0.0, fillups=0.0, fuelcost=0.0, avgkm=0.0, avgkmcost=0.0, consumedFuel;
+    Double odometer=0.0, distance=0.0, fillups=0.0, fuelcost=0.0, avgkm=0.0, avgkmcost=0.0, consumedFuel=0.0, avgkmltr=0.0;
 
     private DatabaseReference databaseReference1,databaseReference2;
     private FirebaseAuth firebaseAuth;
@@ -38,6 +39,9 @@ public class Compute extends AppCompatActivity {
     ArrayList<Double> costList=new ArrayList<Double>();
     ArrayList<Double> distanceList=new ArrayList<Double>();
     ArrayList<Double> fuellist=new ArrayList<Double>();
+
+
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,8 @@ public class Compute extends AppCompatActivity {
             finish();
             startActivity(new Intent(Compute.this, Signin.class));
         }
+        progressDialog= ProgressDialog.show(Compute.this, "","Please Wait, Loading...",true);
+
         final FirebaseUser user=firebaseAuth.getCurrentUser();
         key= getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                 .getString("key","-1");
@@ -63,6 +69,7 @@ public class Compute extends AppCompatActivity {
         kmRouteEt=(TextView)findViewById(R.id.kmRouteEt);
         costKmEt=(TextView)findViewById(R.id.costKmEt);
         consumedFuelEt=(TextView)findViewById(R.id.consumedFuelEt);
+        avgKmLtrEt=(TextView)findViewById(R.id.avgKmLtrEt);
 
         databaseReference1.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
@@ -139,7 +146,9 @@ public class Compute extends AppCompatActivity {
                 }
 
                 avgkm=(distance/distanceList.size());
-                avgkmcost=(fuelcost/distance);
+                avgkmltr=(fuelcost/distance);
+                avgkmcost=(fuelcost/consumedFuel)/avgkmltr;
+
                 setValues();
             }
         });
@@ -154,5 +163,8 @@ public class Compute extends AppCompatActivity {
         kmRouteEt.setText(new DecimalFormat("##.##").format(avgkm)+" km");
         costKmEt.setText("Rs: "+new DecimalFormat("##.##").format(avgkmcost));
         consumedFuelEt.setText(new DecimalFormat("##.##").format(consumedFuel)+" Ltr");
+        avgKmLtrEt.setText(new DecimalFormat("##.##").format(avgkmltr)+" KM");
+
+        progressDialog.dismiss();
     }
 }

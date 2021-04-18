@@ -3,6 +3,7 @@ package com.softtechglobal.androidcarmanager.Expenses;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -89,6 +90,7 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
     int mMonth;
     int mDay;
 
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,7 +163,7 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
             }
         });
 
-//      seting date and time picker
+//      setting date and time picker
         dateEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,7 +172,7 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
                 mMonth = calendar.get(Calendar.MONTH);
                 mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-//                setting date picker
+//              setting date picker
                 datePickerDialog = new DatePickerDialog(AddExpenses.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -220,6 +222,7 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
             public void onClick(View v) {
 
                 Log.d("SaveBtn: ","Button Clicked");
+                progressDialog= ProgressDialog.show(AddExpenses.this, "","Please Wait, Inserting...",true);
 
                 if(selectedExpenses.equals("Add Odometer")){
                     getValuesFromEt(true, false);
@@ -234,14 +237,19 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
                 }
 
                 if(key.equals("-1")) {
+                    progressDialog.dismiss();
                     Toast.makeText(AddExpenses.this, "Please Select a Car Before Adding Expense!", Toast.LENGTH_LONG).show();
                 }else if (selectedExpenses.isEmpty()){
+                    progressDialog.dismiss();
                     Toast.makeText(AddExpenses.this,"Select Expense Category!",Toast.LENGTH_SHORT).show();
                 }else if(date==null){
+                    progressDialog.dismiss();
                     Toast.makeText(AddExpenses.this,"Enter Date!",Toast.LENGTH_SHORT).show();
                 }else if(time==null){
+                    progressDialog.dismiss();
                     Toast.makeText(AddExpenses.this,"Enter Time!",Toast.LENGTH_SHORT).show();
                 }else if(meter==null){
+                    progressDialog.dismiss();
                     Toast.makeText(AddExpenses.this,"Enter Meter Reading!",Toast.LENGTH_SHORT).show();
                 }else if(selectedExpenses.equals("Add Odometer")) {
 //                  if adding oddometer
@@ -265,11 +273,14 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
                 }else if(!selectedExpenses.equals("Add Odometer")){
 //                  checking if it isn't add odometer
                     if(title==null){
+                        progressDialog.dismiss();
                         Toast.makeText(AddExpenses.this,"Enter Title!",Toast.LENGTH_SHORT).show();
                     }else if(cost==null){
+                        progressDialog.dismiss();
                         Toast.makeText(AddExpenses.this,"Enter Cost!",Toast.LENGTH_SHORT).show();
                     }else if(selectedExpenses.equals("Fuel")){
                         if (ltr==null){
+                            progressDialog.dismiss();
                             Toast.makeText(AddExpenses.this,"Enter Litters!",Toast.LENGTH_SHORT).show();
                         }else{
                             getDBIndex(true);
@@ -278,6 +289,7 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
                     }else{
                         int position=keys.indexOf(key);
                         if(position == -1){
+                            progressDialog.dismiss();
                             Toast.makeText(AddExpenses.this, "Please Select an Existing Car!", Toast.LENGTH_LONG).show();
                         }else {
 //                            call function
@@ -322,6 +334,8 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
                 imageView.setImageBitmap(bitmap);
                 imagesContainer.addView(imageView);
             } catch (IOException e) {
+                progressDialog.dismiss();
+                Toast.makeText(AddExpenses.this, e.toString(), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
         }
@@ -399,11 +413,13 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
             @Override
             public void onSuccess(Void aVoid) {
                 clearEtValue();
+                progressDialog.dismiss();
                 Toast.makeText(AddExpenses.this, "Oddometer Reading added!!", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
                 Toast.makeText(AddExpenses.this, "Failed to add, "+e.toString()+"!!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -423,21 +439,18 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
                         @Override
                         public void onSuccess(Void aVoid) {
                             clearEtValue();
+                            progressDialog.dismiss();
                             Toast.makeText(AddExpenses.this, "Expense Added!", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    progressDialog.dismiss();
                     Toast.makeText(AddExpenses.this, "Failed to add: "+e.toString(), Toast.LENGTH_LONG).show();
                 }
             });
         }else{
-//            ExpensesDB expensesDB;
-//            if (selectedExpenses.equals("Fuel")){
-//                expensesDB = new ExpensesDB(title, selectedExpenses, date, time, meter, cost, ltr);
-//            }else{
-//                expensesDB = new ExpensesDB(title, selectedExpenses, date, time, meter, cost);
-//            }
+
             databaseReference2.child(selectedExpenses).child(String.valueOf(index)).setValue(expensesDB)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
@@ -486,12 +499,14 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
+                            progressDialog.dismiss();
                             Toast.makeText(AddExpenses.this, "Expense Added!", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
                             Toast.makeText(AddExpenses.this, "Failed"+e.toString(), Toast.LENGTH_SHORT).show();
                         }
                     });
