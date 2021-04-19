@@ -40,6 +40,10 @@ public class Gallery extends AppCompatActivity {
 
     private DatabaseReference databaseReference1;
     private FirebaseAuth firebaseAuth;
+
+    private int READ_PERMISSION=787;
+    private int CAMERA_PERMISSION=789;
+    private int WRITE_PERMISSION=790;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,13 +66,19 @@ public class Gallery extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i=new Intent(Gallery.this, Capture.class);
 
-//              ask for camera permission if haven't
-                if (ContextCompat.checkSelfPermission(Gallery.this, Manifest.permission.CAMERA)
-                        == PackageManager.PERMISSION_DENIED){
-                    ActivityCompat.requestPermissions(Gallery.this, new String[] {Manifest.permission.CAMERA},
-                            100);
+//              ask for permission if haven't
+                if (ContextCompat.checkSelfPermission(Gallery.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(Gallery.this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION);
+
+                }else
+                    if (ContextCompat.checkSelfPermission(Gallery.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(Gallery.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_PERMISSION);
                 }else{
-                    startActivity(i);
+                    if (ContextCompat.checkSelfPermission(Gallery.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(Gallery.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERMISSION);
+                    }else{
+                        startActivity(i);
+                    }
                 }
             }
         });

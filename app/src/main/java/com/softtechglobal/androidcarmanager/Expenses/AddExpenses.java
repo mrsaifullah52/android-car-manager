@@ -67,8 +67,9 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
     LinearLayout imagesContainer;
 
     private int PICK_IMAGE=786;
-    private int READ_PERMISSION=787;
     private int CAMERA_REQUEST=788;
+    private int READ_PERMISSION=787;
+    private int WRITE_PERMISSION=790;
     private int CAMERA_PERMISSION=789;
     private Uri filePath;
     ArrayList<Uri> imagesPathList=new ArrayList<Uri>();
@@ -139,9 +140,15 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
         addImgCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(AddExpenses.this, Manifest.permission.CAMERA)
-                        == PackageManager.PERMISSION_DENIED){
-                    ActivityCompat.requestPermissions(AddExpenses.this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION);
+                if (ContextCompat.checkSelfPermission(AddExpenses.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(AddExpenses.this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION);
+
+                }else if (ContextCompat.checkSelfPermission(AddExpenses.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(AddExpenses.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_PERMISSION);
+
+                }else if (ContextCompat.checkSelfPermission(AddExpenses.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(AddExpenses.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERMISSION);
+
                 }else{
                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(cameraIntent, CAMERA_REQUEST);
