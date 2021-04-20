@@ -34,12 +34,11 @@
         <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" /> <!-- setting reminder -->
-        <receiver android:name=".add.AlarmReceiver" />
+        <receiver android:name=".add.ReminderBroadcast" />
     </application>
 
 </manifest>
