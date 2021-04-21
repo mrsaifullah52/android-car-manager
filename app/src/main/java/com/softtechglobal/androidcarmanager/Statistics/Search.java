@@ -105,7 +105,6 @@ public class Search extends AppCompatActivity {
                         startDateEt.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
                         calendar.set(year, month, dayOfMonth);
                         startDate=calendar.getTimeInMillis();
-//                        startDate = dayOfMonth + "/" + (month + 1) + "/" + year;
                     }
                 }, mYear, mMonth, mDay).show();
             }
@@ -297,8 +296,6 @@ public class Search extends AppCompatActivity {
                 Log.d("setAdapter", title);
             }
             for (Long date:maintenanceDate){
-//                c.setTimeInMillis(date);
-//                dates.add(c.get(Calendar.DAY_OF_MONTH)+"/"+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR));
                 dates.add(date);
             }
         }
@@ -309,8 +306,6 @@ public class Search extends AppCompatActivity {
                 Log.d("setAdapter", title);
             }
             for (Long date:fuelDate){
-//                c.setTimeInMillis(date);
-//                dates.add(c.get(Calendar.DAY_OF_MONTH)+"/"+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR));
                 dates.add(date);
             }
         }
@@ -321,8 +316,6 @@ public class Search extends AppCompatActivity {
                 Log.d("setAdapter", title);
             }
             for (Long date:purchaseDate){
-//                c.setTimeInMillis(date);
-//                dates.add(c.get(Calendar.DAY_OF_MONTH)+"/"+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR));
                 dates.add(date);
             }
         }
@@ -333,8 +326,6 @@ public class Search extends AppCompatActivity {
                 Log.d("setAdapter", title);
             }
             for (Long date:servicesDate){
-//                c.setTimeInMillis(date);
-//                dates.add(c.get(Calendar.DAY_OF_MONTH)+"/"+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR));
                 dates.add(date);
             }
         }
@@ -345,8 +336,6 @@ public class Search extends AppCompatActivity {
                 Log.d("setAdapter", title);
             }
             for (Long date:fineDate){
-//                c.setTimeInMillis(date);
-//                dates.add(c.get(Calendar.DAY_OF_MONTH)+"/"+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR));
                 dates.add(date);
             }
         }
@@ -356,20 +345,10 @@ public class Search extends AppCompatActivity {
             for(int i=0;i<=tax.size()-1;i++){
 
                 titles.add(tax.get(i));
-//                c.setTimeInMillis(taxDate.get(i));
-//                dates.add(c.get(Calendar.DAY_OF_MONTH)+"/"+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR));
                 dates.add(taxDate.get(i));
 
             }
 
-//            for (String title:tax){
-//                titles.add(title);
-//                Log.d("setAdapter", title);
-//            }
-//            for (Long date:taxDate){
-//                c.setTimeInMillis(date);
-//                dates.add(c.get(Calendar.DAY_OF_MONTH)+"/"+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR));
-//            }
         }
 
         setAdapter();
@@ -378,7 +357,6 @@ public class Search extends AppCompatActivity {
     public void setAdapter(){
         if(!titles.isEmpty() && !dates.isEmpty()){
 
-//        Log.d("setAdapter", String.valueOf(titles.size()));
             for(int i=0;i<titles.size()-1;i++){
                 ModelForList modelAdapter=new ModelForList(titles.get(i), dates.get(i));
                 //bind all strings in an array

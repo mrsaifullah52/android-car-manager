@@ -391,15 +391,12 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
                         Log.d("expensesIndex1", String.valueOf(expensesIndex));
                     }
                     expensesIndex++;
-//                    Log.d("expensesIndex2", String.valueOf(expensesIndex));
                     if(type){
                         addIntoDb(expensesIndex, true);
                     }else{
                         addIntoDb(expensesIndex, false);
                     }
-//                  expensesIndex = Integer.parseInt(dataSnapshot.child(selectedExpenses).getKey());
                 }else{
-//                    Log.d("expensesIndex3", String.valueOf(expensesIndex));
                     expensesIndex=0;
                     if(type){
                         addIntoDb(expensesIndex, true);

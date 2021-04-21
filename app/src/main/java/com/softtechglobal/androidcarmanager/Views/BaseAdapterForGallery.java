@@ -30,7 +30,6 @@ public class BaseAdapterForGallery extends BaseAdapter {
     public BaseAdapterForGallery(Context context, List<ModelForGallery> list) {
         this.context = context;
         this.list = list;
-//        this.arrayList = arrayList;
         this.arrayList = new ArrayList<ModelForGallery>();
         this.arrayList.addAll(list);
     }
@@ -52,7 +51,6 @@ public class BaseAdapterForGallery extends BaseAdapter {
     }
 
     public class MyHolder {
-//        TextView titleTv;
         ProgressBar progressBar;
         ImageView imageView;
         MyHolder(View v) {

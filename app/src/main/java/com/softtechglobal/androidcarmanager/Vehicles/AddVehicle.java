@@ -56,9 +56,6 @@ public class AddVehicle extends AppCompatActivity{
         final FirebaseUser user=firebaseAuth.getCurrentUser();
         databaseReference= FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/vehicles");
 
-//        odometerUnitSpin=(Spinner)findViewById(R.id.odometerUnit);
-//        odometerUnitSpin.setOnItemSelectedListener(this);
-
         vehicleNameEt=(EditText)findViewById(R.id.vehicleName);
         manufacturerEt=(EditText)findViewById(R.id.manufacturer);
         vehicleModelEt=(EditText)findViewById(R.id.vehicleModel);
@@ -100,10 +97,6 @@ public class AddVehicle extends AppCompatActivity{
             setTitle("Add Vehicle");
         }
 
-//        ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_spinner_item, odometerUnitTypeSpin);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        odometerUnitSpin.setAdapter(adapter);
-
         purchaseDateEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +105,7 @@ public class AddVehicle extends AppCompatActivity{
                 int mMonth=calendar.get(Calendar.MONTH);
                 int mDay=calendar.get(Calendar.DAY_OF_MONTH);
 
-//                setting date picker
+//              setting date picker
                 datePickerDialog = new DatePickerDialog(AddVehicle.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {

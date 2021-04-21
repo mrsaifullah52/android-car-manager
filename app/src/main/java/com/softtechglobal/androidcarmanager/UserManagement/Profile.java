@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -55,9 +54,8 @@ public class Profile extends AppCompatActivity {
     private FirebaseStorage storage;
     private FirebaseAuth firebaseAuth;
 
-    EditText nameEt,phoneEt,genderEt,emailEt;
-    TextView emailTv;
-    Button updateBtn, btnPickImg, btnUploadImg;
+    EditText nameEt,phoneEt ,emailEt;
+    Button updateBtn;
     ImageView userDp;
 
     private int PICK_IMAGE=786;
@@ -87,14 +85,8 @@ public class Profile extends AppCompatActivity {
         nameEt=(EditText)findViewById(R.id.userNameEt);
         phoneEt=(EditText)findViewById(R.id.userPhoneEt);
         emailEt=(EditText)findViewById(R.id.userEmailEt);
-//        emailTv=(TextView)findViewById(R.id.userEmailEt);
-//        set Email from user object of Firebase
-//        emailTv.setText(user.getEmail());
         updateBtn=(Button)findViewById(R.id.btnUpdate);
-//        btnPickImg=(Button)findViewById(R.id.btnPickImg);
-//        btnUploadImg=(Button)findViewById(R.id.btnUploadImg);
         userDp=(ImageView)findViewById(R.id.userDp);
-
 
         userDp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,44 +108,6 @@ public class Profile extends AppCompatActivity {
                 uploadToDatabase();
             }
         });
-
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                FirebaseUser user = firebaseAuth.getCurrentUser();
-//
-//                if(snapshot.exists()){
-//                    if(snapshot.child("profile").exists()) {
-////                        for (DataSnapshot ds:snapshot.child("profile").getChildren()){
-//
-//                            UserInfoDB userProfile = snapshot.child("profile").getValue(UserInfoDB.class);
-//                            nameEt.setText(userProfile.getFullname());
-//                            phoneEt.setText(userProfile.getPhone());
-//                            emailEt.setText(userProfile.getEmail());
-//                            if (!TextUtils.isEmpty(userProfile.getDpUrl())){
-//                                Glide.with(Profile.this)
-//                                        .load(userProfile.getDpUrl())
-//                                        .into(userDp);
-//                            }
-////                            Log.d("snapshot.child", ds.getKey());
-////                        }
-//
-//                        progressDialog.dismiss();
-//
-//
-//                    }else{
-//                        Log.d("snapshot.child","not exists");
-//                    }
-//                }else{
-//                    progressDialog.dismiss();
-//                    Log.d("snapshot","not exists");
-//                }
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Log.d("snapshot",error.toString());
-//            }
-//        });
 
         progressDialog = ProgressDialog.show(Profile.this, "", "Loading Profile...");
         databaseReference.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {

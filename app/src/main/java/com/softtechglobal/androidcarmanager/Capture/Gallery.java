@@ -89,8 +89,6 @@ public class Gallery extends AppCompatActivity {
 
                 String key;
                 for(DataSnapshot ds:dataSnapshot.getChildren()){
-//                    Map<String,Object> myVal=(HashMap<String,Object>) ds.getValue();
-//                    urls.add(String.valueOf(myVal.get(ds.getKey())));
                     MyGallery myGallery=ds.getValue(MyGallery.class);
                     Log.d("myGallery", myGallery.getUrl());
                     urls.add(myGallery.getUrl());

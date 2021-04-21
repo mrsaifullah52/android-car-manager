@@ -19,16 +19,15 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.softtechglobal.androidcarmanager.Views.BaseAdapterForList;
 import com.softtechglobal.androidcarmanager.Database.VehicleDB;
 import com.softtechglobal.androidcarmanager.MainActivity;
-import com.softtechglobal.androidcarmanager.Views.ModelForList;
 import com.softtechglobal.androidcarmanager.R;
 import com.softtechglobal.androidcarmanager.UserManagement.Signin;
+import com.softtechglobal.androidcarmanager.Views.BaseAdapterForList;
+import com.softtechglobal.androidcarmanager.Views.ModelForList;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -58,8 +57,7 @@ public class Vehicles extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
 
     boolean status;
-    ProgressDialog progressDialog1, progressDialog;
-    ChildEventListener childEventListener;
+    ProgressDialog progressDialog1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +72,6 @@ public class Vehicles extends AppCompatActivity {
             finish();
             startActivity(new Intent(Vehicles.this, Signin.class));
         }
-
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/vehicles");
@@ -134,113 +131,6 @@ public class Vehicles extends AppCompatActivity {
                 Log.d("snapshot:", "snapshot does not exist");
             }
         });
-
-//      add or delete or update item from firebase database
-//        childEventListener=new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-////                Log.d("prevChild",previousChildName);
-////                progressDialog= ProgressDialog.show(Vehicles.this, "","Please Wait, Loading...");
-////                if(snapshot.exists()){
-////                    int index= Integer.parseInt(snapshot.getKey());
-////                    Map<String,Object> myVal=(HashMap<String,Object>) snapshot.getValue();
-////                    key.add(String.valueOf(index));
-////                    title.add(String.valueOf(myVal.get("vehicleName")));
-////                    purchaseDate.add((Long) myVal.get("purchaseDate"));
-////                    odometerUnit.add(String.valueOf(myVal.get("odometerReading")));
-////                    manufacturer.add(String.valueOf(myVal.get("manufacturer")));
-////                    model.add(String.valueOf(myVal.get("vehicleModel")));
-////                    milage.add(String.valueOf(myVal.get("mileageRange")));
-////                    fuelLimit.add(String.valueOf(myVal.get("fuelLimit")));
-////                    plateNum.add(String.valueOf(myVal.get("plateNumber")));
-////
-////                    if(!title.isEmpty() && !purchaseDate.isEmpty()){
-////                        for(int i=0;i<title.size();i++){
-////                            ModelForAdapter modelAdapter=new ModelForAdapter(title.get(i), purchaseDate.get(i));
-////                            //bind all strings in an array
-////                            listModel.add(modelAdapter);
-////                        }
-////                        progressDialog.dismiss();
-////                        setListAdapter();
-////                    }else{
-////                        progressDialog.dismiss();
-////                        Toast.makeText(Vehicles.this, "Failed in Retrieving Data",Toast.LENGTH_SHORT).show();
-////                    }
-////                }else{
-////                    progressDialog.dismiss();
-////                    Toast.makeText(Vehicles.this,"Failed to Fetch Data try again",Toast.LENGTH_SHORT);
-////                    Log.d("snapshot:", "snapshot does not exist");
-////                }
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//                progressDialog= ProgressDialog.show(Vehicles.this, "","Please Wait, Loading...");
-//                if(snapshot.exists()){
-//                    int arrayIndex=key.indexOf(snapshot.getKey());
-//                    if(arrayIndex != -1 ){
-//                            VehicleDB vehicleDB=snapshot.getValue(VehicleDB.class);
-//                            title.set(arrayIndex, vehicleDB.getVehicleName());
-//                            Calendar calendar = Calendar.getInstance();
-//                            calendar.setTimeInMillis(vehicleDB.getPurchaseDate());
-//                            String dateObj = calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR);
-//                            purchaseDate.set(arrayIndex, vehicleDB.getPurchaseDate());
-//                            odometerUnit.set(arrayIndex,vehicleDB.getModometerReading());
-//                            manufacturer.set(arrayIndex,vehicleDB.getManufacturer());
-//                            model.set(arrayIndex,vehicleDB.getVehicleModel());
-//                            milage.set(arrayIndex,String.valueOf(vehicleDB.getMileageRange()));
-//                            fuelLimit.set(arrayIndex,String.valueOf(vehicleDB.getFuelLimit()));
-//                            plateNum.set(arrayIndex,vehicleDB.getPlateNumber());
-////                          notify the adapter
-//                            adapter.notifyDataSetChanged();
-//                    }
-//                    progressDialog.dismiss();
-//                }else{
-//                    progressDialog.dismiss();
-//                    Toast.makeText(Vehicles.this,"Failed to Update Refresh it.",Toast.LENGTH_SHORT);
-//                }
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-//                progressDialog= ProgressDialog.show(Vehicles.this, "","Please Wait, Loading...");
-//                if(snapshot.exists()){
-//                    int arrayIndex=key.indexOf(snapshot.getKey());
-//                    if(arrayIndex != -1 ) {
-//                        int index = Integer.parseInt(snapshot.getKey());
-//                        Log.d("snapshotindex", String.valueOf(index));
-//                        key.remove(arrayIndex);
-//                        title.remove(arrayIndex);
-//                        purchaseDate.remove(arrayIndex);
-//                        odometerUnit.remove(arrayIndex);
-//                        manufacturer.remove(arrayIndex);
-//                        model.remove(arrayIndex);
-//                        milage.remove(arrayIndex);
-//                        fuelLimit.remove(arrayIndex);
-//                        plateNum.remove(arrayIndex);
-////                      notify the adapter
-//                        adapter.notifyDataSetChanged();
-//                    }
-//                    progressDialog.dismiss();
-//                }else{
-//                    progressDialog.dismiss();
-//                    Toast.makeText(Vehicles.this,"Failed to Delete!! Please Try again.",Toast.LENGTH_LONG);
-//                }
-//            }
-//
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-////                progressDialog.dismiss();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Toast.makeText(Vehicles.this,error.toString(),Toast.LENGTH_LONG);
-////                progressDialog.dismiss();
-//            }
-//        };
-//      set childEventListener
-//        databaseReference.addChildEventListener(childEventListener);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -380,5 +270,8 @@ public class Vehicles extends AppCompatActivity {
                     }
                 });
     }
+
+
+
 
 }

@@ -181,9 +181,7 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
             barChart.setData(barData);
             barChart.groupBars(0.5f, groupSpace, barSpace);
 
-//          barChart.setFitBars(true);
             barChart.notifyDataSetChanged();
-//            barChart.invalidate();
         }
     }
 

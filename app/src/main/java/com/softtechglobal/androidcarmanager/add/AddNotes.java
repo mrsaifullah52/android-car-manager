@@ -31,7 +31,7 @@ public class AddNotes extends AppCompatActivity {
     String title="",message="";
     Long date;
 
-    private DatabaseReference databaseReference, databaseReference2;
+    private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
     String key="";
     int position;
@@ -49,7 +49,6 @@ public class AddNotes extends AppCompatActivity {
         key= getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                 .getString("key","-1");
         databaseReference= FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/notes/"+key);
-//        databaseReference2=FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/notes/"+key);
 
         titleEt=(EditText) findViewById(R.id.notesTitleEt);
         messageEt=(EditText) findViewById(R.id.notesMessageEt);

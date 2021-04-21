@@ -35,17 +35,7 @@ public class ExpensesDB {
         this.cost = cost;
         this.ltr = ltr;
     }
-//  while adding fuel expense with images
-//    public ExpensesDB(String expenseTitle, String expenseType, Long date, Long time, Double odometer, Double cost, Double ltr, String image) {
-//        this.expenseTitle = expenseTitle;
-//        this.expenseType = expenseType;
-//        this.date = date;
-//        this.time = time;
-//        this.odometer = odometer;
-//        this.cost = cost;
-//        this.ltr = ltr;
-//        this.image = image;
-//    }
+
 //  whiel adding expenses with images
     public ExpensesDB(String expenseTitle, String expenseType, Long date, Long time, Double odometer, Double cost, String image) {
         this.expenseTitle = expenseTitle;

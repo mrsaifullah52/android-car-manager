@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -37,24 +36,24 @@ public class ReminderBroadcast extends BroadcastReceiver {
         key = preferences.getString("key","-1");
 
         Bundle bundle = intent.getExtras();
-        String Title = bundle.getString("Title");
-        String Description = bundle.getString("Description");
+        final String Title = bundle.getString("Title");
+        final String Description = bundle.getString("Description");
         String index = bundle.getString("index");
 
         databaseReference1.child(index).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(context,"Reminder has been Completed!!",Toast.LENGTH_LONG).show();
+                NotificationCompat.Builder builder=new NotificationCompat.Builder(context, "AndroidCarManager")
+                        .setSmallIcon(R.drawable.icon)
+                        .setContentTitle(Title)
+                        .setContentText(Description)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+                notificationManagerCompat.notify(0, builder.build());
             }
         });
 
-        NotificationCompat.Builder builder=new NotificationCompat.Builder(context, "AndroidCarManager")
-                .setSmallIcon(R.drawable.icon)
-                .setContentTitle(Title)
-                .setContentText(Description)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-        notificationManagerCompat.notify(0, builder.build());
     }
 }

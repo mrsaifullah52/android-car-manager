@@ -1,5 +1,6 @@
 package com.softtechglobal.androidcarmanager;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.softtechglobal.androidcarmanager.Capture.Gallery;
 import com.softtechglobal.androidcarmanager.Expenses.AddExpenses;
 import com.softtechglobal.androidcarmanager.Statistics.Statistics;
 import com.softtechglobal.androidcarmanager.UserManagement.Profile;
@@ -18,8 +20,9 @@ import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 import com.softtechglobal.androidcarmanager.Vehicles.Vehicles;
 import com.softtechglobal.androidcarmanager.add.Notes;
 import com.softtechglobal.androidcarmanager.add.Reminder;
-import com.softtechglobal.androidcarmanager.Capture.Gallery;
-import com.softtechglobal.androidcarmanager.compute.Compute;
+import com.softtechglobal.androidcarmanager.Compute.Compute;
+
+import java.io.File;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -49,9 +52,6 @@ public class MainActivity extends AppCompatActivity {
                     getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                             .getString("vehicle","Nothing Selected")
                     +")");
-//          selected vehicle id
-//            vehicleId = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
-//                    .getInt("vehicleId", 0);
         }
 
     }
@@ -122,4 +122,36 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//      Deleting Cache memory so we can get updated values each time
+        deleteCache(MainActivity.this);
+    }
+
+    public static void deleteCache(Context context) {
+        try {
+            File dir = context.getCacheDir();
+            deleteDir(dir);
+        } catch (Exception e) { e.printStackTrace();}
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        } else if(dir!= null && dir.isFile()) {
+            return dir.delete();
+        } else {
+            return false;
+        }
+    }
+
 }

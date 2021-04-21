@@ -1,4 +1,4 @@
-package com.softtechglobal.androidcarmanager.compute;
+package com.softtechglobal.androidcarmanager.Compute;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -34,12 +34,9 @@ public class Compute extends AppCompatActivity {
     private DatabaseReference databaseReference1,databaseReference2;
     private FirebaseAuth firebaseAuth;
     String key;
-    ArrayList<String> keys = new ArrayList<String>();
-
     ArrayList<Double> costList=new ArrayList<Double>();
     ArrayList<Double> distanceList=new ArrayList<Double>();
     ArrayList<Double> fuellist=new ArrayList<Double>();
-
 
     ProgressDialog progressDialog;
     @Override
@@ -61,7 +58,6 @@ public class Compute extends AppCompatActivity {
         databaseReference1 = FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/expenses/"+key);
         databaseReference2 = FirebaseDatabase.getInstance().getReference("users/"+user.getUid());
 //      initialize all textviews
-
         lastOdometerEt=(TextView)findViewById(R.id.lastOdometerEt);
         distanceEt=(TextView)findViewById(R.id.distanceEt);
         fillupsEt=(TextView)findViewById(R.id.fillupsEt);

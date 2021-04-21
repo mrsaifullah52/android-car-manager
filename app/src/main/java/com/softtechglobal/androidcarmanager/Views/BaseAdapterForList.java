@@ -22,7 +22,6 @@ public class BaseAdapterForList extends BaseAdapter {
     public BaseAdapterForList(Context context, List<ModelForList> modellist ) {
         this.context = context;
         this.modellist = modellist;
-//        this.arrayList = arrayList;
         this.arrayList = new ArrayList<ModelForList>();
         this.arrayList.addAll(modellist);
     }

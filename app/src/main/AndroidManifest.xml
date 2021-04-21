@@ -23,7 +23,7 @@
         <activity android:name=".add.AddNotes" />
         <activity android:name=".add.Reminder" />
         <activity android:name=".add.Notes" />
-        <activity android:name=".compute.Compute" />
+        <activity android:name=".Compute.Compute" />
         <activity android:name=".Statistics.Search" />
         <activity android:name=".Statistics.Statistics" />
         <activity android:name=".Capture.Capture" />

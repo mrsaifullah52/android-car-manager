@@ -34,11 +34,8 @@ import com.softtechglobal.androidcarmanager.UserManagement.Signin;
 import java.util.ArrayList;
 
 public class Capture extends AppCompatActivity {
-//implements AdapterView.OnItemSelectedListener
     ImageView imageView;
     Button captureImageBtn, uploadImageBtn;
-//    Spinner spinner;
-//    String[] service={"Maintenance","Fuel","Purchase","Service","Engine Tunning","Fine","Tax"};
     private static final int CAMERA_REQUEST = 0;
 
     private Uri filePath;
@@ -65,21 +62,14 @@ public class Capture extends AppCompatActivity {
         key= getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                 .getString("key","-1");
         databaseReference1= FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/gallery/");
-//        databaseReference2=FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/gallery/"+key);
 
         storage = FirebaseStorage.getInstance();
         storageReference=storage.getReference("gallery/"+user.getUid());
 
 
         imageView=(ImageView)findViewById(R.id.imgView);
-//        spinner=(Spinner)findViewById(R.id.spinner);
         captureImageBtn=(Button) findViewById(R.id.captureImageBtn);
         uploadImageBtn=(Button) findViewById(R.id.uploadImage);
-//        spinner.setOnItemSelectedListener(this);
-
-//        ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_spinner_item,service);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinner.setAdapter(adapter);
 
         captureImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,24 +81,13 @@ public class Capture extends AppCompatActivity {
 
             }
         });
-//        databaseReference1.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-//            @Override
-//            public void onSuccess(DataSnapshot dataSnapshot) {
-//                for(DataSnapshot ds:dataSnapshot.getChildren()){
-//                    keys.add(ds.getKey());
-//                }
-//            }
-//        });
+
         uploadImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(key.equals("-1")) {
                     Toast.makeText(Capture.this, "Please Select a Car Before Adding Expense!", Toast.LENGTH_LONG).show();
                 }else{
-//                    int position=keys.indexOf(key);
-//                    if(position == -1){
-//                        Toast.makeText(Capture.this, "Please Select an Existing Car!", Toast.LENGTH_LONG).show();
-//                    }else {
                         databaseReference1.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                             @Override
                             public void onSuccess(DataSnapshot dataSnapshot) {
@@ -128,14 +107,10 @@ public class Capture extends AppCompatActivity {
                             }
                         });
 
-//                    }
                 }
             }
         });
-//        if (ContextCompat.checkSelfPermission(Capture.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(Capture.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 790);
             capture();
-//        }
 
     }
 
@@ -191,14 +166,4 @@ public class Capture extends AppCompatActivity {
             imageView.setImageBitmap(photo);
         }
     }
-
-//    @Override
-//    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//
-//    }
-//
-//    @Override
-//    public void onNothingSelected(AdapterView<?> parent) {
-//
-//    }
 }

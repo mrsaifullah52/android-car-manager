@@ -91,11 +91,7 @@ public class Signin extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-//        Intent i = new Intent(Signin.this, MainActivity.class);
-//        i.putExtra("token",currentUser);
-//        startActivity(i);
     }
 
     public void forgotPassword(View v){
@@ -103,9 +99,6 @@ public class Signin extends AppCompatActivity {
         startActivity(i);
     }
     public void signIn(View v){
-
-
-
         Intent i = new Intent(Signin.this, MainActivity.class);
         startActivity(i);
         Log.i("Sign In","Signed In Successfully.");

@@ -126,7 +126,6 @@ public class AddReminders extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         timeEt.setText(hourOfDay+" : "+minute);
-//                        calendar.set(0,0,0,hourOfDay, minute);
 
                         Log.d("chours", String.valueOf( calendar.get(Calendar.HOUR_OF_DAY)));
                         Log.d("cminute", String.valueOf( calendar.get(Calendar.MINUTE)));
@@ -278,8 +277,6 @@ public class AddReminders extends AppCompatActivity {
     }
     public void getValuesFromEt() {
         title=titleEt.getText().toString().trim();
-//        date= Long.valueOf(dateEt.getText().toString().trim());
-//        time= Long.valueOf(timeEt.getText().toString().trim());
     }
 
     public void createNotificationChannel(){
