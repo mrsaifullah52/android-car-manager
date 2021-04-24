@@ -124,7 +124,6 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
         barEntries6.add(new BarEntry(6, cost6.floatValue()));
         initializeBarGraph(false);
 
-        progressDialog= ProgressDialog.show(Statistics.this, "","Please Wait, Loading...",true);
         getDataFromFirebase();
     }
 
@@ -193,6 +192,9 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+
+                    progressDialog= ProgressDialog.show(Statistics.this, "","Please Wait, Loading...",true);
+
 //                  maintenance
                     if (dataSnapshot.child("Maintenance").exists()) {
                         databaseReference2 = FirebaseDatabase.getInstance().getReference("users/" + user.getUid() + "/expenses/" + vehicleId + "/Maintenance");
@@ -202,6 +204,7 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                     ExpensesDB expensesDB = ds.getValue(ExpensesDB.class);
                                     Log.d("expensesDB(maintena)", String.valueOf(expensesDB.getCost()));
+                                    Log.d("expensesDB(img)", String.valueOf(expensesDB.getImage()));
                                     maintenance.add(expensesDB.getCost());
                                     maintenanceDate.add(expensesDB.getDate());
                                 }
@@ -327,7 +330,7 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
                 for(int i=0;i<=maintenance.size()-1;i++){
                     if (maintenanceDate.get(i) >= queryDate){
                         cost1 = cost1 + maintenance.get(i);
-                        Log.d("maintenance"+i, String.valueOf(cost1));
+                        Log.d("Maintenance"+i, String.valueOf(cost1));
                     }else{
                         Log.d("maintenance", "out of filter");
                     }

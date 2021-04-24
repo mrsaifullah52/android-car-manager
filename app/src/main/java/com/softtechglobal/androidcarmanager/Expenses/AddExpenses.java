@@ -454,7 +454,6 @@ public class AddExpenses extends AppCompatActivity implements AdapterView.OnItem
                 }
             });
         }else{
-
             databaseReference2.child(selectedExpenses).child(String.valueOf(index)).setValue(expensesDB)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override

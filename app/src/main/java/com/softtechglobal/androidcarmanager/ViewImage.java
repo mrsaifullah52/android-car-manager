@@ -1,4 +1,4 @@
-package com.softtechglobal.androidcarmanager.Capture;
+package com.softtechglobal.androidcarmanager;
 
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.softtechglobal.androidcarmanager.R;
 
 public class ViewImage extends AppCompatActivity {
     ImageView imageView;

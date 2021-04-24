@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -38,20 +39,29 @@ public class Search extends AppCompatActivity {
 
     BaseAdapterForList adapter;
 //  values from firebase
+
+    ArrayList<String> maintenanceKey = new ArrayList<String>();
     ArrayList<String> maintenance = new ArrayList<String>();
     ArrayList<Long> maintenanceDate = new ArrayList<Long>();
+    ArrayList<String> fuelKey = new ArrayList<String>();
     ArrayList<String> fuel = new ArrayList<String>();
     ArrayList<Long> fuelDate = new ArrayList<Long>();
+    ArrayList<String> purchaseKey = new ArrayList<String>();
     ArrayList<String> purchase = new ArrayList<String>();
     ArrayList<Long> purchaseDate = new ArrayList<Long>();
+    ArrayList<String> servicesKey = new ArrayList<String>();
     ArrayList<String> services = new ArrayList<String>();
     ArrayList<Long> servicesDate = new ArrayList<Long>();
+    ArrayList<String> fineKey = new ArrayList<String>();
     ArrayList<String> fine = new ArrayList<String>();
     ArrayList<Long> fineDate = new ArrayList<Long>();
+    ArrayList<String> taxKey = new ArrayList<String>();
     ArrayList<String> tax = new ArrayList<String>();
     ArrayList<Long> taxDate = new ArrayList<Long>();
 
 
+    ArrayList<String>index=new ArrayList<String>();
+    ArrayList<String>category=new ArrayList<String>();
     ArrayList<String>titles=new ArrayList<String>();
     ArrayList<Long>dates=new ArrayList<Long>();
     ArrayList<ModelForList> listModel= new ArrayList<ModelForList>();
@@ -86,10 +96,25 @@ public class Search extends AppCompatActivity {
         expensesList=(ListView) findViewById(R.id.searchList);
         searchListBtn=(ImageButton) findViewById(R.id.searchListBtn);
 
-        progressDialog= ProgressDialog.show(Search.this, "","Please Wait, Loading...",true);
+
         getDataFromFirebase();
 //        setListforAdapter();
 
+//      listview click
+        expensesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("title", titles.get(position));
+                Log.d("category", category.get(position));
+                Log.d("date", String.valueOf(dates.get(position)));
+                Log.d("index", String.valueOf(index.get(position)));
+
+                Intent i=new Intent(Search.this, SearchDetails.class);
+                i.putExtra("category", category.get(position));
+                i.putExtra("index", index.get(position));
+                startActivity(i);
+            }
+        });
 
         startDateEt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +181,7 @@ public class Search extends AppCompatActivity {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
+                    progressDialog= ProgressDialog.show(Search.this, "","Please Wait, Loading...",true);
 //                  maintenance
                     if (dataSnapshot.child("Maintenance").exists()) {
                         databaseReference2 = FirebaseDatabase.getInstance().getReference("users/" + user.getUid() + "/expenses/" + vehicleId + "/Maintenance");
@@ -165,6 +191,7 @@ public class Search extends AppCompatActivity {
                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                     ExpensesDB expensesDB = ds.getValue(ExpensesDB.class);
                                     Log.d("expensesDB(maintena)", expensesDB.getExpenseTitle());
+                                    maintenanceKey.add(ds.getKey());
                                     maintenance.add(expensesDB.getExpenseTitle());
                                     maintenanceDate.add(expensesDB.getDate());
                                 }
@@ -189,6 +216,7 @@ public class Search extends AppCompatActivity {
                                     Log.d("expensesDB(fuel)", expensesDB.getExpenseTitle());
                                     fuel.add(expensesDB.getExpenseTitle());
                                     fuelDate.add(expensesDB.getDate());
+                                    fuelKey.add(ds.getKey());
                                 }
                             }
                         });
@@ -207,6 +235,7 @@ public class Search extends AppCompatActivity {
                                     Log.d("expensesDB(purchase)", expensesDB.getExpenseTitle());
                                     purchase.add(expensesDB.getExpenseTitle());
                                     purchaseDate.add(expensesDB.getDate());
+                                    purchaseKey.add(ds.getKey());
                                 }
                             }
                         });
@@ -225,6 +254,7 @@ public class Search extends AppCompatActivity {
                                     Log.d("expensesDB(services)", expensesDB.getExpenseTitle());
                                     services.add(expensesDB.getExpenseTitle());
                                     servicesDate.add(expensesDB.getDate());
+                                    servicesKey.add(ds.getKey());
                                 }
                             }
                         });
@@ -243,6 +273,7 @@ public class Search extends AppCompatActivity {
                                     Log.d("expensesDB(fine)", expensesDB.getExpenseTitle());
                                     fine.add(expensesDB.getExpenseTitle());
                                     fineDate.add(expensesDB.getDate());
+                                    fineKey.add(ds.getKey());
                                 }
                             }
                         });
@@ -262,6 +293,7 @@ public class Search extends AppCompatActivity {
                                     Log.d("expensesDB(tax)", String.valueOf(expensesDB.getDate()));
                                     tax.add(expensesDB.getExpenseTitle());
                                     taxDate.add(expensesDB.getDate());
+                                    taxKey.add(ds.getKey());
                                 }
                             }
                         });
@@ -291,64 +323,81 @@ public class Search extends AppCompatActivity {
         Calendar c=Calendar.getInstance();
 //      maintenance
         if (!maintenance.isEmpty() && !maintenanceDate.isEmpty()){
-            for (String title:maintenance){
-                titles.add(title);
-                Log.d("setAdapter", title);
-            }
-            for (Long date:maintenanceDate){
-                dates.add(date);
+            for(int i=0;i<maintenance.size();i++){
+//              category
+                category.add("Maintenance");
+//              titles
+                titles.add(maintenance.get(i));
+//              dates
+                dates.add(maintenanceDate.get(i));
+//              index
+                index.add(String.valueOf(i));
             }
         }
 //      fuel
         if (!fuel.isEmpty() && !fuelDate.isEmpty()){
-            for (String title:fuel){
-                titles.add(title);
-                Log.d("setAdapter", title);
-            }
-            for (Long date:fuelDate){
-                dates.add(date);
+            for(int i=0;i<fuel.size();i++){
+//              category
+                category.add("Fuel");
+//              titles
+                titles.add(fuel.get(i));
+//              dates
+                dates.add(fuelDate.get(i));
+//              index
+                index.add(String.valueOf(i));
             }
         }
 //      purchase
         if (!purchase.isEmpty() && !purchaseDate.isEmpty()){
-            for (String title:purchase){
-                titles.add(title);
-                Log.d("setAdapter", title);
-            }
-            for (Long date:purchaseDate){
-                dates.add(date);
+            for(int i=0;i<purchase.size();i++){
+//              category
+                category.add("Purchase");
+//              titles
+                titles.add(purchase.get(i));
+//              dates
+                dates.add(purchaseDate.get(i));
+//              index
+                index.add(String.valueOf(i));
             }
         }
 //      service
         if (!services.isEmpty() && !servicesDate.isEmpty()){
-            for (String title:services){
-                titles.add(title);
-                Log.d("setAdapter", title);
-            }
-            for (Long date:servicesDate){
-                dates.add(date);
+            for(int i=0;i<services.size();i++){
+//              category
+                category.add("Service");
+//              titles
+                titles.add(services.get(i));
+//              dates
+                dates.add(servicesDate.get(i));
+//              index
+                index.add(String.valueOf(i));
             }
         }
 //      fine
         if (!fine.isEmpty() && !fineDate.isEmpty()){
-            for (String title:fine){
-                titles.add(title);
-                Log.d("setAdapter", title);
-            }
-            for (Long date:fineDate){
-                dates.add(date);
+            for(int i=0;i<fine.size();i++){
+//              category
+                category.add("Fine");
+//              titles
+                titles.add(fine.get(i));
+//              dates
+                dates.add(fineDate.get(i));
+//              index
+                index.add(String.valueOf(i));
             }
         }
 //      tax
         if (!tax.isEmpty() && !taxDate.isEmpty()){
-
-            for(int i=0;i<=tax.size()-1;i++){
-
+            for(int i=0;i<tax.size();i++){
+//              category
+                category.add("Tax");
+//              titles
                 titles.add(tax.get(i));
+//              dates
                 dates.add(taxDate.get(i));
-
+//              index
+                index.add(String.valueOf(i));
             }
-
         }
 
         setAdapter();

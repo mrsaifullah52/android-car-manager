@@ -157,9 +157,9 @@ public class Compute extends AppCompatActivity {
         fillupsEt.setText(new DecimalFormat("##.##").format(fillups)+" Time");
         fuelCostEt.setText("Rs: "+new DecimalFormat("##.##").format(fuelcost));
         kmRouteEt.setText(new DecimalFormat("##.##").format(avgkm)+" km");
+        avgKmLtrEt.setText(new DecimalFormat("##.##").format(avgkmltr)+" KM");
         costKmEt.setText("Rs: "+new DecimalFormat("##.##").format(avgkmcost));
         consumedFuelEt.setText(new DecimalFormat("##.##").format(consumedFuel)+" Ltr");
-        avgKmLtrEt.setText(new DecimalFormat("##.##").format(avgkmltr)+" KM");
 
         progressDialog.dismiss();
     }
