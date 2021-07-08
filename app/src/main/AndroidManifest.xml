@@ -15,20 +15,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Statistics.SearchDetails"></activity>
-        <activity android:name=".ViewImage" />
-        <activity android:name=".Capture.Gallery" />
-        <activity android:name=".Vehicles.AddVehicle" />
-        <activity android:name=".Vehicles.Vehicles" />
-        <activity android:name=".UserManagement.Profile" />
-        <activity android:name=".add.AddReminders" />
-        <activity android:name=".add.AddNotes" />
-        <activity android:name=".add.Reminder" />
-        <activity android:name=".add.Notes" />
-        <activity android:name=".Compute.Compute" />
-        <activity android:name=".Statistics.Search" />
-        <activity android:name=".Statistics.Statistics" />
-        <activity android:name=".Capture.Capture" />
-        <activity android:name=".Expenses.AddExpenses" />
+        <activity android:name=".ViewImage"   android:parentActivityName=".Capture.Gallery"/>
+        <activity android:name=".Capture.Gallery"   android:parentActivityName=".MainActivity"/>
+        <activity android:name=".Vehicles.AddVehicle" android:parentActivityName=".Vehicles.Vehicles"/>
+        <activity android:name=".Vehicles.Vehicles"  android:parentActivityName=".MainActivity"/>
+        <activity android:name=".UserManagement.Profile"   android:parentActivityName=".MainActivity"/>
+        <activity android:name=".add.AddReminders"  android:parentActivityName=".add.Reminder"/>
+        <activity android:name=".add.AddNotes"  android:parentActivityName=".add.Notes" />
+        <activity android:name=".add.Reminder"   android:parentActivityName=".MainActivity"/>
+        <activity android:name=".add.Notes"   android:parentActivityName=".MainActivity"/>
+        <activity android:name=".Compute.Compute"   android:parentActivityName=".MainActivity"/>
+        <activity android:name=".Statistics.Search"  android:parentActivityName=".Statistics.Statistics"/>
+        <activity android:name=".Statistics.Statistics"   android:parentActivityName=".MainActivity"/>
+        <activity android:name=".Capture.Capture"  android:parentActivityName=".Capture.Gallery"/>
+        <activity android:name=".Expenses.AddExpenses" android:parentActivityName=".MainActivity"/>
         <activity android:name=".UserManagement.Forgotpassword" />
         <activity android:name=".UserManagement.Signup" />
         <activity android:name=".UserManagement.Signin" />

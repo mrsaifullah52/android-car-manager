@@ -98,7 +98,6 @@ public class Search extends AppCompatActivity {
 
 
         getDataFromFirebase();
-//        setListforAdapter();
 
 //      listview click
         expensesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -213,7 +212,6 @@ public class Search extends AppCompatActivity {
                             public void onSuccess(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                     ExpensesDB expensesDB = ds.getValue(ExpensesDB.class);
-                                    Log.d("expensesDB(fuel)", expensesDB.getExpenseTitle());
                                     fuel.add(expensesDB.getExpenseTitle());
                                     fuelDate.add(expensesDB.getDate());
                                     fuelKey.add(ds.getKey());
@@ -232,7 +230,6 @@ public class Search extends AppCompatActivity {
                             public void onSuccess(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                     ExpensesDB expensesDB = ds.getValue(ExpensesDB.class);
-                                    Log.d("expensesDB(purchase)", expensesDB.getExpenseTitle());
                                     purchase.add(expensesDB.getExpenseTitle());
                                     purchaseDate.add(expensesDB.getDate());
                                     purchaseKey.add(ds.getKey());
@@ -251,7 +248,6 @@ public class Search extends AppCompatActivity {
                             public void onSuccess(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                     ExpensesDB expensesDB = ds.getValue(ExpensesDB.class);
-                                    Log.d("expensesDB(services)", expensesDB.getExpenseTitle());
                                     services.add(expensesDB.getExpenseTitle());
                                     servicesDate.add(expensesDB.getDate());
                                     servicesKey.add(ds.getKey());
@@ -270,7 +266,6 @@ public class Search extends AppCompatActivity {
                             public void onSuccess(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                     ExpensesDB expensesDB = ds.getValue(ExpensesDB.class);
-                                    Log.d("expensesDB(fine)", expensesDB.getExpenseTitle());
                                     fine.add(expensesDB.getExpenseTitle());
                                     fineDate.add(expensesDB.getDate());
                                     fineKey.add(ds.getKey());
@@ -289,8 +284,6 @@ public class Search extends AppCompatActivity {
                             public void onSuccess(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                     ExpensesDB expensesDB = ds.getValue(ExpensesDB.class);
-                                    Log.d("expensesDB(tax)", expensesDB.getExpenseTitle());
-                                    Log.d("expensesDB(tax)", String.valueOf(expensesDB.getDate()));
                                     tax.add(expensesDB.getExpenseTitle());
                                     taxDate.add(expensesDB.getDate());
                                     taxKey.add(ds.getKey());
@@ -313,7 +306,6 @@ public class Search extends AppCompatActivity {
                 }else{
                     progressDialog.dismiss();
                     Toast.makeText(Search.this,"Failed to Fetch Data try again",Toast.LENGTH_SHORT).show();
-                    Log.d("dataSnapshot.exists()", "Empty");
                 }
             }
         });
@@ -324,96 +316,68 @@ public class Search extends AppCompatActivity {
 //      maintenance
         if (!maintenance.isEmpty() && !maintenanceDate.isEmpty()){
             for(int i=0;i<maintenance.size();i++){
-//              category
                 category.add("Maintenance");
-//              titles
                 titles.add(maintenance.get(i));
-//              dates
                 dates.add(maintenanceDate.get(i));
-//              index
                 index.add(String.valueOf(i));
             }
         }
 //      fuel
         if (!fuel.isEmpty() && !fuelDate.isEmpty()){
             for(int i=0;i<fuel.size();i++){
-//              category
                 category.add("Fuel");
-//              titles
                 titles.add(fuel.get(i));
-//              dates
                 dates.add(fuelDate.get(i));
-//              index
                 index.add(String.valueOf(i));
             }
         }
 //      purchase
         if (!purchase.isEmpty() && !purchaseDate.isEmpty()){
             for(int i=0;i<purchase.size();i++){
-//              category
                 category.add("Purchase");
-//              titles
                 titles.add(purchase.get(i));
-//              dates
                 dates.add(purchaseDate.get(i));
-//              index
                 index.add(String.valueOf(i));
             }
         }
 //      service
         if (!services.isEmpty() && !servicesDate.isEmpty()){
             for(int i=0;i<services.size();i++){
-//              category
                 category.add("Service");
-//              titles
                 titles.add(services.get(i));
-//              dates
                 dates.add(servicesDate.get(i));
-//              index
                 index.add(String.valueOf(i));
             }
         }
 //      fine
         if (!fine.isEmpty() && !fineDate.isEmpty()){
             for(int i=0;i<fine.size();i++){
-//              category
                 category.add("Fine");
-//              titles
                 titles.add(fine.get(i));
-//              dates
                 dates.add(fineDate.get(i));
-//              index
                 index.add(String.valueOf(i));
             }
         }
 //      tax
         if (!tax.isEmpty() && !taxDate.isEmpty()){
             for(int i=0;i<tax.size();i++){
-//              category
                 category.add("Tax");
-//              titles
                 titles.add(tax.get(i));
-//              dates
                 dates.add(taxDate.get(i));
-//              index
                 index.add(String.valueOf(i));
             }
         }
-
         setAdapter();
     }
 
     public void setAdapter(){
         if(!titles.isEmpty() && !dates.isEmpty()){
-
             for(int i=0;i<titles.size()-1;i++){
                 ModelForList modelAdapter=new ModelForList(titles.get(i), dates.get(i));
-                //bind all strings in an array
                 listModel.add(modelAdapter);
             }
             adapter = new BaseAdapterForList(Search.this, listModel);
             expensesList.setAdapter(adapter);
-
         }else{
             Toast.makeText(Search.this, "Failed in Retrieving Data",Toast.LENGTH_SHORT).show();
         }

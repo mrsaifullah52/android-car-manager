@@ -50,7 +50,6 @@ public class SearchDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_details);
 
-
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         if (user == null) {
@@ -59,15 +58,9 @@ public class SearchDetails extends AppCompatActivity {
         }
         vehicleId = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                 .getString("key", "-1");
-
         Bundle intent=getIntent().getExtras();
         category=intent.getString("category");
         index = intent.getString("index");
-
-        Log.d("bundle", category);
-        Log.d("bundle", index);
-
-
         titleTv=(TextView) findViewById(R.id.titleTv);
         categoryTv=(TextView) findViewById(R.id.categoryTv);
         meterReadingTv=(TextView) findViewById(R.id.meterReadingTv);
@@ -75,7 +68,6 @@ public class SearchDetails extends AppCompatActivity {
         dateTv=(TextView) findViewById(R.id.dateTv);
         timeTv=(TextView) findViewById(R.id.timeTv);
         imageContainer=(LinearLayout) findViewById(R.id.imagesParent);
-        
         databaseReference1 = FirebaseDatabase.getInstance().getReference("users/" + user.getUid() + "/expenses/" + vehicleId + "/" + category);
         getData();
     }
@@ -87,10 +79,8 @@ public class SearchDetails extends AppCompatActivity {
                     for (DataSnapshot ds:dataSnapshot.getChildren()){
                         indexList.add(ds.getKey());
                     }
-
                     String dbIndex=indexList.get(Integer.parseInt(index));
                     databaseReference2 = FirebaseDatabase.getInstance().getReference("users/" + user.getUid() + "/expenses/" + vehicleId + "/" + category);
-
                     databaseReference2.child(dbIndex).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
@@ -100,15 +90,12 @@ public class SearchDetails extends AppCompatActivity {
                                 categoryTv.setText(expensesDB.getExpenseType());
                                 meterReadingTv.setText(expensesDB.getOdometer().toString());
                                 costTv.setText(expensesDB.getCost().toString());
-
                                 final Calendar date = Calendar.getInstance();
                                 date.setTimeInMillis(expensesDB.getDate());
                                 dateTv.setText(date.get(Calendar.DAY_OF_MONTH)+"/"+date.get(Calendar.MONTH)+"/"+date.get(Calendar.YEAR));
-
                                 final Calendar time = Calendar.getInstance();
                                 time.setTimeInMillis(expensesDB.getTime());
                                 timeTv.setText(time.get(Calendar.HOUR_OF_DAY)+":"+time.get(Calendar.MINUTE)+":"+time.get(Calendar.MILLISECOND));
-
                                 if(dataSnapshot.child("images").exists()){
                                     for (final DataSnapshot img : dataSnapshot.child("images").getChildren()){
                                         imageView=new ImageView(SearchDetails.this);

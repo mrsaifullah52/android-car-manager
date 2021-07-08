@@ -3,10 +3,10 @@ package com.softtechglobal.androidcarmanager.UserManagement;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.royrodriguez.transitionbutton.TransitionButton;
 import com.softtechglobal.androidcarmanager.MainActivity;
 import com.softtechglobal.androidcarmanager.R;
 
@@ -25,7 +26,8 @@ public class Signin extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     EditText emailEt, passwordEt;
-    Button SigninBtn;
+//    Button SigninBtn;
+    TransitionButton SigninBtn;
 
     ProgressDialog progressDialog;
     @Override
@@ -42,33 +44,63 @@ public class Signin extends AppCompatActivity {
         setTitle("Sign In");
         emailEt=(EditText)findViewById(R.id.email);
         passwordEt=(EditText)findViewById(R.id.pass);
-        SigninBtn=(Button)findViewById(R.id.btnSignIn);
+        SigninBtn=(TransitionButton)findViewById(R.id.btnSignIn);
         mAuth = FirebaseAuth.getInstance();
 
         SigninBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                progressDialog= ProgressDialog.show(Signin.this, "","Please Wait, Authenticating...",true);
+                SigninBtn.startAnimation();
+
+//                progressDialog= ProgressDialog.show(Signin.this, "","Please Wait, Authenticating...",true);
 
                 String email = emailEt.getText().toString();
                 final String password = passwordEt.getText().toString();
                 if (TextUtils.isEmpty(email)) {
-                    progressDialog.dismiss();
+                    SigninBtn.stopAnimation(TransitionButton.StopAnimationStyle.SHAKE, null);
+//                    progressDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
                     return;
                 }else if (TextUtils.isEmpty(password)) {
-                    progressDialog.dismiss();
+//                    progressDialog.dismiss();
+                    SigninBtn.stopAnimation(TransitionButton.StopAnimationStyle.SHAKE, null);
                     Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
                     return;
                 }else {
                     mAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            progressDialog.dismiss();
-                            Intent intent = new Intent(Signin.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
+
+//                            progressDialog.dismiss();
+//                            Intent intent = new Intent(Signin.this, MainActivity.class);
+//                            startActivity(intent);
+//                            finish();
+
+
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    boolean isSuccessful = true;
+                                    // Choose a stop animation if your call was succesful or not
+                                    if (isSuccessful) {
+                                        SigninBtn.stopAnimation(TransitionButton.StopAnimationStyle.EXPAND, new TransitionButton.OnAnimationStopEndListener() {
+                                            @Override
+                                            public void onAnimationStopEnd() {
+                                                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                    } else {
+                                        SigninBtn.stopAnimation(TransitionButton.StopAnimationStyle.SHAKE, null);
+                                    }
+                                }
+                            }, 1000);
+
+
+
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -76,9 +108,11 @@ public class Signin extends AppCompatActivity {
                             // there was an error
                             if (password.length() < 6) {
                                 passwordEt.setError("Password must have 6 Characters.");
-                                progressDialog.dismiss();
+//                                progressDialog.dismiss();
+                                SigninBtn.stopAnimation(TransitionButton.StopAnimationStyle.SHAKE, null);
                             } else {
-                                progressDialog.dismiss();
+                                SigninBtn.stopAnimation(TransitionButton.StopAnimationStyle.SHAKE, null);
+//                                progressDialog.dismiss();
                                 Toast.makeText(Signin.this, "Email or Password not Matched.", Toast.LENGTH_LONG).show();
                             }
                         }
